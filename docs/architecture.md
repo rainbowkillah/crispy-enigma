@@ -154,7 +154,7 @@ export interface Env {
 
 Returns `{ tenantId, source }` or `null`.
 
-**Tenant config schema** ([schema.ts](packages/core/src/tenant/schema.ts)) — Zod schema validating `tenant.config.json` at load time. Required fields: `tenantId`, `accountId`, `aiGatewayId`, `aiModels`, `vectorizeNamespace`, `rateLimit`. Optional: `featureFlags`, `allowedHosts`, `apiKeys`.
+**Tenant config schema** ([schema.ts](packages/core/src/tenant/schema.ts)) — Zod schema validating `tenant.config.json` at load time. Required fields: `tenantId`, `accountId`, `aiGatewayId`, `aiModels`, `vectorizeNamespace`, `rateLimit`. Optional: `sessionRetentionDays` (default 30), `maxMessagesPerSession` (default 1000), `featureFlags`, `allowedHosts`, `apiKeys`.
 
 **Tenant index** ([loader.ts](packages/core/src/tenant/loader.ts)) — `buildTenantIndex(configs)` pre-computes three O(1) lookup maps from validated configs: `hostMap`, `apiKeyMap`, `byId`.
 
@@ -189,8 +189,13 @@ The deployed Worker. Responsibilities:
 2. Build the tenant index (pre-computed lookup maps).
 3. Handle every incoming request through the tenant resolution → routing → response pipeline.
 
-Currently exposes a single `/health` endpoint. Planned endpoints (M1+):
-- `/chat` — streaming chat with session persistence
+Endpoints implemented through M1:
+- `/health` — tenant-aware health check (M0)
+- `POST /chat` — streaming chat with SSE, session persistence, rate limiting (M1)
+- `GET /chat/:sessionId/history` — session history retrieval (M1)
+- `DELETE /chat/:sessionId` — session clear (M1)
+
+Planned endpoints (M2+):
 - `/search` — RAG-powered search with citations
 - `/tools/execute` — tool/function dispatch
 - `/ingest` — document ingestion pipeline
@@ -249,17 +254,23 @@ A key architectural distinction:
 
 ## Testing strategy
 
-Vitest runs all tests in the `tests/` directory. Current coverage (M0):
+Vitest runs all tests in the `tests/` directory. Current coverage (M0+M1):
 
-| Test | Focus |
-|------|-------|
-| `health.test.ts` | /health endpoint with header, host, and API key tenant resolution |
-| `resolveTenant.test.ts` | Resolution priority order; null for unresolvable requests |
-| `kv-prefix.test.ts` | TenantKVAdapter key prefixing correctness |
-| `do-name.test.ts` | DO name encoding pattern |
-| `request-size.test.ts` | Request body size validation (413 responses) |
+| Test | Focus | Milestone |
+|------|-------|-----------|
+| [`health.test.ts`](../tests/health.test.ts) | /health endpoint with header, host, and API key tenant resolution | M0 |
+| [`resolveTenant.test.ts`](../tests/resolveTenant.test.ts) | Resolution priority order; null for unresolvable requests | M0 |
+| [`kv-prefix.test.ts`](../tests/kv-prefix.test.ts) | TenantKVAdapter key prefixing + cache key correctness | M0+M1 |
+| [`do-name.test.ts`](../tests/do-name.test.ts) | DO name encoding pattern | M0 |
+| [`request-size.test.ts`](../tests/request-size.test.ts) | Request body size validation (413 responses) | M0 |
+| [`chat.test.ts`](../tests/chat.test.ts) | /chat endpoint validation, streaming default, history, session clear | M1 |
+| [`streaming.test.ts`](../tests/streaming.test.ts) | SSE streaming and JSON fallback behavior | M1 |
+| [`session-isolation.test.ts`](../tests/session-isolation.test.ts) | Tenant-scoped DO naming, cross-tenant isolation | M1 |
+| [`rate-limit.test.ts`](../tests/rate-limit.test.ts) | 429 rejection and rate limit header generation | M1 |
+| [`rate-limiter.test.ts`](../tests/rate-limiter.test.ts) | `applyRateLimit()` allow/deny logic, remaining count | M1 |
+| [`session-retention.test.ts`](../tests/session-retention.test.ts) | `pruneMessages()` time-based cleanup, maxMessages cap | M1 |
 
-Planned (M1+): streaming behavior tests, session isolation tests, rate limit enforcement tests, Vectorize tenant isolation tests, tool permission tests.
+**32 tests across 11 files** (296ms). Planned (M2+): Vectorize tenant isolation tests, tool permission tests, load/stress tests.
 
 ## Planned endpoints
 
