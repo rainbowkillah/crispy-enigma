@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/dev.mjs",
+    "smoke:dev": "node scripts/smoke-dev.mjs",
     "tenants:generate": "node scripts/generate-tenant-index.mjs",
-    "test": "vitest",
+    "test": "vitest run",
     "lint": "eslint .",
     "format": "prettier --write .",
     "typecheck": "tsc -p tsconfig.json --noEmit"

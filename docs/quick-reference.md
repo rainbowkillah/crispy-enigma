@@ -25,6 +25,8 @@
 - `pnpm tenants:generate`
 - `pnpm dev --tenant=mrrainbowsmoke`
 - `pnpm dev --tenant=rainbowsmokeofficial`
+- `pnpm dev --tenant=mrrainbowsmoke --env=dev`
+- `pnpm smoke:dev --tenant=mrrainbowsmoke`
 
 ## Test
 - `pnpm tenants:generate`
