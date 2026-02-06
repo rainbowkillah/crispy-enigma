@@ -180,6 +180,67 @@ Created preparation documents:
 
 ---
 
+## M1 Completion Verification
+
+### Verification Date: 2026-02-06
+
+### GitHub Issues Gap
+
+**Finding:** Issues #15-#24 referenced in `docs/plan.md` have not been created in the GitHub repository yet. No M1 milestone or labels exist in GitHub.
+
+**Recommendation:** Create issues #15-#24 in `crispy-enigma` and close them as completed, or track via [GitHub Project #13](https://github.com/users/rainbowkillah/projects/13).
+
+### Code Verification (All Files Confirmed Present)
+
+| Plan Issue | Deliverable | File(s) | Status |
+|-----------|-------------|---------|--------|
+| #15 | /chat endpoint + schema | `apps/worker-api/src/index.ts`, `packages/core/src/chat/schema.ts` | ✅ Verified |
+| #16 | Streaming contract (SSE) | `apps/worker-api/src/index.ts` (SSE + fallback), `docs/streaming.md` | ✅ Verified |
+| #17 | ChatSession DO | `apps/worker-api/src/session-do.ts` | ✅ Verified |
+| #18 | History + retention | `session-do.ts` (pruneMessages, retentionDays, maxMessages) | ✅ Verified |
+| #19 | KV cache layer | `packages/storage/src/kv.ts` (getCache/putCache with TTL) | ✅ Verified |
+| #20 | RateLimiter DO | `apps/worker-api/src/rate-limiter-do.ts` | ✅ Verified |
+| #21 | Rate limit keying | `docs/rate-limiting.md`, `rate-limiter-do.ts` | ✅ Verified |
+| #22 | Streaming tests | `tests/streaming.test.ts` (2 tests) | ✅ Verified |
+| #23 | Session isolation tests | `tests/session-isolation.test.ts` (2 tests) | ✅ Verified |
+| #24 | Rate limit tests | `tests/rate-limit.test.ts` (1), `tests/rate-limiter.test.ts` (2) | ✅ Verified |
+
+### Binding Verification
+
+- `CHAT_SESSION: DurableObjectNamespace` — defined in `packages/core/src/env.ts` ✅
+- `RATE_LIMITER_DO: DurableObjectNamespace` — defined in `packages/core/src/env.ts` ✅
+- Both DOs declared in all 4 tenant wrangler.jsonc files with migration tag `v1` ✅
+
+### Tenant Config Schema Verification
+
+- `sessionRetentionDays` (optional, default 30) — added to schema ✅
+- `maxMessagesPerSession` (optional, default 1000) — added to schema ✅
+- `rateLimit.perMinute` and `rateLimit.burst` — present in schema ✅
+
+### Test Results (2026-02-06)
+
+```
+✓ tests/rate-limiter.test.ts (2 tests)
+✓ tests/do-name.test.ts (1 test)
+✓ tests/kv-prefix.test.ts (3 tests)
+✓ tests/session-retention.test.ts (2 tests)
+✓ tests/resolveTenant.test.ts (4 tests)
+✓ tests/session-isolation.test.ts (2 tests)
+✓ tests/rate-limit.test.ts (1 test)
+✓ tests/health.test.ts (4 tests)
+✓ tests/streaming.test.ts (2 tests)
+✓ tests/request-size.test.ts (2 tests)
+✓ tests/chat.test.ts (9 tests)
+
+Test Files: 11 passed (11)
+Tests:      32 passed (32)
+Duration:   296ms
+```
+
+### TypeScript: ✅ Compiles with no errors
+
+---
+
 ## M0 Key Achievements
 
 ### Infrastructure
@@ -201,7 +262,7 @@ Created preparation documents:
 - ✅ Trace ID propagation (cf-ray, x-request-id)
 
 ### Quality
-- ✅ 13 passing unit tests
+- ✅ 13 passing unit tests (M0) → 32 passing (M0+M1)
 - ✅ Strict TypeScript with no errors
 - ✅ Tenant isolation verified
 - ✅ Error handling with response envelopes
@@ -210,11 +271,10 @@ Created preparation documents:
 
 ## Repository Metrics
 
-**Packages:** 6 (core, storage, ai, rag, observability, worker-api)  
-**Tests:** 13 (5 test files)  
-**Test Coverage:** Tenant resolution, KV prefixing, DO naming, health endpoint  
-**Lines of Code:** ~2,000 (excluding node_modules)  
-**Dependencies:** 1 runtime (zod), 8 dev dependencies  
+**Packages:** 6 (core, storage, ai, rag, observability, worker-api)
+**Tests:** 32 (11 test files)
+**Test Coverage:** Tenant resolution, KV prefixing, DO naming, health, chat, streaming, session isolation, rate limiting, session retention
+**Dependencies:** 1 runtime (zod), 8 dev dependencies
 
 ---
 
@@ -222,19 +282,21 @@ Created preparation documents:
 
 - **Master Plan:** [docs/plan.md](plan.md)
 - **M0 Completion Report:** [docs/M0-COMPLETE.md](M0-COMPLETE.md)
+- **M1 Milestone Summary:** [docs/milestones/M1.md](milestones/M1.md)
 - **M1 Preparation Guide:** [docs/M1-PREP.md](M1-PREP.md)
-- **GitHub Project:** https://github.com/users/rainbowkillah/projects/12
+- **M1 Handoff:** [docs/handoff-M1.md](handoff-M1.md)
+- **GitHub Project:** https://github.com/users/rainbowkillah/projects/13
 - **Repository:** https://github.com/rainbowkillah/crispy-enigma
 
 ---
 
 ## Sign-off
 
-**M0 Status:** ✅ COMPLETE AND VERIFIED  
-**M1 Status:** 🔵 READY TO START  
-**Blockers:** None  
-**Team:** Ready for M1 kick-off  
+**M0 Status:** ✅ COMPLETE AND VERIFIED
+**M1 Status:** ✅ COMPLETE AND VERIFIED
+**Next Milestone:** M2 — AI Gateway Integration
+**Blockers:** None
 
-**Date:** 2026-02-06  
-**Verified By:** GitHub Copilot Agent  
-**Next Review:** After M1 completion  
+**Date:** 2026-02-06
+**Verified By:** Claude Code Agent
+**Next Review:** After M2 completion
