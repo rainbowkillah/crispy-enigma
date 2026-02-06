@@ -171,26 +171,6 @@
       }
     ],
     "projectFileMap": {
-      "observability": [
-        {
-          "file": "packages/observability/project.json",
-          "hash": "6428200784532287838"
-        },
-        {
-          "file": "packages/observability/src/index.ts",
-          "hash": "4595979742548113990"
-        }
-      ],
-      "ai": [
-        {
-          "file": "packages/ai/project.json",
-          "hash": "9152839301447230763"
-        },
-        {
-          "file": "packages/ai/src/index.ts",
-          "hash": "4595979742548113990"
-        }
-      ],
       "worker-api": [
         {
           "file": "apps/worker-api/project.json",
@@ -201,13 +181,13 @@
           "hash": "2576037746577402451"
         }
       ],
-      "rag": [
+      "observability": [
         {
-          "file": "packages/rag/project.json",
-          "hash": "16544294613512713695"
+          "file": "packages/observability/project.json",
+          "hash": "6428200784532287838"
         },
         {
-          "file": "packages/rag/src/index.ts",
+          "file": "packages/observability/src/index.ts",
           "hash": "4595979742548113990"
         }
       ],
@@ -243,6 +223,26 @@
         {
           "file": "packages/core/src/tenant/types.ts",
           "hash": "6189555554380899843"
+        }
+      ],
+      "ai": [
+        {
+          "file": "packages/ai/project.json",
+          "hash": "9152839301447230763"
+        },
+        {
+          "file": "packages/ai/src/index.ts",
+          "hash": "4595979742548113990"
+        }
+      ],
+      "rag": [
+        {
+          "file": "packages/rag/project.json",
+          "hash": "16544294613512713695"
+        },
+        {
+          "file": "packages/rag/src/index.ts",
+          "hash": "4595979742548113990"
         }
       ],
       "storage": [
