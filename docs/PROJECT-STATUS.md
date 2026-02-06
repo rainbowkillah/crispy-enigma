@@ -186,9 +186,9 @@ Created preparation documents:
 
 ### GitHub Issues Gap
 
-**Finding:** Issues #15-#24 referenced in `docs/plan.md` were never created in the `crispy-enigma` repository. The plan links point to `cloudflare-mono-repo` (a separate/predecessor repo). No M1 milestone or labels exist in GitHub.
+**Finding:** Issues #15-#24 referenced in `docs/plan.md` have not been created in the GitHub repository yet. No M1 milestone or labels exist in GitHub.
 
-**Recommendation:** Create issues #15-#24 in `crispy-enigma` and close them as completed, or update `plan.md` links to reflect the current repository.
+**Recommendation:** Create issues #15-#24 in `crispy-enigma` and close them as completed, or track via [GitHub Project #13](https://github.com/users/rainbowkillah/projects/13).
 
 ### Code Verification (All Files Confirmed Present)
 
@@ -285,7 +285,7 @@ Duration:   296ms
 - **M1 Milestone Summary:** [docs/milestones/M1.md](milestones/M1.md)
 - **M1 Preparation Guide:** [docs/M1-PREP.md](M1-PREP.md)
 - **M1 Handoff:** [docs/handoff-M1.md](handoff-M1.md)
-- **GitHub Project:** https://github.com/users/rainbowkillah/projects/12
+- **GitHub Project:** https://github.com/users/rainbowkillah/projects/13
 - **Repository:** https://github.com/rainbowkillah/crispy-enigma
 
 ---
