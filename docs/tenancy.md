@@ -26,6 +26,8 @@ type TenantContext = {
     perMinute: number;            // Requests per minute cap
     burst: number;                // Burst allowance
   };
+  sessionRetentionDays: number;   // Days to keep session messages (default: 30)
+  maxMessagesPerSession: number;  // Message cap per session (default: 1000)
   featureFlags: Record<string, boolean>;
   allowedHosts: string[];         // Hostnames that resolve to this tenant
   apiKeys: string[];              // API keys that resolve to this tenant
@@ -265,7 +267,16 @@ Every isolation mechanism has corresponding tests:
 | `do-name.test.ts` | DO name encoding includes tenantId |
 | `request-size.test.ts` | Body size validation per tenant config |
 
-Planned tests (M1+) will verify cross-tenant session isolation, rate-limit independence, and Vectorize namespace boundary enforcement.
+### M1 isolation tests (implemented)
+
+| Test | Verifies |
+|------|----------|
+| `session-isolation.test.ts` | Tenant-scoped DO naming for sessions and rate limiters; cross-tenant access denied |
+| `rate-limit.test.ts` | Per-tenant rate limit enforcement (429 rejection); rate limit headers |
+| `rate-limiter.test.ts` | Sliding window allow/deny logic; remaining count tracking |
+| `session-retention.test.ts` | Time-based message pruning; maxMessages cap enforcement |
+
+Planned tests (M2+) will verify Vectorize namespace boundary enforcement and AI Gateway tenant attribution.
 
 ## Anti-patterns
 

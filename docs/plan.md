@@ -134,7 +134,7 @@ export type TenantContext = {
 
 ## 3) Milestones with acceptance criteria
 
-### M0 — Foundation ([Issues #3-#14](https://github.com/rainbowkillah/crispy-enigma/issues?q=is%3Aissue+label%3AM0))
+### M0 — Foundation ✅ ([Issues #3-#14](https://github.com/rainbowkillah/crispy-enigma/issues?q=is%3Aissue+label%3AM0))
 **Deliverables**
 - [#3](https://github.com/rainbowkillah/crispy-enigma/issues/3) Create monorepo skeleton (apps/packages/tenants/docs/scripts/tests)
 - [#4](https://github.com/rainbowkillah/crispy-enigma/issues/4) Set up TypeScript baseline + tsconfig for Workers runtime
@@ -158,7 +158,7 @@ export type TenantContext = {
 
 ---
 
-### M1 — Chat + Sessions ([Issues #15-#24](https://github.com/rainbowkillah/crispy-enigma/issues?q=is%3Aissue+label%3AM1))
+### M1 — Chat + Sessions ✅ ([Issues #15-#24](https://github.com/rainbowkillah/crispy-enigma/issues?q=is%3Aissue+label%3AM1))
 **Deliverables**
 - [#15](https://github.com/rainbowkillah/crispy-enigma/issues/15) Build /chat endpoint with request schema
 - [#16](https://github.com/rainbowkillah/crispy-enigma/issues/16) Define streaming response contract (SSE vs chunked)
