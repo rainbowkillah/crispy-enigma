@@ -21,7 +21,8 @@
     "nx": "^19.6.0",
     "prettier": "^3.3.3",
     "typescript": "^5.5.4",
-    "vitest": "^2.0.5"
+    "vitest": "^2.0.5",
+    "wrangler": "4.20.0"
   },
   "dependencies": {
     "zod": "^3.23.8"

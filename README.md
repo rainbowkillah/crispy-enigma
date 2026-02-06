@@ -20,6 +20,7 @@ pnpm test
 Request flow: `apps/worker-api` → **tenant resolution** → policy checks → AI Gateway → Workers AI → DO/KV/Vectorize → streaming response.
 
 See [docs/plan.md](docs/plan.md) for full architecture and milestones.
+See [docs/wrangler.md](docs/wrangler.md) for the Wrangler version pin and ESM module format decision.
 
 ## Critical Patterns
 

@@ -28,6 +28,9 @@
 - `pnpm dev --tenant=mrrainbowsmoke --env=dev`
 - `pnpm smoke:dev --tenant=mrrainbowsmoke`
 
+## Wrangler
+- Version pinned: `wrangler@4.20.0` (see `docs/wrangler.md`)
+
 ## Test
 - `pnpm tenants:generate`
 - `pnpm test`
