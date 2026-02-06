@@ -1,0 +1,413 @@
+# agents.prompt.yml
+# Orchestrates Codex, Claude, Gemini, and Copilot to architect/design/build a
+# multi-tenant Cloudflare Workers AI monorepo with AI Gateway, Vectorize, RAG search,
+# KV, Durable Objects, metrics, testing, and repeatable deployments.
+#
+# Style: opinionated, autonomous-first, reproducible.
+# Notes:
+# - “Codex” here is your code-writing/patch agent.
+# - “Copilot” here is your inline pair programmer + refactor/suggest agent.
+# - “Claude” here is your spec/architecture + risk-reduction agent.
+# - “Gemini” here is your systems/planning + evaluation/quality agent.
+
+version: "1.0"
+
+project:
+  name: "cloudflare-ai-multitenant-monorepo"
+  repo_type: "monorepo"
+  primary_language: "typescript"
+  runtime: "cloudflare-workers"
+  tenancy:
+    mode: "multi-tenant"
+    accounts: ["rainbowsmokeofficial", "mrrainbowsmoke"]
+    tenant_isolation:
+      strategy: "config + namespace isolation"
+      rules:
+        - "No cross-tenant data access unless explicitly allowed by policy."
+        - "All storage bindings must be tenant-scoped (KV namespaces, DO IDs, Vectorize indexes, R2 buckets if used)."
+        - "Every request must resolve a tenant before touching storage or AI."
+  goals:
+    - "Autonomous-first agent workflow: plan -> scaffold -> implement -> test -> deploy -> observe -> iterate."
+    - "Streaming chat + tool-like generative functions."
+    - "TTS support (design the interface; implementation may vary by provider constraints)."
+    - "Embeddings + retrieval (Vectorize) + RAG responses."
+    - "AI Gateway integration and usage policies."
+    - "KV + Durable Objects for sessions/state/ratelimiting."
+    - "Repeatable deployments per tenant/account with minimal manual steps."
+  non_goals:
+    - "No secrets hardcoded in repo. Ever."
+    - "No single-tenant assumptions."
+
+principles:
+  - "Truth over vibes: don’t invent APIs or capabilities—validate against Cloudflare docs and wrangler schema."
+  - "Ship small, measured increments: every milestone must produce runnable code."
+  - "Observability is a feature: metrics/logs/traces planned from day 1."
+  - "Security defaults: least privilege bindings, strict CORS, request validation, rate limits."
+  - "Multi-tenant correctness first: tenant resolution is mandatory middleware."
+
+inputs_expected:
+  - "wrangler.jsonc present and used (not legacy wrangler.toml unless required)."
+  - "Per-tenant config files stored under /tenants/<tenant>/"
+  - "CI environment provides secrets via vars or secret store, not committed files."
+
+outputs_required:
+  - "plan.md (project plan + milestones + acceptance criteria)"
+  - "repo scaffolding (apps, packages, tenants, scripts)"
+  - "metrics plan (what/why/how; dashboards/alerts suggestions)"
+  - "dev + test strategy (unit, integration, e2e; local Miniflare where possible)"
+  - "repeatable deployment docs + scripts"
+  - "runbooks (troubleshooting + oncall-style notes)"
+
+agents:
+  - id: "architect"
+    name: "Claude"
+    role: "Architecture + technical leadership"
+    responsibilities:
+      - "Define target architecture (components, data flow, tenancy model, boundaries)."
+      - "Write/approve plan.md and ADRs (architecture decision records)."
+      - "Define contracts: API routes, schemas, function-calling/tooling interfaces."
+      - "Identify risks, unknowns, and validation steps."
+      - "Define security model and guardrails."
+    deliverables:
+      - "docs/plan.md"
+      - "docs/architecture.md"
+      - "docs/adrs/*.md"
+      - "docs/security.md"
+      - "docs/tenancy.md"
+    acceptance_criteria:
+      - "All major components mapped to Cloudflare primitives (Workers AI, AI Gateway, Vectorize, KV, DO)."
+      - "Tenant isolation approach clearly documented and testable."
+      - "Interfaces specified (request/response, events, errors)."
+
+  - id: "planner"
+    name: "Gemini"
+    role: "Systems planning + evaluation"
+    responsibilities:
+      - "Turn architecture into milestone breakdown with checkpoints."
+      - "Define testing matrix + quality gates."
+      - "Define metrics/observability plan (what to measure + where to emit)."
+      - "Review for completeness, edge cases, failure modes."
+    deliverables:
+      - "docs/milestones.md"
+      - "docs/testing.md"
+      - "docs/metrics.md"
+      - "docs/failure-modes.md"
+    acceptance_criteria:
+      - "Each milestone has a demo step and measurable pass/fail criteria."
+      - "Metrics cover latency, errors, cost signals, token usage, cache hit rates, retrieval quality."
+
+  - id: "builder"
+    name: "Codex"
+    role: "Primary implementer (code + scripts)"
+    responsibilities:
+      - "Generate repo scaffolding and implement features per milestone."
+      - "Write type-safe code, wiring bindings correctly."
+      - "Add tests, fixtures, local dev scripts."
+      - "Keep changes minimal and reviewable; produce clean commits."
+    deliverables:
+      - "apps/*, packages/*, tenants/*"
+      - "wrangler.jsonc templates per tenant"
+      - "scripts/*"
+      - "tests/*"
+    acceptance_criteria:
+      - "Everything runs locally (as much as Cloudflare allows) and deploys per tenant."
+      - "No broken builds; lint/test gates pass."
+
+  - id: "pair"
+    name: "Copilot"
+    role: "Inline refactor + DX polish"
+    responsibilities:
+      - "Improve readability, reduce duplication, strengthen typing."
+      - "Suggest ergonomic APIs and better abstractions."
+      - "Help write docs, examples, and JSDoc."
+      - "Spot obvious footguns and performance issues."
+    deliverables:
+      - "refactors, cleanup PRs"
+      - "docs/examples/*.md"
+      - "developer experience improvements (scripts, generators)"
+    acceptance_criteria:
+      - "Developer workflow is one-command simple for common tasks."
+      - "No ‘clever’ abstractions that hide tenancy boundaries."
+
+orchestration:
+  mode: "autonomous-first"
+  autonomy_rules:
+    - "Architect and Planner can proceed without asking questions unless a hard blocker is found."
+    - "Builder executes milestones in order; pauses only when requirements conflict or unknown API constraints arise."
+    - "Pair agent runs after each milestone to refactor + harden."
+  conflict_resolution:
+    - "If agents disagree: prefer Cloudflare docs + runtime constraints; then simplicity; then performance."
+    - "Architect has final say on architecture; Builder has final say on implementation feasibility; Planner has final say on gates."
+  review_policy:
+    - "Every milestone ends with a short ‘Milestone Report’ including: what shipped, how to run, tests, metrics emitted, known issues."
+
+milestones:
+  - id: "M0"
+    name: "Foundation + Repo Scaffolding"
+    owner: "Codex"
+    tasks:
+      - "Create monorepo layout (apps, packages, tenants, docs, scripts)."
+      - "Add baseline tooling: TypeScript, ESLint, Prettier, Vitest, Miniflare (if compatible)."
+      - "Define tenant config format and loader."
+      - "Add request pipeline with mandatory tenant resolution middleware."
+    exit_criteria:
+      - "pnpm/npm install + test passes"
+      - "local dev starts for a hello worker per tenant"
+      - "tenant resolution proven by unit tests"
+
+  - id: "M1"
+    name: "Core API: Streaming Chat + Session State"
+    owner: "Codex"
+    tasks:
+      - "Implement /chat endpoint with streaming response."
+      - "Implement session state via Durable Object (per-tenant)."
+      - "Implement KV for lightweight metadata/cache (per-tenant)."
+      - "Add rate limiting (DO-based) and request validation."
+    exit_criteria:
+      - "Streaming works end-to-end"
+      - "Sessions persist and are tenant-isolated"
+      - "Rate limits and validation tested"
+
+  - id: "M2"
+    name: "AI Gateway + Model Routing"
+    owner: "Codex"
+    tasks:
+      - "Integrate AI Gateway for model calls."
+      - "Add routing policies: model selection per tenant + per route."
+      - "Add cost/usage logging hooks."
+    exit_criteria:
+      - "Gateway used for all model calls"
+      - "Policies documented and enforced"
+      - "Usage signals emitted"
+
+  - id: "M3"
+    name: "Embeddings + Vectorize + Retrieval"
+    owner: "Codex"
+    tasks:
+      - "Implement ingestion pipeline (docs -> chunk -> embed -> upsert)."
+      - "Implement retrieval API (query -> embed -> Vectorize search -> rerank optional)."
+      - "Add RAG assembly logic with citations + safety filters."
+    exit_criteria:
+      - "RAG answers include citations/metadata"
+      - "Vectorize index is tenant-scoped"
+      - "Offline/fixture tests for retrieval quality basics"
+
+  - id: "M4"
+    name: "AI Search Experience (RAG + Query Understanding)"
+    owner: "Codex"
+    tasks:
+      - "Build /search endpoint tuned for RAG search UX."
+      - "Add query rewriting, intent classification (lightweight), and result formatting."
+      - "Add caching strategy (KV) for common queries (tenant-scoped)."
+    exit_criteria:
+      - "Search endpoint returns stable structured output"
+      - "Latency + cache hit metrics emitted"
+
+  - id: "M5"
+    name: "Generative Functions (Tooling/Function Calling)"
+    owner: "Claude"
+    tasks:
+      - "Define tool/function schema (JSON) for actions (summarize, extract, classify, tag, ingest)."
+      - "Implement tool dispatcher and guardrails."
+      - "Add audit logging per tool invocation."
+    exit_criteria:
+      - "At least 5 functions implemented and tested"
+      - "Tool calls are tenant-safe and logged"
+
+  - id: "M6"
+    name: "TTS Interface + Optional Implementation"
+    owner: "Gemini"
+    tasks:
+      - "Define TTS abstraction and API contract (/tts)."
+      - "If provider available: implement; else: stub with clear adapter boundary."
+      - "Add streaming audio response where possible."
+    exit_criteria:
+      - "TTS contract documented"
+      - "Adapter pattern ready; no vendor lock-in in core"
+
+  - id: "M7"
+    name: "Observability + Metrics + QA Gates"
+    owner: "Gemini"
+    tasks:
+      - "Finalize metrics plan and implement counters/timers/log structure."
+      - "Create dashboards/alerts suggestions (documented)."
+      - "Add load test script(s) and regression suite."
+    exit_criteria:
+      - "Metrics emitted for chat/search/retrieval/tooling"
+      - "Basic load test runnable"
+      - "QA checklist passes"
+
+  - id: "M8"
+    name: "Repeatable Deployments (Per Tenant)"
+    owner: "Codex"
+    tasks:
+      - "Create deployment scripts: deploy one tenant, deploy all, promote envs."
+      - "Add config validation + drift detection."
+      - "Document runbooks and replication steps."
+    exit_criteria:
+      - "One-command deploy per tenant"
+      - "Docs sufficient for a fresh clone to deploy"
+
+repo_layout:
+  root:
+    - "apps/"
+    - "packages/"
+    - "tenants/"
+    - "docs/"
+    - "scripts/"
+    - "tests/"
+    - "wrangler.jsonc"
+    - "package.json"
+    - "tsconfig.base.json"
+  apps:
+    - "apps/worker-api/           # main API worker (chat/search/tools)"
+    - "apps/ingest-worker/        # optional: ingestion pipeline worker"
+  packages:
+    - "packages/core/             # shared types, tenant resolution, middleware"
+    - "packages/rag/              # chunking, retrieval, prompting, citations"
+    - "packages/storage/          # KV/DO/Vectorize adapters"
+    - "packages/observability/    # metrics/log helpers"
+    - "packages/testing/          # test utils + fixtures"
+  tenants:
+    - "tenants/rainbowsmokeofficial/"
+    - "tenants/mrrainbowsmoke/"
+  tenant_files:
+    required:
+      - "tenants/<tenant>/tenant.config.json"
+      - "tenants/<tenant>/wrangler.jsonc"
+    optional:
+      - "tenants/<tenant>/policies.json"
+      - "tenants/<tenant>/prompts/*.md"
+
+contracts:
+  http_endpoints:
+    - path: "/health"
+      method: "GET"
+      purpose: "Basic health and version"
+    - path: "/chat"
+      method: "POST"
+      purpose: "Streaming chat + session handling"
+    - path: "/search"
+      method: "POST"
+      purpose: "RAG search UX endpoint"
+    - path: "/ingest"
+      method: "POST"
+      purpose: "Ingest docs/chunks into Vectorize (protected)"
+    - path: "/tools/execute"
+      method: "POST"
+      purpose: "Tool/function dispatcher"
+    - path: "/tts"
+      method: "POST"
+      purpose: "TTS contract (adapter-based)"
+  tenancy_resolution:
+    priority_order:
+      - "x-tenant-id header"
+      - "hostname mapping"
+      - "jwt claim (if auth enabled)"
+    required_behavior:
+      - "Reject request if tenant cannot be resolved."
+      - "Attach tenant context to request lifecycle object."
+
+security:
+  baseline:
+    - "Strict input validation (zod or equivalent)."
+    - "CORS locked down per tenant."
+    - "Rate limiting per tenant and per IP/user key."
+    - "Auth optional but planned: JWT verification middleware hook."
+  secrets:
+    - "Use wrangler secrets / vars; never commit .env with secrets."
+  data_handling:
+    - "No PII logging by default."
+    - "Redact tokens and sensitive fields in logs."
+
+observability:
+  logging:
+    format: "structured-json"
+    required_fields:
+      - "timestamp"
+      - "tenant"
+      - "route"
+      - "request_id"
+      - "latency_ms"
+      - "status"
+  metrics:
+    required:
+      - "requests_total"
+      - "errors_total"
+      - "latency_ms_histogram"
+      - "ai_tokens_in_out"
+      - "vectorize_queries_total"
+      - "vectorize_latency_ms"
+      - "cache_hit_rate"
+      - "rate_limited_total"
+  tracing:
+    note: "If full tracing isn’t available, emulate with request_id + span-like logs."
+
+testing:
+  levels:
+    - "unit"
+    - "integration"
+    - "e2e (where feasible)"
+  required_suites:
+    - "tenant isolation tests"
+    - "streaming behavior tests"
+    - "retrieval correctness smoke tests"
+    - "tool execution guardrail tests"
+  gates:
+    - "lint"
+    - "typecheck"
+    - "unit tests"
+    - "integration tests on PR"
+    - "deploy preview (optional)"
+
+execution_playbook:
+  step_order:
+    - "Claude writes docs/plan.md + docs/architecture.md + docs/tenancy.md."
+    - "Gemini writes docs/milestones.md + docs/testing.md + docs/metrics.md."
+    - "Codex scaffolds repo (M0) and makes it runnable."
+    - "Copilot refactors + polishes after each milestone."
+    - "Repeat M1..M8 with milestone reports."
+  milestone_report_template: |
+    # Milestone Report: <ID> <Name>
+    ## Shipped
+    - ...
+    ## How to Run
+    - ...
+    ## Tests
+    - ...
+    ## Metrics/Logs
+    - ...
+    ## Known Issues / Next
+    - ...
+
+agent_prompts:
+  shared_system_prompt: |
+    You are part of a multi-agent build team for a Cloudflare Workers AI monorepo.
+    You must NOT invent APIs or configuration keys. Validate against Cloudflare docs and wrangler schema.
+    Multi-tenant isolation is a hard requirement: resolve tenant first, then access resources scoped to that tenant.
+
+  claude_architect_prompt: |
+    Produce architecture that maps directly to Cloudflare Workers primitives:
+    Workers AI + AI Gateway + Vectorize + KV + Durable Objects.
+    Define interfaces and tenancy boundaries. Write plan.md with milestones and acceptance criteria.
+    Identify unknowns and propose validation experiments.
+
+  gemini_planner_prompt: |
+    Turn architecture into an execution plan with strong QA:
+    testing matrix, metrics plan, failure modes, operational runbooks.
+    Ensure milestones are demoable and measurable.
+
+  codex_builder_prompt: |
+    Implement exactly what the docs/specs say. Keep changes small, type-safe, and testable.
+    Scaffold monorepo, add tenant configs, implement streaming chat, DO sessions, KV cache,
+    Vectorize ingestion/retrieval, tool dispatcher, and deployment scripts.
+    Emit milestone reports.
+
+  copilot_pair_prompt: |
+    Refactor for clarity and DX. Strengthen types, remove duplication, improve naming.
+    Add lightweight docs/examples, and point out footguns.
+    Do not blur tenancy boundaries or over-abstract.
+
+stop_conditions:
+  - "If a required Cloudflare feature is unavailable or uncertain, halt and produce a ‘Constraint Note’ doc explaining options."
+  - "If tenancy isolation cannot be proven by tests, halt and fix before proceeding."
