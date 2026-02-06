@@ -1,8 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { TenantKVAdapter, tenantKey } from '../packages/storage/src/kv';
+import {
+  TenantKVAdapter,
+  tenantCacheKey,
+  tenantKey
+} from '../packages/storage/src/kv';
 
 class FakeKV {
   public lastKey: string | null = null;
+  public lastOptions: Record<string, unknown> | undefined;
   public store = new Map<string, string>();
 
   async get(key: string): Promise<string | null> {
@@ -10,8 +15,13 @@ class FakeKV {
     return this.store.get(key) ?? null;
   }
 
-  async put(key: string, value: string): Promise<void> {
+  async put(
+    key: string,
+    value: string,
+    options?: Record<string, unknown>
+  ): Promise<void> {
     this.lastKey = key;
+    this.lastOptions = options;
     this.store.set(key, value);
   }
 }
@@ -35,5 +45,15 @@ describe('TenantKVAdapter', () => {
 
     expect(result).toBe('value');
     expect(kv.lastKey).toBe('tenant-a:token');
+  });
+
+  it('prefixes cache keys with tenantId and cache namespace', async () => {
+    const kv = new FakeKV();
+    const adapter = new TenantKVAdapter(kv as unknown as KVNamespace);
+
+    await adapter.putCache('tenant-a', 'prompt', 'value', 120);
+
+    expect(kv.lastKey).toBe(tenantCacheKey('tenant-a', 'prompt'));
+    expect(kv.lastOptions).toEqual({ expirationTtl: 120 });
   });
 });

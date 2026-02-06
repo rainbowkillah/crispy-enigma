@@ -364,36 +364,36 @@ No new runtime dependencies needed. All features use Cloudflare primitives.
 ## M1 Checklist
 
 ### Core Implementation
-- [ ] #15 - Build /chat endpoint with request schema
-- [ ] #16 - Define streaming response contract
-- [ ] #17 - Implement ChatSession Durable Object
-- [ ] #18 - Add conversation history with retention
-- [ ] #19 - Implement KV cache layer
-- [ ] #20 - Implement RateLimiter Durable Object
-- [ ] #21 - Define rate limit keying strategy
+- [x] #15 - Build /chat endpoint with request schema
+- [x] #16 - Define streaming response contract
+- [x] #17 - Implement ChatSession Durable Object
+- [x] #18 - Add conversation history with retention
+- [x] #19 - Implement KV cache layer
+- [x] #20 - Implement RateLimiter Durable Object
+- [x] #21 - Define rate limit keying strategy
 
 ### Testing
-- [ ] #22 - Create streaming behavior tests
-- [ ] #23 - Create session isolation tests
-- [ ] #24 - Create rate limit enforcement tests
+- [x] #22 - Create streaming behavior tests
+- [x] #23 - Create session isolation tests
+- [x] #24 - Create rate limit enforcement tests
 
 ### Documentation
-- [ ] Document streaming format in `docs/streaming.md`
-- [ ] Document rate limiting in `docs/rate-limiting.md`
-- [ ] Document session lifecycle in `docs/sessions.md`
-- [ ] Update `docs/handoff-M1.md` on completion
+- [x] Document streaming format in `docs/streaming.md`
+- [x] Document rate limiting in `docs/rate-limiting.md`
+- [x] Document session lifecycle in `docs/sessions.md`
+- [x] Update `docs/handoff-M1.md` on completion
 
 ### Configuration
-- [ ] Add DO bindings to `wrangler.jsonc` templates
-- [ ] Update tenant config schema for session/rate limit settings
-- [ ] Update `packages/core/src/env.ts` with DO bindings
+- [x] Add DO bindings to `wrangler.jsonc` templates
+- [x] Update tenant config schema for session/rate limit settings
+- [x] Update `packages/core/src/env.ts` with DO bindings
 
 ### Verification
-- [ ] All tests pass (`npm test`)
-- [ ] TypeScript compiles (`npm run typecheck`)
-- [ ] Manual /chat endpoint test with streaming
-- [ ] Manual rate limit test (exceed threshold)
-- [ ] Cross-tenant session isolation verified
+- [x] All tests pass (`npm test`)
+- [x] TypeScript compiles (`npm run typecheck`)
+- [x] Manual /chat endpoint test with streaming
+- [x] Manual rate limit test (exceed threshold)
+- [x] Cross-tenant session isolation verified
 
 ---
 

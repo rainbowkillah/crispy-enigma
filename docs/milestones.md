@@ -18,6 +18,7 @@ This milestone introduces the first core AI feature: stateful, streaming chat.
   - Durable Object-based session store for conversation history, scoped per tenant.
   - DO-based rate limiter to protect the service, configurable per tenant.
   - KV cache layer for tenant-scoped data.
+See `docs/milestones/M1.md` for the completion summary.
 
 ## M2: AI Gateway Integration
 Integrate with Cloudflare's AI Gateway to manage model access, observability, and policy enforcement.

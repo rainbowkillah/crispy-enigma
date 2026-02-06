@@ -13,6 +13,8 @@ export const tenantConfigSchema = z.object({
     perMinute: z.number().int().positive(),
     burst: z.number().int().positive()
   }),
+  sessionRetentionDays: z.number().int().positive().optional().default(30),
+  maxMessagesPerSession: z.number().int().positive().optional().default(1000),
   featureFlags: z.record(z.boolean()),
   allowedHosts: z.array(z.string()),
   apiKeys: z.array(z.string())

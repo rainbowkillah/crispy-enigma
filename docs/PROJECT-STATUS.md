@@ -3,8 +3,8 @@
 ## Status Summary
 
 **Date:** 2026-02-06  
-**Current Milestone:** M0 ✅ COMPLETE  
-**Next Milestone:** M1 🔵 Ready to Start  
+**Current Milestone:** M1 ✅ COMPLETE  
+**Next Milestone:** M2 🔵 Ready to Start  
 
 ---
 
@@ -66,33 +66,43 @@ Duration: 438ms
 ### M1 Overview: Chat + Sessions
 
 **Issues:** #15-#24 (from [docs/plan.md](plan.md))  
-**Status:** 🔵 Ready to start  
-**Blockers:** None (M0 complete)
+**Status:** ✅ Complete  
+**Blockers:** None
 
 ### M1 Deliverables Checklist
 
 #### Core Features
-- [ ] #15 - Build /chat endpoint with request schema
-- [ ] #16 - Define streaming response contract (SSE vs chunked)
-- [ ] #17 - Implement Durable Object session store (tenant-scoped)
-- [ ] #18 - Add conversation history with retention policy
-- [ ] #19 - Implement KV cache layer (tenant-scoped keys)
-- [ ] #20 - Implement DO-based rate limiter (per tenant + per IP/user)
-- [ ] #21 - Define rate limit keying strategy (tenant+user+ip)
+- [x] #15 - Build /chat endpoint with request schema
+- [x] #16 - Define streaming response contract (SSE vs chunked)
+- [x] #17 - Implement Durable Object session store (tenant-scoped)
+- [x] #18 - Add conversation history with retention policy
+- [x] #19 - Implement KV cache layer (tenant-scoped keys)
+- [x] #20 - Implement DO-based rate limiter (per tenant + per IP/user)
+- [x] #21 - Define rate limit keying strategy (tenant+user+ip)
 
 #### Testing
-- [ ] #22 - Create streaming behavior tests
-- [ ] #23 - Create session isolation tests
-- [ ] #24 - Create rate limit enforcement tests
+- [x] #22 - Create streaming behavior tests
+- [x] #23 - Create session isolation tests
+- [x] #24 - Create rate limit enforcement tests
+
+#### Configuration
+- [x] Add DO bindings to `wrangler.jsonc` templates
+- [x] Update tenant config schema for session/rate limit settings
+- [x] Update `packages/core/src/env.ts` with DO bindings
 
 ### M1 Acceptance Criteria
 
 From [docs/plan.md](plan.md):
 
-- [ ] Session messages persist for same tenant/session
-- [ ] Cross-tenant session access is denied
-- [ ] Rate limiter rejects over-limit requests with trace id
-- [ ] Rate limiter uses dedicated `RATE_LIMITER_DO` namespace, not `CHAT_SESSION`
+- [x] Session messages persist for same tenant/session
+- [x] Cross-tenant session access is denied
+- [x] Rate limiter rejects over-limit requests with trace id
+- [x] Rate limiter uses dedicated `RATE_LIMITER_DO` namespace, not `CHAT_SESSION`
+
+### M1 Verification
+
+- [x] All tests pass (`npm test`)
+- [x] TypeScript compiles (`npm run typecheck`)
 
 ### M1 Architecture Changes
 
@@ -102,6 +112,8 @@ From [docs/plan.md](plan.md):
 
 **New Endpoints:**
 - `POST /chat` - Streaming chat with session history
+- `GET /chat/:sessionId/history` - Retrieve session history
+- `DELETE /chat/:sessionId` - Clear session history
 
 **Updated Packages:**
 - `packages/storage` - Add KV cache methods
@@ -113,6 +125,9 @@ Created preparation documents:
 - ✅ `docs/M0-COMPLETE.md` - Full M0 completion report
 - ✅ `docs/M1-PREP.md` - Detailed M1 requirements and checklist
 - ✅ `docs/PROJECT-STATUS.md` - This file (GitHub Project summary)
+- ✅ `docs/streaming.md` - Streaming response contract
+- ✅ `docs/rate-limiting.md` - Rate limit keying + headers
+- ✅ `docs/sessions.md` - Session lifecycle
 
 ---
 

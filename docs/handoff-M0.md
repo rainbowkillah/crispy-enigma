@@ -1,5 +1,7 @@
 # Handoff: M0 Foundation Complete
 
+**Note:** M1 is complete. See `docs/handoff-M1.md` for current status.
+
 ## Status
 M0 scaffolding is in place with tenant resolution, core response helpers, and baseline tooling. The worker exposes `/health` and enforces tenant resolution before responding. Tenant configs are Zod-validated and indexed for host/api-key lookups. Storage adapters are tenant-scoped for KV, DO, and Vectorize.
 

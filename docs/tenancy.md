@@ -127,8 +127,8 @@ Two DO bindings are used, each for a different purpose:
 
 | Binding | Class | Key pattern | Purpose |
 |---------|-------|-------------|---------|
-| `CHAT_SESSION` | `ChatSessionDO` | `{tenantId}:{sessionId}` | Chat session state |
-| `RATE_LIMITER_DO` | `RateLimiterDO` | `{tenantId}:{userId}` | Per-tenant rate limiting |
+| `CHAT_SESSION` | `ChatSession` | `{tenantId}:{sessionId}` | Chat session state |
+| `RATE_LIMITER_DO` | `RateLimiter` | `{tenantId}:ratelimit:{userKey}` | Per-tenant rate limiting |
 
 These use separate bindings to prevent contention between session and rate-limiting workloads on the same DO instance.
 

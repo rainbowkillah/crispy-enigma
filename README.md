@@ -2,6 +2,8 @@
 
 **Multi-tenant Cloudflare Workers AI monorepo** with streaming chat, RAG search, tool execution, and per-tenant deployments.
 
+**Current status:** M1 complete (streaming chat, sessions, rate limiting, KV cache, tests).
+
 ## Quick Start
 
 ```bash
@@ -19,7 +21,14 @@ npm test
 
 Request flow: `apps/worker-api` → **tenant resolution** → policy checks → AI Gateway → Workers AI → DO/KV/Vectorize → streaming response.
 
+Key endpoints:
+- `POST /chat`
+- `GET /chat/:sessionId/history`
+- `DELETE /chat/:sessionId`
+
 See [docs/plan.md](docs/plan.md) for full architecture and milestones.
+See [docs/milestones/M1.md](docs/milestones/M1.md) for the M1 summary.
+See [docs/streaming.md](docs/streaming.md), [docs/sessions.md](docs/sessions.md), and [docs/rate-limiting.md](docs/rate-limiting.md) for the M1 contracts.
 See [docs/wrangler.md](docs/wrangler.md) for the Wrangler version pin and ESM module format decision.
 
 ## Critical Patterns
@@ -99,7 +108,7 @@ tenants/
 ## Milestones
 
 - **M0**: Foundation + tenant resolution
-- **M1**: Streaming chat + sessions (DO)
+- **M1**: Streaming chat + sessions (DO) ✅
 - **M2**: AI Gateway integration
 - **M3**: Embeddings + Vectorize + RAG
 - **M4**: AI Search endpoint

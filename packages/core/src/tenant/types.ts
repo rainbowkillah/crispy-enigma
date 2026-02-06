@@ -11,6 +11,8 @@ export type TenantContext = {
     perMinute: number;
     burst: number;
   };
+  sessionRetentionDays: number;
+  maxMessagesPerSession: number;
   featureFlags: Record<string, boolean>;
   allowedHosts: string[];
   apiKeys: string[];

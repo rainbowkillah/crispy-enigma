@@ -48,18 +48,18 @@
     "bindings": [
       {
         "name": "RATE_LIMITER_DO",
-        "class_name": "RateLimiterDO"
+        "class_name": "RateLimiter"
       },
       {
         "name": "CHAT_SESSION",
-        "class_name": "ChatSessionDO"
+        "class_name": "ChatSession"
       }
     ]
   },
   "migrations": [
     {
       "tag": "v1",
-      "new_classes": ["RateLimiterDO", "ChatSessionDO"]
+      "new_classes": ["RateLimiter", "ChatSession"]
     }
   ],
   "env": {

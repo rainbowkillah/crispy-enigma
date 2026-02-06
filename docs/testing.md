@@ -38,10 +38,12 @@ The following test suites are critical for project success and must have compreh
   - Verify that a request for `tenant-a` cannot access data (KV, DO, Vectorize) belonging to `tenant-b`.
   - Ensure that API keys or hostnames correctly resolve to the right tenant context.
   - Prove that Vectorize queries using `namespace` correctly isolate results.
+  - Implemented in `tests/session-isolation.test.ts`.
 
 - **Streaming Behavior Tests (Integration/E2E):**
   - Confirm that `/chat` responses stream tokens correctly without data loss or premature termination.
   - Test handling of backpressure and connection interruptions.
+  - Implemented in `tests/streaming.test.ts`.
 
 - **Retrieval Correctness "Smoke" Tests (Integration):**
   - Use a fixed set of documents (fixtures) and queries to ensure the RAG pipeline returns deterministic and relevant results.
@@ -54,6 +56,7 @@ The following test suites are critical for project success and must have compreh
 
 - **Rate Limiting Tests (Integration):**
   - Confirm that the DO-based rate limiter correctly blocks requests that exceed the defined limit for a given tenant, user, or IP.
+  - Implemented in `tests/rate-limit.test.ts` and `tests/rate-limiter.test.ts`.
 
 ## 4. Quality Gates (CI/CD)
 The following gates will be enforced on every pull request before it can be merged.

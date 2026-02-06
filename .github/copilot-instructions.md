@@ -8,8 +8,8 @@
 ```typescript
 // ✅ CORRECT: Explicit tenant parameter
 function getSessionDO(tenantId: string, sessionId: string, env: Env): DurableObjectStub {
-  const id = env.SESSION_DO.idFromName(`${tenantId}:${sessionId}`);
-  return env.SESSION_DO.get(id);
+  const id = env.CHAT_SESSION.idFromName(`${tenantId}:${sessionId}`);
+  return env.CHAT_SESSION.get(id);
 }
 
 // ❌ WRONG: Hidden tenant in closure
@@ -50,12 +50,12 @@ npm run smoke:dev -- --tenant=<name>  # smoke tests
 
 ## Project Status
 
-**Current Milestone:** M0 ✅ COMPLETE | M1 🔵 READY TO START
+**Current Milestone:** M1 ✅ COMPLETE | M2 🔵 NEXT
 
-- **M0 (Foundation):** Complete - All tests passing, tenant resolution working
-- **M1 (Chat + Sessions):** Next - Implement streaming chat, Durable Object sessions, rate limiting
+- **M0 (Foundation):** Complete
+- **M1 (Chat + Sessions):** Complete
 - See [docs/PROJECT-STATUS.md](../docs/PROJECT-STATUS.md) for full status
-- See [docs/M1-PREP.md](../docs/M1-PREP.md) for M1 requirements
+- See [docs/milestones/M1.md](../docs/milestones/M1.md) for the M1 summary
 
 ## Project Conventions
 
@@ -96,7 +96,7 @@ const value = await env.KV.get(flagName);
 **DO IDs**: Encode tenant in ID
 ```typescript
 // ✅ Correct
-const doId = env.SESSION_DO.idFromName(`${tenantId}:${sessionId}`);
+const doId = env.CHAT_SESSION.idFromName(`${tenantId}:${sessionId}`);
 
 // ❌ Wrong - tenant not encoded
 const doId = env.SESSION_DO.idFromName(sessionId);
@@ -135,17 +135,15 @@ const response = await env.AI.run('@cf/meta/llama-2-7b-chat-int8', { messages })
 **Env typings**: Single source of truth in `packages/core/src/env.ts`
 ```typescript
 export interface Env {
-  // AI
   AI: Ai;
-  AI_GATEWAY: string; // Account ID for gateway routing
-  
-  // Storage (tenant-scoped via config)
-  KV: KVNamespace;
-  SESSION_DO: DurableObjectNamespace;
-  VECTORIZE: VectorizeIndex;
-  
-  // Config
-  ENVIRONMENT: 'dev' | 'staging' | 'production';
+  VECTORIZE: Vectorize;
+  CONFIG: KVNamespace;
+  CACHE: KVNamespace;
+  RATE_LIMITER: KVNamespace;
+  DB: D1Database;
+  CHAT_SESSION: DurableObjectNamespace;
+  RATE_LIMITER_DO: DurableObjectNamespace;
+  ENVIRONMENT?: string;
 }
 ```
 
@@ -162,12 +160,12 @@ export interface Env {
 {
   "tenantId": "acme-corp",
   "accountId": "cf-account-id",
-  "aiGateway": "acme-gateway",
+  "aiGatewayId": "acme-gateway",
   "aiModels": {
     "chat": "@cf/meta/llama-2-7b-chat-int8",
     "embeddings": "@cf/baai/bge-base-en-v1.5"
   },
-  "vectorizeIndex": "acme-embeddings",
+  "vectorizeNamespace": "acme-embeddings",
   "rateLimit": { "perMinute": 100, "burst": 20 }
 }
 ```

@@ -5,5 +5,25 @@
   "logpush": true,
   "vars": {
     "TENANT_ID": "example"
-  }
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "CHAT_SESSION",
+        "class_name": "ChatSession",
+        "script_name": "worker-api"
+      },
+      {
+        "name": "RATE_LIMITER_DO",
+        "class_name": "RateLimiter",
+        "script_name": "worker-api"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_classes": ["ChatSession", "RateLimiter"]
+    }
+  ]
 }

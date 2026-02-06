@@ -73,8 +73,8 @@ Two DO classes, each with a dedicated binding:
 
 | Binding | Class | Purpose |
 |---------|-------|---------|
-| `CHAT_SESSION` | `ChatSessionDO` | Stateful chat session history per tenant+session |
-| `RATE_LIMITER_DO` | `RateLimiterDO` | Sliding-window rate limiting per tenant+user |
+| `CHAT_SESSION` | `ChatSession` | Stateful chat session history per tenant+session |
+| `RATE_LIMITER_DO` | `RateLimiter` | Sliding-window rate limiting per tenant+user |
 
 DO IDs encode the tenant: `namespace.idFromName(`${tenantId}:${objectId}`)`. Session and rate-limiter DOs use separate namespaces to prevent contention.
 
@@ -110,7 +110,7 @@ HTTP Request
              ▼
 ┌─────────────────────────┐
 │  4. Route Dispatch      │  ← URL pathname matching
-│     /health             │     (M1+: /chat, /search, /tools/execute, /tts)
+│     /health             │     /chat, /chat/:sessionId/history, /chat/:sessionId
 └────────────┬────────────┘
              │
              ▼
@@ -267,6 +267,8 @@ Planned (M1+): streaming behavior tests, session isolation tests, rate limit enf
 |----------|-----------|-------------|
 | `GET /health` | M0 | Tenant-aware health check |
 | `POST /chat` | M1 | Streaming chat with session persistence (SSE) |
+| `GET /chat/:sessionId/history` | M1 | Session history retrieval |
+| `DELETE /chat/:sessionId` | M1 | Session clear |
 | `POST /search` | M4 | RAG search: answer + sources + confidence + follow-ups |
 | `POST /tools/execute` | M5 | Tool/function dispatch with permission gating |
 | `POST /ingest` | M3 | Document chunking + embedding + Vectorize upsert |
@@ -289,7 +291,7 @@ npm run typecheck                 # TypeScript strict check
 | Milestone | Scope | Status |
 |-----------|-------|--------|
 | M0 | Foundation: monorepo, tenant resolution, Env types, /health, tests | Complete |
-| M1 | Chat + Sessions: /chat streaming, DO sessions, KV cache, rate limiter | Next |
+| M1 | Chat + Sessions: /chat streaming, DO sessions, KV cache, rate limiter | Complete |
 | M2 | AI Gateway: gateway integration, model routing, budget/limits, observability hooks | Planned |
 | M3 | Embeddings + Vectorize + RAG: ingestion, retrieval, citations | Planned |
 | M4 | AI Search UX: /search endpoint, query rewriting, caching | Planned |

@@ -8,6 +8,8 @@ We are building a multi-tenant Cloudflare Workers AI platform inside a monorepo.
 
 We also build a developer experience layer: an **Nx plugin** that provides generators/executors comparable to Cloudflare’s `wrangler` + `create-cloudflare` so new apps/services/tenants can be created and deployed consistently.
 
+**Status:** M1 complete. See `docs/milestones/M1.md` for the milestone summary.
+
 ## 1) Architecture mapped to Cloudflare primitives
 
 ### 1.1 Request lifecycle overview

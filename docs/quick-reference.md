@@ -19,6 +19,16 @@
 - Durable Objects: `RATE_LIMITER_DO`, `CHAT_SESSION`
 - Vectorize: `VECTORIZE`
 
+## Endpoints
+- `POST /chat`
+- `GET /chat/:sessionId/history`
+- `DELETE /chat/:sessionId`
+
+## M1 Docs
+- `docs/streaming.md`
+- `docs/sessions.md`
+- `docs/rate-limiting.md`
+
 ## Tenant Config Paths
 - `tenants/alpha/tenant.config.json`
 - `tenants/alpha/wrangler.jsonc`
