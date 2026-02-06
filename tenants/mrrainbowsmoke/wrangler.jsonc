@@ -16,6 +16,10 @@
   "ai": {
     "binding": "AI"
   },
+  "vectorize": {
+    "binding": "VECTORIZE",
+    "index_name": "ai-worker-dev"
+  },
   "kv_namespaces": [
     {
       "binding": "RATE_LIMITER",
