@@ -1,0 +1,26 @@
+{
+  "name": "worker-api",
+  "root": "apps/worker-api",
+  "sourceRoot": "apps/worker-api/src",
+  "projectType": "application",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm dev --tenant=example"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm test"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm typecheck"
+      }
+    }
+  }
+}

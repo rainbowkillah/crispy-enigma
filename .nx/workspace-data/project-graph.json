@@ -1,0 +1,202 @@
+{
+  "nodes": {
+    "observability": {
+      "name": "observability",
+      "type": "lib",
+      "data": {
+        "root": "packages/observability",
+        "name": "observability",
+        "sourceRoot": "packages/observability/src",
+        "projectType": "library",
+        "targets": {
+          "test": {
+            "executor": "nx:run-commands",
+            "options": {
+              "command": "pnpm test"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "typecheck": {
+            "executor": "nx:run-commands",
+            "options": {
+              "command": "pnpm typecheck"
+            },
+            "configurations": {},
+            "parallelism": true
+          }
+        },
+        "implicitDependencies": [],
+        "tags": []
+      }
+    },
+    "storage": {
+      "name": "storage",
+      "type": "lib",
+      "data": {
+        "root": "packages/storage",
+        "name": "storage",
+        "sourceRoot": "packages/storage/src",
+        "projectType": "library",
+        "targets": {
+          "test": {
+            "executor": "nx:run-commands",
+            "options": {
+              "command": "pnpm test"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "typecheck": {
+            "executor": "nx:run-commands",
+            "options": {
+              "command": "pnpm typecheck"
+            },
+            "configurations": {},
+            "parallelism": true
+          }
+        },
+        "implicitDependencies": [],
+        "tags": []
+      }
+    },
+    "worker-api": {
+      "name": "worker-api",
+      "type": "app",
+      "data": {
+        "root": "apps/worker-api",
+        "name": "worker-api",
+        "sourceRoot": "apps/worker-api/src",
+        "projectType": "application",
+        "targets": {
+          "dev": {
+            "executor": "nx:run-commands",
+            "options": {
+              "command": "pnpm dev --tenant=example"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "test": {
+            "executor": "nx:run-commands",
+            "options": {
+              "command": "pnpm test"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "typecheck": {
+            "executor": "nx:run-commands",
+            "options": {
+              "command": "pnpm typecheck"
+            },
+            "configurations": {},
+            "parallelism": true
+          }
+        },
+        "implicitDependencies": [],
+        "tags": []
+      }
+    },
+    "core": {
+      "name": "core",
+      "type": "lib",
+      "data": {
+        "root": "packages/core",
+        "name": "core",
+        "sourceRoot": "packages/core/src",
+        "projectType": "library",
+        "targets": {
+          "test": {
+            "executor": "nx:run-commands",
+            "options": {
+              "command": "pnpm test"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "typecheck": {
+            "executor": "nx:run-commands",
+            "options": {
+              "command": "pnpm typecheck"
+            },
+            "configurations": {},
+            "parallelism": true
+          }
+        },
+        "implicitDependencies": [],
+        "tags": []
+      }
+    },
+    "rag": {
+      "name": "rag",
+      "type": "lib",
+      "data": {
+        "root": "packages/rag",
+        "name": "rag",
+        "sourceRoot": "packages/rag/src",
+        "projectType": "library",
+        "targets": {
+          "test": {
+            "executor": "nx:run-commands",
+            "options": {
+              "command": "pnpm test"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "typecheck": {
+            "executor": "nx:run-commands",
+            "options": {
+              "command": "pnpm typecheck"
+            },
+            "configurations": {},
+            "parallelism": true
+          }
+        },
+        "implicitDependencies": [],
+        "tags": []
+      }
+    },
+    "ai": {
+      "name": "ai",
+      "type": "lib",
+      "data": {
+        "root": "packages/ai",
+        "name": "ai",
+        "sourceRoot": "packages/ai/src",
+        "projectType": "library",
+        "targets": {
+          "test": {
+            "executor": "nx:run-commands",
+            "options": {
+              "command": "pnpm test"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "typecheck": {
+            "executor": "nx:run-commands",
+            "options": {
+              "command": "pnpm typecheck"
+            },
+            "configurations": {},
+            "parallelism": true
+          }
+        },
+        "implicitDependencies": [],
+        "tags": []
+      }
+    }
+  },
+  "externalNodes": {},
+  "dependencies": {
+    "observability": [],
+    "storage": [],
+    "worker-api": [],
+    "core": [],
+    "rag": [],
+    "ai": []
+  },
+  "version": "6.0"
+}

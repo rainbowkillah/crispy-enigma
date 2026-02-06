@@ -1,0 +1,20 @@
+{
+  "name": "ai",
+  "root": "packages/ai",
+  "sourceRoot": "packages/ai/src",
+  "projectType": "library",
+  "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm test"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm typecheck"
+      }
+    }
+  }
+}

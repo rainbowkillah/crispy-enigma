@@ -1,0 +1,17 @@
+{
+  "tenantId": "example",
+  "accountId": "example-account",
+  "aiGatewayId": "example-gateway",
+  "aiModels": {
+    "chat": "@cf/meta/llama-3.1-8b-instruct",
+    "embeddings": "@cf/baai/bge-base-en-v1.5"
+  },
+  "vectorizeNamespace": "example",
+  "rateLimit": {
+    "perMinute": 60,
+    "burst": 20
+  },
+  "featureFlags": {},
+  "allowedHosts": ["example.local"],
+  "apiKeys": []
+}

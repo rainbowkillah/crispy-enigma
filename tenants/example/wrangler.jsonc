@@ -1,0 +1,9 @@
+{
+  "name": "worker-api-example",
+  "main": "apps/worker-api/src/index.ts",
+  "compatibility_date": "2026-02-01",
+  "logpush": true,
+  "vars": {
+    "TENANT_ID": "example"
+  }
+}

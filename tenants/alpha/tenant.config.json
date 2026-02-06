@@ -1,0 +1,17 @@
+{
+  "tenantId": "alpha",
+  "accountId": "alpha-account",
+  "aiGatewayId": "alpha-gateway",
+  "aiModels": {
+    "chat": "@cf/meta/llama-3.1-8b-instruct",
+    "embeddings": "@cf/baai/bge-base-en-v1.5"
+  },
+  "vectorizeNamespace": "alpha",
+  "rateLimit": {
+    "perMinute": 60,
+    "burst": 20
+  },
+  "featureFlags": {},
+  "allowedHosts": ["alpha.local"],
+  "apiKeys": ["alpha-key"]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "core",
+  "root": "packages/core",
+  "sourceRoot": "packages/core/src",
+  "projectType": "library",
+  "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm test"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm typecheck"
+      }
+    }
+  }
+}

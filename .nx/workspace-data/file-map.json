@@ -1,0 +1,224 @@
+{
+  "version": "6.0",
+  "nxVersion": "19.8.14",
+  "deps": {
+    "zod": "^3.23.8",
+    "@cloudflare/workers-types": "^4.20240215.0",
+    "@typescript-eslint/eslint-plugin": "^8.1.0",
+    "@typescript-eslint/parser": "^8.1.0",
+    "eslint": "^9.8.0",
+    "eslint-config-prettier": "^9.1.0",
+    "nx": "^19.6.0",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  },
+  "pathMappings": {},
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "projectFileMap": {
+      "core": [
+        {
+          "file": "packages/core/project.json",
+          "hash": "15230410330796334108"
+        },
+        {
+          "file": "packages/core/src/env.ts",
+          "hash": "14285348314462847678"
+        },
+        {
+          "file": "packages/core/src/http/response.ts",
+          "hash": "8556291513789522508"
+        },
+        {
+          "file": "packages/core/src/index.ts",
+          "hash": "5434483253253471655"
+        },
+        {
+          "file": "packages/core/src/tenant/loader.ts",
+          "hash": "16290322184780458341"
+        },
+        {
+          "file": "packages/core/src/tenant/resolveTenant.ts",
+          "hash": "1659372200797821516"
+        },
+        {
+          "file": "packages/core/src/tenant/schema.ts",
+          "hash": "17908368736879901591"
+        },
+        {
+          "file": "packages/core/src/tenant/types.ts",
+          "hash": "6189555554380899843"
+        }
+      ],
+      "worker-api": [
+        {
+          "file": "apps/worker-api/project.json",
+          "hash": "6013637391676551897"
+        },
+        {
+          "file": "apps/worker-api/src/index.ts",
+          "hash": "6350293256307417799"
+        }
+      ],
+      "ai": [
+        {
+          "file": "packages/ai/project.json",
+          "hash": "9152839301447230763"
+        },
+        {
+          "file": "packages/ai/src/index.ts",
+          "hash": "4595979742548113990"
+        }
+      ],
+      "observability": [
+        {
+          "file": "packages/observability/project.json",
+          "hash": "6428200784532287838"
+        },
+        {
+          "file": "packages/observability/src/index.ts",
+          "hash": "4595979742548113990"
+        }
+      ],
+      "rag": [
+        {
+          "file": "packages/rag/project.json",
+          "hash": "16544294613512713695"
+        },
+        {
+          "file": "packages/rag/src/index.ts",
+          "hash": "4595979742548113990"
+        }
+      ],
+      "storage": [
+        {
+          "file": "packages/storage/project.json",
+          "hash": "12253957537730247810"
+        },
+        {
+          "file": "packages/storage/src/do.ts",
+          "hash": "15124964690760613976"
+        },
+        {
+          "file": "packages/storage/src/index.ts",
+          "hash": "4260946828283953203"
+        },
+        {
+          "file": "packages/storage/src/kv.ts",
+          "hash": "13884600019567354285"
+        },
+        {
+          "file": "packages/storage/src/vectorize.ts",
+          "hash": "15308775536369274324"
+        }
+      ]
+    },
+    "nonProjectFiles": [
+      {
+        "file": ".github/copilot-instructions.md",
+        "hash": "250890688948449306"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "13119912102255678890"
+      },
+      {
+        "file": ".prettierrc.json",
+        "hash": "2431873673864141239"
+      },
+      {
+        "file": ".vscode/settings.json",
+        "hash": "15113672247534006936"
+      },
+      {
+        "file": "LICENSE",
+        "hash": "15598910314814648805"
+      },
+      {
+        "file": "README.md",
+        "hash": "17460217003566297695"
+      },
+      {
+        "file": "docs/agents.prompt.yaml",
+        "hash": "7886199894142190861"
+      },
+      {
+        "file": "docs/examples/tenant-aware-handler.ts",
+        "hash": "4164487409256851761"
+      },
+      {
+        "file": "docs/footguns.md",
+        "hash": "10898494277440145267"
+      },
+      {
+        "file": "docs/plan.md",
+        "hash": "13149271726212320794"
+      },
+      {
+        "file": "docs/quick-reference.md",
+        "hash": "699455143484696529"
+      },
+      {
+        "file": "eslint.config.js",
+        "hash": "5322207381626217975"
+      },
+      {
+        "file": "nx.json",
+        "hash": "3784481289658410771"
+      },
+      {
+        "file": "package.json",
+        "hash": "7403478735657509330"
+      },
+      {
+        "file": "scripts/dev.mjs",
+        "hash": "9898236013572870286"
+      },
+      {
+        "file": "tenants/alpha/tenant.config.json",
+        "hash": "1363558194095765126"
+      },
+      {
+        "file": "tenants/example/tenant.config.json",
+        "hash": "15922214223165577465"
+      },
+      {
+        "file": "tenants/example/wrangler.jsonc",
+        "hash": "5747082960697393870"
+      },
+      {
+        "file": "tenants/index.ts",
+        "hash": "14135603256010153023"
+      },
+      {
+        "file": "tests/do-name.test.ts",
+        "hash": "9066739488068152674"
+      },
+      {
+        "file": "tests/health.test.ts",
+        "hash": "5581100438841377719"
+      },
+      {
+        "file": "tests/kv-prefix.test.ts",
+        "hash": "6676351472938786972"
+      },
+      {
+        "file": "tests/resolveTenant.test.ts",
+        "hash": "6690891934882864550"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "8819194656202361571"
+      },
+      {
+        "file": "tsconfig.json",
+        "hash": "16221407414043570034"
+      },
+      {
+        "file": "vitest.config.ts",
+        "hash": "4261060993313167734"
+      }
+    ]
+  }
+}
