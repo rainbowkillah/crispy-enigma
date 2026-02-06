@@ -1,0 +1,87 @@
+{
+  "name": "bluey-ai-worker",
+  "main": "apps/worker-api/src/index.ts",
+  "compatibility_date": "2026-02-01",
+  "account_id": "9acbaee838d01aa096e63ad4551fda77",
+  "vars": {
+    "ENVIRONMENT": "production",
+    "MODEL_ID": "@cf/meta/llama-3.1-8b-instruct-fast",
+    "FALLBACK_MODEL_ID": "@cf/meta/llama-3.1-8b-instruct",
+    "RATE_LIMIT_KEYS_PER_MINUTE": 60,
+    "MAX_REQUEST_BODY_SIZE": 10240,
+    "MAX_MESSAGE_COUNT": 50,
+    "MAX_MESSAGE_LENGTH": 2000,
+    "DEBUG_LOGGING": false
+  },
+  "ai": {
+    "binding": "AI"
+  },
+  "kv_namespaces": [
+    {
+      "binding": "RATE_LIMITER",
+      "id": "3d92856849a143d1b066ba67c3c19140",
+      "preview_id": "c1b8fabe9cd04217ae9e0e7c2337e496"
+    },
+    {
+      "binding": "CONFIG",
+      "id": "fe5f8c7dc4044d98b331354e1d5d411f",
+      "preview_id": "7d19664717324aadbfe8a9b6a4234228"
+    },
+    {
+      "binding": "CACHE",
+      "id": "6bc11f864eb9454ebb2bc7cde047b517",
+      "preview_id": "51cc3bceff0a45ceb7dcc8485abed458"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "mrrainbowsmoke-db",
+      "database_id": "ad1db3cf-5ed8-4128-adfb-be819b3e7385"
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "RATE_LIMITER_DO",
+        "class_name": "RateLimiterDO"
+      },
+      {
+        "name": "CHAT_SESSION",
+        "class_name": "ChatSessionDO"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_classes": ["RateLimiterDO", "ChatSessionDO"]
+    }
+  ],
+  "env": {
+    "dev": {
+      "vars": {
+        "ENVIRONMENT": "dev",
+        "MODEL_ID": "@cf/meta/llama-3.1-8b-instruct-fast",
+        "FALLBACK_MODEL_ID": "@cf/meta/llama-3.1-8b-instruct",
+        "RATE_LIMIT_KEYS_PER_MINUTE": 100,
+        "MAX_REQUEST_BODY_SIZE": 10240,
+        "MAX_MESSAGE_COUNT": 50,
+        "MAX_MESSAGE_LENGTH": 2000,
+        "DEBUG_LOGGING": true
+      }
+    },
+    "staging": {
+      "vars": {
+        "ENVIRONMENT": "staging",
+        "MODEL_ID": "@cf/meta/llama-3.1-8b-instruct-fast",
+        "FALLBACK_MODEL_ID": "@cf/meta/llama-3.1-8b-instruct",
+        "RATE_LIMIT_KEYS_PER_MINUTE": 60,
+        "MAX_REQUEST_BODY_SIZE": 10240,
+        "MAX_MESSAGE_COUNT": 50,
+        "MAX_MESSAGE_LENGTH": 2000,
+        "DEBUG_LOGGING": false
+      }
+    }
+  }
+}

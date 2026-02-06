@@ -1,0 +1,12 @@
+{
+  "name": "alpha-worker",
+  "main": "apps/worker-api/src/index.ts",
+  "compatibility_date": "2026-02-01",
+  "account_id": "00000000000000000000000000000000",
+  "vars": {
+    "ENVIRONMENT": "dev"
+  },
+  "ai": {
+    "binding": "AI"
+  }
+}

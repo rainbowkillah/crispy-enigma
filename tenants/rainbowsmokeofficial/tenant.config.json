@@ -1,0 +1,17 @@
+{
+  "tenantId": "rainbowsmokeofficial",
+  "accountId": "7fde695caf9cc41efca391316eb71003",
+  "aiGatewayId": "rainbowsmokeofficial-gateway",
+  "aiModels": {
+    "chat": "@cf/meta/llama-3.1-8b-instruct-fast",
+    "embeddings": "@cf/baai/bge-base-en-v1.5"
+  },
+  "vectorizeNamespace": "rainbowsmokeofficial",
+  "rateLimit": {
+    "perMinute": 60,
+    "burst": 20
+  },
+  "featureFlags": {},
+  "allowedHosts": ["rainbowsmokeofficial.local"],
+  "apiKeys": []
+}

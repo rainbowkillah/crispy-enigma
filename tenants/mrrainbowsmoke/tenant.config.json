@@ -1,0 +1,17 @@
+{
+  "tenantId": "mrrainbowsmoke",
+  "accountId": "9acbaee838d01aa096e63ad4551fda77",
+  "aiGatewayId": "mrrainbowsmoke-gateway",
+  "aiModels": {
+    "chat": "@cf/meta/llama-3.1-8b-instruct-fast",
+    "embeddings": "@cf/baai/bge-base-en-v1.5"
+  },
+  "vectorizeNamespace": "mrrainbowsmoke",
+  "rateLimit": {
+    "perMinute": 60,
+    "burst": 20
+  },
+  "featureFlags": {},
+  "allowedHosts": ["mrrainbowsmoke.local"],
+  "apiKeys": []
+}
