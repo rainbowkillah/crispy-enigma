@@ -40,12 +40,22 @@ function createAdapter(tenantId: string) {
 ## Build and Test
 
 ```bash
-# Once M0 complete:
-pnpm install
-pnpm build
-pnpm test
-pnpm dev --tenant=<name>  # wrangler dev with tenant config
+# M0 is complete! Use npm (not pnpm):
+npm install
+npm test
+npm run typecheck
+npm run dev -- --tenant=<name>  # wrangler dev with tenant config
+npm run smoke:dev -- --tenant=<name>  # smoke tests
 ```
+
+## Project Status
+
+**Current Milestone:** M0 ✅ COMPLETE | M1 🔵 READY TO START
+
+- **M0 (Foundation):** Complete - All tests passing, tenant resolution working
+- **M1 (Chat + Sessions):** Next - Implement streaming chat, Durable Object sessions, rate limiting
+- See [docs/PROJECT-STATUS.md](../docs/PROJECT-STATUS.md) for full status
+- See [docs/M1-PREP.md](../docs/M1-PREP.md) for M1 requirements
 
 ## Project Conventions
 
