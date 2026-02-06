@@ -1,6 +1,6 @@
 {
   "name": "bluey-ai-worker",
-  "main": "apps/worker-api/src/index.ts",
+  "main": "../../apps/worker-api/src/index.ts",
   "compatibility_date": "2026-02-01",
   "account_id": "9acbaee838d01aa096e63ad4551fda77",
   "vars": {

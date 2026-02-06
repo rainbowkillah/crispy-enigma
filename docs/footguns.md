@@ -13,7 +13,7 @@ This doc catalogs common mistakes that break tenant isolation and how to avoid t
 export default {
   async fetch(request: Request, env: Env) {
     // Direct storage access without tenant check!
-    const config = await env.KV.get('app-config');
+    const config = await env.CONFIG.get('app-config');
     return new Response(config);
   }
 };
@@ -23,7 +23,7 @@ export default {
 ```typescript
 export default {
   async fetch(request: Request, env: Env) {
-    const tenant = await resolveTenant(request, env);
+    const tenant = resolveTenant(request, { hostMap, apiKeyMap });
     if (!tenant) {
       return new Response('Tenant required', { status: 400 });
     }
@@ -37,7 +37,7 @@ export default {
 
 **Mitigation**:
 - Use middleware pattern that enforces tenant resolution
-- Add linter rule to flag `env.KV`, `env.AI` usage outside tenant handlers
+- Add linter rule to flag `env.CONFIG`, `env.CACHE`, `env.RATE_LIMITER`, `env.AI` usage outside tenant handlers
 - Add integration test that verifies tenant rejection
 
 ---
@@ -49,19 +49,19 @@ export default {
 **Wrong** ❌:
 ```typescript
 // sessionId might collide across tenants!
-await env.KV.put(sessionId, JSON.stringify(data));
+await env.CACHE.put(sessionId, JSON.stringify(data));
 ```
 
 **Right** ✅:
 ```typescript
 // Tenant prefix ensures isolation
 const key = `${tenantId}:sessions:${sessionId}`;
-await env.KV.put(key, JSON.stringify(data));
+await env.CACHE.put(key, JSON.stringify(data));
 ```
 
 **Mitigation**:
 - Create adapter functions that enforce prefixing: `kvGet(tenantId, key)`
-- Never pass raw `env.KV` to functions; always wrap it
+- Never pass raw `env.CONFIG`, `env.CACHE`, or `env.RATE_LIMITER` to functions; always wrap them
 - Add test: write data for tenant A, verify tenant B cannot read it
 
 ---
@@ -73,15 +73,15 @@ await env.KV.put(key, JSON.stringify(data));
 **Wrong** ❌:
 ```typescript
 // sessionId alone is not tenant-scoped!
-const id = env.SESSION_DO.idFromName(sessionId);
-const stub = env.SESSION_DO.get(id);
+const id = env.CHAT_SESSION.idFromName(sessionId);
+const stub = env.CHAT_SESSION.get(id);
 ```
 
 **Right** ✅:
 ```typescript
 // Encode tenant in the ID itself
-const id = env.SESSION_DO.idFromName(`${tenantId}:${sessionId}`);
-const stub = env.SESSION_DO.get(id);
+const id = env.CHAT_SESSION.idFromName(`${tenantId}:${sessionId}`);
+const stub = env.CHAT_SESSION.get(id);
 ```
 
 **Mitigation**:
@@ -179,14 +179,14 @@ const response = await generateChat(tenantId, messages, tenant, env);
 ```typescript
 // Cache key based only on query - tenant-agnostic!
 const cacheKey = `search:${JSON.stringify(query)}`;
-const cached = await env.KV.get(cacheKey);
+const cached = await env.CACHE.get(cacheKey);
 ```
 
 **Right** ✅:
 ```typescript
 // Include tenant in cache key
 const cacheKey = `${tenantId}:search:${JSON.stringify(query)}`;
-const cached = await env.KV.get(cacheKey);
+const cached = await env.CACHE.get(cacheKey);
 ```
 
 **Mitigation**:
@@ -206,8 +206,8 @@ const cached = await env.KV.get(cacheKey);
 function createAdapter(tenantId: string, env: Env) {
   return {
     getSession: async (sessionId: string) => {
-      const id = env.SESSION_DO.idFromName(`${tenantId}:${sessionId}`);
-      return env.SESSION_DO.get(id);
+      const id = env.CHAT_SESSION.idFromName(`${tenantId}:${sessionId}`);
+      return env.CHAT_SESSION.get(id);
     },
   };
 }
@@ -221,8 +221,8 @@ const session = await adapter.getSession(sessionId); // Where's tenantId?
 ```typescript
 // tenantId explicit in every call
 function getSessionDO(tenantId: string, sessionId: string, env: Env) {
-  const id = env.SESSION_DO.idFromName(`${tenantId}:${sessionId}`);
-  return env.SESSION_DO.get(id);
+  const id = env.CHAT_SESSION.idFromName(`${tenantId}:${sessionId}`);
+  return env.CHAT_SESSION.get(id);
 }
 
 // Call site makes tenant boundary clear
@@ -383,7 +383,7 @@ describe('Tenant isolation', () => {
 Before deploying any tenant-aware code:
 
 - [ ] All storage operations require explicit `tenantId` parameter
-- [ ] No `env.KV.get()`, `env.AI.run()` called outside adapters
+- [ ] No `env.CONFIG.get()`, `env.CACHE.get()`, `env.RATE_LIMITER.get()`, `env.AI.run()` called outside adapters
 - [ ] All DO IDs encode tenant: `idFromName(`${tenantId}:${id}`)`
 - [ ] All Vectorize queries filter by tenant (or use per-tenant index)
 - [ ] All AI calls route through gateway wrapper
@@ -399,7 +399,7 @@ Before deploying any tenant-aware code:
 
 ```bash
 # Find potential KV calls without tenant scoping
-grep -rn "env.KV.get\|env.KV.put" apps/ packages/
+grep -rn "env.CONFIG.get\|env.CONFIG.put\|env.CACHE.get\|env.CACHE.put\|env.RATE_LIMITER.get\|env.RATE_LIMITER.put" apps/ packages/
 
 # Find potential direct AI calls (should be rare)
 grep -rn "env.AI.run" apps/ packages/

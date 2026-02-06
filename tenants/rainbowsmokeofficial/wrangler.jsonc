@@ -1,6 +1,6 @@
 {
   "name": "azure-ai-worker",
-  "main": "apps/worker-api/src/index.ts",
+  "main": "../../apps/worker-api/src/index.ts",
   "compatibility_date": "2026-02-01",
   "account_id": "7fde695caf9cc41efca391316eb71003",
   "vars": {

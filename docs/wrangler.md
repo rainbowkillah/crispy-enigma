@@ -1,7 +1,7 @@
 # Wrangler Version + Module Format
 
 ## Version Pin
-- Wrangler CLI is pinned in `package.json` as `wrangler@4.20.0`.
+- Wrangler CLI is pinned in `package.json` as `wrangler@4.63.0`.
 - Install via `npm install` to use the local CLI.
 
 ## Module Format

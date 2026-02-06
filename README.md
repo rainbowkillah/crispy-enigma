@@ -30,10 +30,14 @@ See [docs/wrangler.md](docs/wrangler.md) for the Wrangler version pin and ESM mo
 // CORRECT: Resolve tenant before any storage/AI access
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
-    const tenant = await resolveTenant(request, env);
+    // hostMap/apiKeyMap built from tenant configs at startup
+    const tenant = resolveTenant(request, { hostMap, apiKeyMap });
     if (!tenant) return new Response('Tenant required', { status: 400 });
-    
-    return handleRequest(tenant, request, env);
+
+    const config = tenantIndex.byId[tenant.tenantId];
+    if (!config) return new Response('Unknown tenant', { status: 404 });
+
+    return handleRequest(config, request, env);
   }
 };
 ```
@@ -42,7 +46,7 @@ export default {
 // WRONG: Direct storage access without tenant context
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
-    const value = await env.KV.get('some-key'); // ❌ No tenant scoping!
+    const value = await env.CONFIG.get('some-key'); // ❌ No tenant scoping!
     return new Response(value);
   }
 };
