@@ -2,7 +2,7 @@
 
 ## Version Pin
 - Wrangler CLI is pinned in `package.json` as `wrangler@4.20.0`.
-- Install via `pnpm install` (or `npm install`) to use the local CLI.
+- Install via `npm install` to use the local CLI.
 
 ## Module Format
 - This repo uses **ESM** (modules) for Workers.

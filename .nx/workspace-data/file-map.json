@@ -11,11 +11,110 @@
     "nx": "^19.6.0",
     "prettier": "^3.3.3",
     "typescript": "^5.5.4",
-    "vitest": "^2.0.5"
+    "vitest": "^2.0.5",
+    "wrangler": "4.20.0"
   },
   "pathMappings": {},
   "nxJsonPlugins": [],
   "fileMap": {
+    "projectFileMap": {
+      "storage": [
+        {
+          "file": "packages/storage/project.json",
+          "hash": "12253957537730247810"
+        },
+        {
+          "file": "packages/storage/src/do.ts",
+          "hash": "15124964690760613976"
+        },
+        {
+          "file": "packages/storage/src/index.ts",
+          "hash": "4260946828283953203"
+        },
+        {
+          "file": "packages/storage/src/kv.ts",
+          "hash": "13884600019567354285"
+        },
+        {
+          "file": "packages/storage/src/vectorize.ts",
+          "hash": "15308775536369274324"
+        }
+      ],
+      "rag": [
+        {
+          "file": "packages/rag/project.json",
+          "hash": "16544294613512713695"
+        },
+        {
+          "file": "packages/rag/src/index.ts",
+          "hash": "4595979742548113990"
+        }
+      ],
+      "ai": [
+        {
+          "file": "packages/ai/project.json",
+          "hash": "9152839301447230763"
+        },
+        {
+          "file": "packages/ai/src/index.ts",
+          "hash": "4595979742548113990"
+        }
+      ],
+      "worker-api": [
+        {
+          "file": "apps/worker-api/project.json",
+          "hash": "6013637391676551897"
+        },
+        {
+          "file": "apps/worker-api/src/index.ts",
+          "hash": "2576037746577402451"
+        }
+      ],
+      "observability": [
+        {
+          "file": "packages/observability/project.json",
+          "hash": "6428200784532287838"
+        },
+        {
+          "file": "packages/observability/src/index.ts",
+          "hash": "4595979742548113990"
+        }
+      ],
+      "core": [
+        {
+          "file": "packages/core/project.json",
+          "hash": "15230410330796334108"
+        },
+        {
+          "file": "packages/core/src/env.ts",
+          "hash": "10745471813101455648"
+        },
+        {
+          "file": "packages/core/src/http/response.ts",
+          "hash": "8556291513789522508"
+        },
+        {
+          "file": "packages/core/src/index.ts",
+          "hash": "5434483253253471655"
+        },
+        {
+          "file": "packages/core/src/tenant/loader.ts",
+          "hash": "16290322184780458341"
+        },
+        {
+          "file": "packages/core/src/tenant/resolveTenant.ts",
+          "hash": "1659372200797821516"
+        },
+        {
+          "file": "packages/core/src/tenant/schema.ts",
+          "hash": "17908368736879901591"
+        },
+        {
+          "file": "packages/core/src/tenant/types.ts",
+          "hash": "6189555554380899843"
+        }
+      ]
+    },
     "nonProjectFiles": [
       {
         "file": ".github/copilot-instructions.md",
@@ -39,7 +138,7 @@
       },
       {
         "file": "README.md",
-        "hash": "17460217003566297695"
+        "hash": "3202476392225166931"
       },
       {
         "file": "docs/agents.prompt.yaml",
@@ -63,7 +162,11 @@
       },
       {
         "file": "docs/quick-reference.md",
-        "hash": "17697410342252721996"
+        "hash": "13753576732200684929"
+      },
+      {
+        "file": "docs/wrangler.md",
+        "hash": "15186703080399350010"
       },
       {
         "file": "eslint.config.js",
@@ -75,11 +178,11 @@
       },
       {
         "file": "package-lock.json",
-        "hash": "8159268554857604041"
+        "hash": "11915227431468264257"
       },
       {
         "file": "package.json",
-        "hash": "17378179907768401945"
+        "hash": "11704266816267604542"
       },
       {
         "file": "scripts/dev.mjs",
@@ -169,104 +272,6 @@
         "file": "vitest.config.ts",
         "hash": "4261060993313167734"
       }
-    ],
-    "projectFileMap": {
-      "worker-api": [
-        {
-          "file": "apps/worker-api/project.json",
-          "hash": "6013637391676551897"
-        },
-        {
-          "file": "apps/worker-api/src/index.ts",
-          "hash": "2576037746577402451"
-        }
-      ],
-      "observability": [
-        {
-          "file": "packages/observability/project.json",
-          "hash": "6428200784532287838"
-        },
-        {
-          "file": "packages/observability/src/index.ts",
-          "hash": "4595979742548113990"
-        }
-      ],
-      "core": [
-        {
-          "file": "packages/core/project.json",
-          "hash": "15230410330796334108"
-        },
-        {
-          "file": "packages/core/src/env.ts",
-          "hash": "10745471813101455648"
-        },
-        {
-          "file": "packages/core/src/http/response.ts",
-          "hash": "8556291513789522508"
-        },
-        {
-          "file": "packages/core/src/index.ts",
-          "hash": "5434483253253471655"
-        },
-        {
-          "file": "packages/core/src/tenant/loader.ts",
-          "hash": "16290322184780458341"
-        },
-        {
-          "file": "packages/core/src/tenant/resolveTenant.ts",
-          "hash": "1659372200797821516"
-        },
-        {
-          "file": "packages/core/src/tenant/schema.ts",
-          "hash": "17908368736879901591"
-        },
-        {
-          "file": "packages/core/src/tenant/types.ts",
-          "hash": "6189555554380899843"
-        }
-      ],
-      "ai": [
-        {
-          "file": "packages/ai/project.json",
-          "hash": "9152839301447230763"
-        },
-        {
-          "file": "packages/ai/src/index.ts",
-          "hash": "4595979742548113990"
-        }
-      ],
-      "rag": [
-        {
-          "file": "packages/rag/project.json",
-          "hash": "16544294613512713695"
-        },
-        {
-          "file": "packages/rag/src/index.ts",
-          "hash": "4595979742548113990"
-        }
-      ],
-      "storage": [
-        {
-          "file": "packages/storage/project.json",
-          "hash": "12253957537730247810"
-        },
-        {
-          "file": "packages/storage/src/do.ts",
-          "hash": "15124964690760613976"
-        },
-        {
-          "file": "packages/storage/src/index.ts",
-          "hash": "4260946828283953203"
-        },
-        {
-          "file": "packages/storage/src/kv.ts",
-          "hash": "13884600019567354285"
-        },
-        {
-          "file": "packages/storage/src/vectorize.ts",
-          "hash": "15308775536369274324"
-        }
-      ]
-    }
+    ]
   }
 }

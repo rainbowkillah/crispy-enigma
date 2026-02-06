@@ -22,15 +22,15 @@
 - `tenants/rainbowsmokeofficial/wrangler.jsonc`
 
 ## Local Dev
-- `pnpm tenants:generate`
-- `pnpm dev --tenant=mrrainbowsmoke`
-- `pnpm dev --tenant=rainbowsmokeofficial`
-- `pnpm dev --tenant=mrrainbowsmoke --env=dev`
-- `pnpm smoke:dev --tenant=mrrainbowsmoke`
+- `npm run tenants:generate`
+- `npm run dev -- --tenant=mrrainbowsmoke`
+- `npm run dev -- --tenant=rainbowsmokeofficial`
+- `npm run dev -- --tenant=mrrainbowsmoke --env=dev`
+- `npm run smoke:dev -- --tenant=mrrainbowsmoke`
 
 ## Wrangler
 - Version pinned: `wrangler@4.20.0` (see `docs/wrangler.md`)
 
 ## Test
-- `pnpm tenants:generate`
-- `pnpm test`
+- `npm run tenants:generate`
+- `npm test`

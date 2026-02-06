@@ -9,7 +9,7 @@ const envArg = process.argv.find((arg) => arg.startsWith('--env='));
 const env = envArg?.split('=')[1];
 
 if (!tenant) {
-  console.error('Usage: pnpm dev --tenant=<tenant-name>');
+  console.error('Usage: npm run dev -- --tenant=<tenant-name>');
   process.exit(1);
 }
 

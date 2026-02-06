@@ -5,14 +5,14 @@
 ## Quick Start
 
 ```bash
-# Install dependencies (once package.json exists)
-pnpm install
+# Install dependencies
+npm install
 
 # Run local dev for a tenant (once M0 scaffolding complete)
-pnpm dev --tenant=<tenant-name>
+npm run dev -- --tenant=<tenant-name>
 
 # Run tests
-pnpm test
+npm test
 ```
 
 ## Architecture

@@ -7,19 +7,19 @@
     "dev": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "pnpm dev --tenant=example"
+        "command": "npm run dev -- --tenant=example"
       }
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "pnpm test"
+        "command": "npm test"
       }
     },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "pnpm typecheck"
+        "command": "npm run typecheck"
       }
     }
   }

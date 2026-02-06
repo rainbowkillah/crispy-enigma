@@ -151,7 +151,7 @@ milestones:
       - "Define tenant config format and loader."
       - "Add request pipeline with mandatory tenant resolution middleware."
     exit_criteria:
-      - "pnpm/npm install + test passes"
+      - "npm install + test passes"
       - "local dev starts for a hello worker per tenant"
       - "tenant resolution proven by unit tests"
 

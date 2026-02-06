@@ -8,7 +8,9 @@ const portArg = process.argv.find((arg) => arg.startsWith('--port='));
 const port = portArg?.split('=')[1] ?? '8787';
 
 if (!tenant) {
-  console.error('Usage: pnpm smoke:dev --tenant=<tenant-name> [--host=127.0.0.1] [--port=8787]');
+  console.error(
+    'Usage: npm run smoke:dev -- --tenant=<tenant-name> [--host=127.0.0.1] [--port=8787]'
+  );
   process.exit(1);
 }
 
