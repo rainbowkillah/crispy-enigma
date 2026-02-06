@@ -27,9 +27,11 @@ We also build a developer experience layer: an **Nx plugin** that provides gener
 - **AI Gateway**
   - Model routing, budget/limit policy, request logging.
   - Enforces per-tenant model allow-lists and token budgets.
+  - Accessed via `env.AI.run(model, inputs, { gateway: { id, metadata, cacheTtl } })`.
+  - Dynamic Routing (Beta) supports conditional routing based on metadata.
 - **Vectorize**
-  - Per-tenant index for embeddings and retrieval.
-  - Metadata stored with tenantId, docId, chunkId, source.
+  - Shared index with per-tenant `namespace` parameter for isolation (up to 50K namespaces/index on paid plan).
+  - Metadata stored with tenantId, docId, chunkId, source (max 10 KiB per vector).
 - **KV**
   - Tenant configuration cache, prompt versions, feature flags, lightweight caches.
 - **Durable Objects**
@@ -70,15 +72,13 @@ We also build a developer experience layer: an **Nx plugin** that provides gener
 ```ts
 export type TenantContext = {
   tenantId: string;
-  accountId?: string;
-  aiGatewayRoute: string;
+  accountId: string;
+  aiGatewayId: string;
   aiModels: {
     chat: string;
     embeddings: string;
   };
-  kvNamespace: string;
-  vectorizeIndex: string;
-  doSessionName: string;
+  vectorizeNamespace: string;
   rateLimit: {
     perMinute: number;
     burst: number;
@@ -87,32 +87,46 @@ export type TenantContext = {
 };
 ```
 
+> **Design note:** Cloudflare bindings (KV, DO, Vectorize, AI) are injected into `Env`
+> at deploy time via `wrangler.jsonc` — they cannot be selected dynamically at runtime.
+> Tenant isolation uses key prefixes (KV), namespaces (Vectorize), and ID encoding (DO)
+> within shared bindings. Per-tenant deployments with dedicated bindings are an alternative
+> for stronger isolation.
+
 ### 2.3 Storage adapters (enforced tenancy)
 - **KV adapter**
   - `get(tenantId, key)`, `put(tenantId, key, value)`
-  - Internally prefixes key with `tenantId:` if sharing a namespace.
+  - Internally prefixes key with `tenantId:` within the shared KV binding.
 - **Vectorize adapter**
   - `query(tenantId, embedding, options)`
   - `upsert(tenantId, vectors[])`
-  - Uses tenant-scoped index or metadata filters.
+  - Uses Vectorize `namespace` parameter set to `tenantId` for isolation within a shared index.
+  - Metadata filtering (`filter: { tenantId }`) is a fallback if namespaces are not used.
 - **DO session adapter**
   - `getSession(tenantId, sessionId)`
   - `appendMessage(tenantId, sessionId, message)`
-  - DO ID must encode `tenantId`.
+  - DO ID must encode `tenantId` via `idFromName(`${tenantId}:${sessionId}`)` or `getByName()`.
+- **DO rate limiter adapter** (separate namespace from session DO)
+  - `checkRateLimit(tenantId, userId)`
+  - Uses dedicated `RATE_LIMITER_DO` binding, not `SESSION_DO`.
 
 ### 2.4 AI interface
-- **Gateway-first**: all Workers AI calls must go through AI Gateway wrapper.
+- **Gateway-first**: all Workers AI calls must use `env.AI.run()` with the `gateway` parameter.
 - **Chat inference**
-  - `generateChat(tenantId, messages, options)`
+  - `generateChat(tenantId, messages, options, env)`
+  - Internally calls `env.AI.run(model, { messages, stream }, { gateway: { id, metadata: { tenantId } } })`
 - **Embedding generation**
-  - `generateEmbedding(tenantId, text[])`
+  - `generateEmbedding(tenantId, text[], env)`
+  - Internally calls `env.AI.run(model, { text }, { gateway: { id, metadata: { tenantId } } })`
+- **No raw `fetch()` to gateway URL** — use the AI binding. This avoids needing API tokens in Worker code and handles auth automatically.
 
 ### 2.5 Multi-tenancy enforcement points
 - Tenant resolution middleware runs before any handler.
 - Shared adapters must require `tenantId` in method signatures.
-- All DO IDs must include `tenantId`.
-- Vectorize indexes are per-tenant; if shared, enforce metadata filter `tenantId`.
-- AI Gateway policy uses tenant-scoped routes.
+- All DO IDs must include `tenantId` (via `idFromName()` or `getByName()`).
+- Vectorize queries must pass `namespace: tenantId` (preferred) or `filter: { tenantId }`.
+- AI calls use `env.AI.run()` with `gateway.metadata: { tenantId }` for attribution.
+- Rate limiting uses a dedicated `RATE_LIMITER_DO` namespace, separate from `SESSION_DO`.
 
 ---
 
@@ -137,6 +151,8 @@ export type TenantContext = {
 - Local dev can resolve tenant and return `/health` response.
 - Any request missing tenant is rejected.
 - Unit tests cover tenant resolution and adapter key prefixing.
+- `Env` type uses `Vectorize` (V2), not `VectorizeIndex` (V1 legacy).
+- `wrangler.jsonc` used (not `.toml`); ESM format confirmed.
 
 ---
 
@@ -157,6 +173,7 @@ export type TenantContext = {
 - Session messages persist for same tenant/session.
 - Cross-tenant session access is denied.
 - Rate limiter rejects over-limit requests with trace id.
+- Rate limiter uses dedicated `RATE_LIMITER_DO` namespace, not `SESSION_DO`.
 
 ---
 
@@ -171,9 +188,9 @@ export type TenantContext = {
 - [#31](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/31) Document fallback behavior for API changes
 
 **Acceptance criteria**
-- All model calls pass through AI Gateway (verified by gateway logs).
-- Tenant-specific model selection works.
-- Usage metrics (latency, tokens if available) are recorded.
+- All model calls use `env.AI.run()` with `gateway` parameter (verified by gateway logs).
+- Tenant-specific model selection works via `gateway.metadata: { tenantId }`.
+- Usage metrics (latency, tokens in/out, cost) are recorded in gateway analytics.
 
 ---
 
@@ -198,6 +215,8 @@ export type TenantContext = {
 - Ingested docs are retrievable for correct tenant only.
 - Retrieval returns deterministic results with fixture docs.
 - Vectorize queries fail closed without tenant context.
+- Vectorize namespace-per-tenant isolation demonstrated (using `namespace` param).
+- Top-K limit of 20 (with metadata) accounted for in retrieval pipeline.
 
 ---
 
@@ -216,6 +235,7 @@ export type TenantContext = {
 - `/search` returns answer + sources + confidence fields.
 - Citations trace back to Vectorize metadata.
 - Cache hit reduces latency for repeat queries.
+- Search respects Vectorize top-K limit of 20 with metadata.
 
 ---
 
@@ -277,6 +297,7 @@ export type TenantContext = {
 **Acceptance criteria**
 - Logs include tenantId, requestId, latency, route.
 - Required metrics are emitted and can be queried.
+- Metrics include AI Gateway analytics (latency, tokens, cost) via gateway API.
 - Load tests pass with defined thresholds.
 - CI gates prevent broken code from merging.
 
@@ -348,26 +369,27 @@ export type TenantContext = {
 
 ## 4) Unknowns and validation experiments
 
-### U1 — AI Gateway routing specifics
+### U1 — AI Gateway routing via AI binding
 **Unknown**
-- Exact header/config requirements for routing Workers AI calls via AI Gateway in Workers runtime.
+- Validate that `env.AI.run(model, inputs, { gateway: { id, metadata: { tenantId } } })` correctly routes through AI Gateway and that `metadata.tenantId` appears in gateway logs.
 
 **Experiment**
-- Build a minimal Worker calling Workers AI via Gateway.
-- Validate that gateway logs show request ids, latency, and usage.
+- Build a minimal Worker calling Workers AI via the AI binding with `gateway` param.
+- Verify gateway dashboard shows request with tenant metadata, latency, and token usage.
 
 **Success signal**
-- Gateway dashboard displays requests matching test tenant.
+- Gateway dashboard displays requests with correct `tenantId` metadata.
 
 ---
 
 ### U2 — Workers AI embeddings + Vectorize latency
 **Unknown**
-- End-to-end latency for embed → Vectorize upsert and query at scale.
+- End-to-end latency for embed → Vectorize upsert and query at scale, specifically using Vectorize namespaces for tenant isolation.
 
 **Experiment**
-- Ingest 1k docs and benchmark retrieval latency.
+- Ingest 1k docs across 10 tenant namespaces and benchmark retrieval latency.
 - Capture P50/P95 latency with/without cache.
+- Compare namespace-scoped queries vs unscoped queries.
 
 **Success signal**
 - P95 retrieval latency within acceptable target (define once SLOs set).
@@ -387,15 +409,17 @@ export type TenantContext = {
 
 ---
 
-### U4 — Multi-tenant Vectorize index strategy
+### U4 — Vectorize namespace vs metadata filter performance
 **Unknown**
-- Whether separate indexes per tenant or single index with metadata filter is best.
+- Vectorize supports both `namespace` param (applied before vector search) and metadata `filter` (applied after). Which gives better latency and isolation for multi-tenant use?
 
 **Experiment**
-- Compare cost/latency between per-tenant indexes vs shared index + filter.
+- Populate a shared index with 10K+ vectors across 10 tenant namespaces.
+- Benchmark identical queries using `namespace: tenantId` vs `filter: { tenantId }`.
+- Measure P50/P95 latency and verify zero cross-tenant leakage in both modes.
 
 **Success signal**
-- Choose approach with best cost/latency and acceptable isolation guarantees.
+- Choose approach with lower P95 latency and confirmed isolation.
 
 ---
 
@@ -408,6 +432,47 @@ export type TenantContext = {
 
 **Success signal**
 - Documented max delay and mitigation strategy (fallback defaults).
+
+---
+
+### U6 — AI binding gateway streaming behavior
+**Unknown**
+- Does `env.AI.run()` with `gateway` param support streaming responses (token-by-token) identically to the raw fetch-based approach?
+
+**Experiment**
+- Build minimal Worker calling the same model via `env.AI.run(model, { messages, stream: true }, { gateway: { id } })`.
+- Measure TTFB and token-by-token latency.
+- Compare with direct `env.AI.run()` without gateway.
+
+**Success signal**
+- Streaming works with gateway param; TTFB and throughput comparable to non-gateway path.
+
+---
+
+### U7 — Durable Object SQLite storage for sessions
+**Unknown**
+- New DOs use SQLite by default. Is SQL-based storage better than KV-style `put`/`get` for conversation history (append-heavy, read-last-N pattern)?
+
+**Experiment**
+- Implement session DO with SQLite table for messages.
+- Benchmark append + read-last-N-messages at 100+ messages per session.
+- Compare with KV-style `storage.put()` / `storage.get()`.
+
+**Success signal**
+- Session read latency < 50ms at P95 with 100 messages. SQL approach handles pagination naturally.
+
+---
+
+### U8 — Vectorize top-K limits and reranking strategy
+**Unknown**
+- Vectorize returns max 20 results with metadata. For search/RAG use cases requiring broader candidate sets before reranking, is this sufficient?
+
+**Experiment**
+- Query Vectorize with `topK: 100` (no metadata) then fetch metadata for top-20 in a second pass.
+- Compare quality/latency vs single `topK: 20` with metadata.
+
+**Success signal**
+- Define whether two-pass approach is needed or top-20 is sufficient for retrieval quality.
 
 ---
 

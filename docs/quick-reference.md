@@ -42,61 +42,76 @@ function getDOStub(
   resourceId: string,
   namespace: DurableObjectNamespace
 ): DurableObjectStub {
+  // Option 1: Two-step (idFromName + get)
   const id = namespace.idFromName(`${tenantId}:${resourceId}`);
   return namespace.get(id);
+
+  // Option 2: One-step convenience (Aug 2025+)
+  // return namespace.getByName(`${tenantId}:${resourceId}`);
 }
 
-// Usage
+// Usage — separate namespaces for sessions vs rate limiting
 const sessionDO = getDOStub(tenant.tenantId, sessionId, env.SESSION_DO);
+const limiterDO = getDOStub(tenant.tenantId, `ratelimit:${userId}`, env.RATE_LIMITER_DO);
 ```
 
 ## Vectorize Pattern
 
 ```typescript
-// ✅ Option 1: Per-tenant index (preferred)
+// ✅ Option 1: Per-tenant namespace (preferred)
+// Namespace filtering is applied before vector search. Up to 50K namespaces/index.
 const results = await env.VECTORIZE.query(vector, {
-  namespace: `${tenantId}-embeddings`,
+  namespace: tenantId,
   topK: 10,
+  returnMetadata: 'all',
 });
 
-// ✅ Option 2: Shared index with filter
+// ✅ Option 2: Shared index with metadata filter
 const results = await env.VECTORIZE.query(vector, {
   topK: 10,
-  filter: { tenantId: { $eq: tenantId } },
+  filter: { tenantId },
+  returnMetadata: 'all',
 });
 
-// Always include tenant in metadata when upserting
+// Always include tenant namespace when upserting
 await env.VECTORIZE.upsert([
   {
     id: vectorId,
     values: embedding,
+    namespace: tenantId,
     metadata: { tenantId, docId, chunkId },
   },
 ]);
+
+// Note: topK max is 20 with returnMetadata, 100 without.
+// Metadata limit: 10 KiB per vector.
 ```
 
 ## AI Gateway Pattern
 
 ```typescript
-// ✅ NEVER call env.AI directly - always use wrapper
+// ✅ NEVER call env.AI.run() without gateway param — always use wrapper
 async function generateChat(
   tenantId: string,
   messages: ChatMessage[],
   tenant: TenantContext,
   env: Env
 ): Promise<ReadableStream> {
-  const gatewayUrl = `https://gateway.ai.cloudflare.com/v1/${tenant.accountId}/${tenant.aiGatewayRoute}`;
-  
-  const response = await fetch(`${gatewayUrl}/workers-ai/${tenant.aiModels.chat}`, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'cf-aig-metadata': JSON.stringify({ tenantId }),
-    },
-    body: JSON.stringify({ messages, stream: true }),
-  });
-  
-  return response.body!;
+  // Use AI binding with gateway parameter (recommended)
+  // No need for account ID or API tokens — binding handles auth
+  const response = await env.AI.run(
+    tenant.aiModels.chat,
+    { messages, stream: true },
+    {
+      gateway: {
+        id: tenant.aiGatewayId,
+        metadata: { tenantId },  // up to 5 entries; string/number/boolean
+        // cacheTtl: 3600,       // optional gateway-level caching
+      },
+    }
+  );
+
+  return response as ReadableStream;
 }
 ```
 
@@ -271,24 +286,27 @@ async function streamChatResponse(
 export interface TenantContext {
   tenantId: string;
   accountId: string;
-  aiGatewayRoute: string;
+  aiGatewayId: string;
   aiModels: {
     chat: string;
     embeddings: string;
   };
-  vectorizeIndex: string;
+  vectorizeNamespace: string;
   rateLimit: {
     perMinute: number;
     burst: number;
   };
+  featureFlags: Record<string, boolean>;
 }
 
 // packages/core/src/env.ts
+// Note: Bindings are injected at deploy time via wrangler.jsonc.
+// They cannot be dynamically selected at runtime.
 export interface Env {
   AI: Ai;
   KV: KVNamespace;
   SESSION_DO: DurableObjectNamespace;
-  VECTORIZE: VectorizeIndex;
+  VECTORIZE: Vectorize;              // V2 type (not VectorizeIndex)
   RATE_LIMITER_DO: DurableObjectNamespace;
   ENVIRONMENT: 'dev' | 'staging' | 'production';
 }
@@ -335,8 +353,8 @@ class BadAdapter {
   constructor(private tenantId: string) {}
 }
 
-// ❌ Direct AI call
-await env.AI.run(model, params);
+// ❌ Direct AI call without gateway
+await env.AI.run(model, params);  // missing { gateway: { id, metadata } }
 
 // ❌ KV without tenant prefix
 await env.KV.get(key);

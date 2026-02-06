@@ -101,30 +101,32 @@ const stub = env.SESSION_DO.get(id);
 const results = await env.VECTORIZE.query(vector, { topK: 10 });
 ```
 
-**Right** ✅ (Option 1: Per-tenant index):
+**Right** ✅ (Option 1: Per-tenant namespace — preferred):
 ```typescript
-// Use separate index per tenant (preferred for strong isolation)
-const indexName = `${tenantId}-embeddings`;
+// Use namespace param for tenant isolation within a shared index
+// (up to 50K namespaces per index on paid plan)
 const results = await env.VECTORIZE.query(vector, {
-  namespace: indexName,
+  namespace: tenantId,
   topK: 10,
+  returnMetadata: 'all',
 });
 ```
 
-**Right** ✅ (Option 2: Shared index with filter):
+**Right** ✅ (Option 2: Shared index with metadata filter):
 ```typescript
-// Use metadata filter if sharing one index
+// Use metadata filter if not using namespaces
 const results = await env.VECTORIZE.query(vector, {
   topK: 10,
-  filter: { tenantId: { $eq: tenantId } },
+  filter: { tenantId },
+  returnMetadata: 'all',
 });
 ```
 
 **Mitigation**:
-- Prefer per-tenant indexes for production
-- If using shared index, wrap all queries with tenant filter
+- Prefer per-tenant namespaces (namespace filtering is applied before vector search)
+- If using metadata filter, wrap all queries with tenant filter
 - Add test: upsert vectors for tenant A, verify tenant B's query returns zero results
-- Add metadata size check: keep `{ tenantId, docId, chunkId }` under 1KB
+- Metadata limit is 10 KiB per vector; filter object must be < 2048 bytes (compact JSON)
 
 ---
 
@@ -135,27 +137,36 @@ const results = await env.VECTORIZE.query(vector, {
 **Wrong** ❌:
 ```typescript
 // Bypasses AI Gateway - no observability!
-const response = await env.AI.run('@cf/meta/llama-2-7b-chat-int8', {
+const response = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
   messages,
 });
 ```
 
 **Right** ✅:
 ```typescript
-// Route through gateway wrapper
-import { generateChat } from '@repo/ai/gateway';
-
-const response = await generateChat(
-  tenantId,
-  messages,
-  { model: tenant.aiModels.chat },
-  env
+// Route through AI Gateway via binding
+const response = await env.AI.run(
+  tenant.aiModels.chat,
+  { messages, stream: true },
+  {
+    gateway: {
+      id: tenant.aiGatewayId,
+      metadata: { tenantId },
+    },
+  }
 );
 ```
 
+Or via the gateway wrapper (recommended for consistency):
+```typescript
+import { generateChat } from '@repo/ai/gateway';
+
+const response = await generateChat(tenantId, messages, tenant, env);
+```
+
 **Mitigation**:
-- Never import `env.AI` directly; always use gateway wrapper
-- Add linter rule to ban `env.AI.run()` outside gateway package
+- Never call `env.AI.run()` without the `gateway` parameter; always use gateway wrapper
+- Add linter rule to ban `env.AI.run()` without `gateway` option outside the ai package
 - Add integration test: verify all AI calls appear in gateway logs
 
 ---
@@ -264,12 +275,14 @@ const allowed = await checkRateLimit(tenantId, userId, tenant.rateLimit);
 
 ### 10. Vectorize Metadata Size Limits
 
-**Symptom**: Upsert fails with cryptic error when metadata exceeds 1KB per vector.
+**Symptom**: Upsert fails with cryptic error when metadata exceeds 10 KiB per vector.
 
 **Mitigation**:
 - Keep metadata minimal: `{ tenantId, docId, chunkId, source }`
 - Don't store full text in metadata; use it only for filtering/citing
-- Add validation: assert metadata JSON size < 1KB before upsert
+- Add validation: assert metadata JSON size < 10 KiB before upsert
+- Filter object compact JSON must be < 2048 bytes
+- String metadata values: only the first 64 bytes (UTF-8) are indexed for filtering
 - Add test: verify upsert fails gracefully when metadata too large
 
 ---

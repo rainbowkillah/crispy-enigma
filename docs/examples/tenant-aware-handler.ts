@@ -20,12 +20,12 @@ import { z } from 'zod';
 export interface TenantContext {
   tenantId: string;
   accountId: string;
-  aiGatewayRoute: string;
+  aiGatewayId: string;
   aiModels: {
     chat: string;
     embeddings: string;
   };
-  vectorizeIndex: string;
+  vectorizeNamespace: string;
   rateLimit: {
     perMinute: number;
     burst: number;
@@ -36,7 +36,8 @@ export interface Env {
   AI: Ai;
   KV: KVNamespace;
   SESSION_DO: DurableObjectNamespace;
-  VECTORIZE: VectorizeIndex;
+  RATE_LIMITER_DO: DurableObjectNamespace;
+  VECTORIZE: Vectorize;  // V2 type (not VectorizeIndex)
 }
 
 // ============================================================================
@@ -126,33 +127,27 @@ interface ChatMessage {
   content: string;
 }
 
-// ✅ CORRECT: Route through AI Gateway with tenant context
+// ✅ CORRECT: Route through AI Gateway via binding with tenant context
 async function generateChat(
   tenantId: string,
   messages: ChatMessage[],
   tenant: TenantContext,
   env: Env
 ): Promise<ReadableStream> {
-  // Gateway URL includes tenant identifier for policy enforcement
-  const gatewayUrl = `https://gateway.ai.cloudflare.com/v1/${tenant.accountId}/${tenant.aiGatewayRoute}`;
-  
-  const response = await fetch(`${gatewayUrl}/workers-ai/${tenant.aiModels.chat}`, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'cf-aig-metadata': JSON.stringify({ tenantId }), // For gateway logs
-    },
-    body: JSON.stringify({
-      messages,
-      stream: true,
-    }),
-  });
+  // Use AI binding with gateway parameter (recommended approach)
+  // No need for account ID or API tokens — binding handles auth automatically
+  const response = await env.AI.run(
+    tenant.aiModels.chat,
+    { messages, stream: true },
+    {
+      gateway: {
+        id: tenant.aiGatewayId,
+        metadata: { tenantId },  // up to 5 entries; string/number/boolean only
+      },
+    }
+  );
 
-  if (!response.ok) {
-    throw new Error(`AI Gateway error: ${response.status}`);
-  }
-
-  return response.body!;
+  return response as ReadableStream;
 }
 
 // ============================================================================
@@ -164,14 +159,14 @@ async function checkRateLimit(
   userId: string,
   env: Env
 ): Promise<{ allowed: boolean; remaining: number }> {
-  // Use DO for distributed rate limiting
-  const id = env.SESSION_DO.idFromName(`ratelimit:${tenantId}:${userId}`);
-  const stub = env.SESSION_DO.get(id);
-  
+  // Use dedicated RATE_LIMITER_DO namespace (not SESSION_DO)
+  const id = env.RATE_LIMITER_DO.idFromName(`${tenantId}:${userId}`);
+  const stub = env.RATE_LIMITER_DO.get(id);
+
   const response = await stub.fetch('https://internal/check-limit', {
     method: 'POST',
   });
-  
+
   return response.json();
 }
 
@@ -323,12 +318,13 @@ class BadKVAdapter {
   }
 }
 
-// ❌ WRONG: Direct Workers AI call (bypasses gateway)
+// ❌ WRONG: Direct Workers AI call without gateway param
 async function badAICall(env: Env, messages: ChatMessage[]) {
-  return env.AI.run('@cf/meta/llama-2-7b-chat-int8', {
+  return env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
     messages,
     stream: true,
   });
+  // Missing { gateway: { id, metadata: { tenantId } } }
   // No tenant tracking, no usage metrics, no policy enforcement!
 }
 
