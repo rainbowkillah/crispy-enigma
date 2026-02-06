@@ -17,5 +17,21 @@ export default [
     rules: {
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }]
     }
+  },
+  {
+    files: ['scripts/**/*.mjs'],
+    languageOptions: {
+      globals: {
+        console: 'readonly',
+        fetch: 'readonly',
+        process: 'readonly'
+      }
+    }
+  },
+  {
+    files: ['docs/examples/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'off'
+    }
   }
 ];

@@ -15,7 +15,12 @@ export class TenantVectorizeAdapter {
   async upsert(
     tenantId: string,
     vectors: VectorizeVector[]
-  ): Promise<VectorizeUpsertResult> {
-    return this.index.upsert(vectors, { namespace: tenantId });
+  ): Promise<VectorizeAsyncMutation> {
+    const namespaced = vectors.map((vector) => ({
+      ...vector,
+      namespace: tenantId
+    }));
+
+    return this.index.upsert(namespaced);
   }
 }

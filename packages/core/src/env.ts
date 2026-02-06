@@ -1,5 +1,5 @@
 export interface Env {
-  AI: AI;
+  AI: Ai;
   VECTORIZE: Vectorize;
   CONFIG: KVNamespace;
   CACHE: KVNamespace;

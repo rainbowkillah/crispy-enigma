@@ -3,7 +3,7 @@ import worker from '../apps/worker-api/src/index';
 import type { Env } from '../packages/core/src';
 
 const env: Env = {
-  AI: {} as AI,
+  AI: {} as Ai,
   VECTORIZE: {} as Vectorize,
   CONFIG: {} as KVNamespace,
   CACHE: {} as KVNamespace,
@@ -17,7 +17,12 @@ const env: Env = {
 const fetchWorker = async (url: string, headers: Record<string, string> = {}) =>
   worker.fetch(new Request(url, { headers }), env);
 
-const json = async (response: Response) => response.json();
+const json = async (response: Response) =>
+  response.json() as Promise<{
+    ok: boolean;
+    data?: { tenantId?: string; modelId?: string };
+    error?: { code?: string };
+  }>;
 
 describe('/health', () => {
   it('returns ok for header-based tenant', async () => {
@@ -27,6 +32,9 @@ describe('/health', () => {
 
     expect(response.status).toBe(200);
     const body = await json(response);
+    if (!body.ok || !body.data) {
+      throw new Error('Expected ok response');
+    }
     expect(body.ok).toBe(true);
     expect(body.data.tenantId).toBe('example');
     expect(body.data.modelId).toBeDefined();
@@ -37,6 +45,9 @@ describe('/health', () => {
 
     expect(response.status).toBe(200);
     const body = await json(response);
+    if (!body.ok || !body.data) {
+      throw new Error('Expected ok response');
+    }
     expect(body.ok).toBe(true);
     expect(body.data.tenantId).toBe('alpha');
   });
@@ -48,6 +59,9 @@ describe('/health', () => {
 
     expect(response.status).toBe(200);
     const body = await json(response);
+    if (!body.ok || !body.data) {
+      throw new Error('Expected ok response');
+    }
     expect(body.ok).toBe(true);
     expect(body.data.tenantId).toBe('alpha');
   });
@@ -57,6 +71,9 @@ describe('/health', () => {
 
     expect(response.status).toBe(400);
     const body = await json(response);
+    if (body.ok || !body.error) {
+      throw new Error('Expected error response');
+    }
     expect(body.ok).toBe(false);
     expect(body.error.code).toBe('tenant_required');
   });

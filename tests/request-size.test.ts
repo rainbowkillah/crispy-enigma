@@ -3,7 +3,7 @@ import worker from '../apps/worker-api/src/index';
 import type { Env } from '../packages/core/src';
 
 const baseEnv: Env = {
-  AI: {} as AI,
+  AI: {} as Ai,
   VECTORIZE: {} as Vectorize,
   CONFIG: {} as KVNamespace,
   CACHE: {} as KVNamespace,

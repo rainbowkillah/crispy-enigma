@@ -21,14 +21,14 @@ for (const name of tenantDirs) {
     const varName = name.replace(/[^a-zA-Z0-9_]/g, '_');
     imports.push(`import ${varName} from './${name}/tenant.config.json';`);
     exports.push(varName);
-  } catch (error) {
+  } catch {
     warnings.push(`${name}: missing tenant.config.json`);
     continue;
   }
 
   try {
     await readFile(wranglerPath, 'utf-8');
-  } catch (error) {
+  } catch {
     warnings.push(`${name}: missing wrangler.jsonc`);
   }
 }

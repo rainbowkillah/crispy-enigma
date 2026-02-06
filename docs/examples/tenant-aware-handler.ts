@@ -22,8 +22,8 @@ export interface TenantContext {
   accountId: string;
   aiGatewayId: string;
   aiModels: {
-    chat: string;
-    embeddings: string;
+    chat: keyof AiModels;
+    embeddings: keyof AiModels;
   };
   vectorizeNamespace: string;
   rateLimit: {
@@ -320,7 +320,8 @@ class BadKVAdapter {
 
 // ❌ WRONG: Direct Workers AI call without gateway param
 async function badAICall(env: Env, messages: ChatMessage[]) {
-  return env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
+  const model = '@cf/meta/llama-3.1-8b-instruct' as keyof AiModels;
+  return env.AI.run(model, {
     messages,
     stream: true,
   });
