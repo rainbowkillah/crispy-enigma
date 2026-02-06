@@ -1,4 +1,4 @@
-import { createLogger, Logger } from '@crispy-enigma/observability/logger';
+import { createLogger, Logger } from '../../../observability/src/logger.js';
 import type { Request as CfRequest } from '@cloudflare/workers-types';
 
 /**
