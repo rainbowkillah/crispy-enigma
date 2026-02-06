@@ -31,5 +31,5 @@ A single namespace was rejected because a burst of rate-limit checks could delay
 
 - [docs/rate-limiting.md](../rate-limiting.md) — rate limiter design
 - [docs/sessions.md](../sessions.md) — session lifecycle
-- `apps/worker-api/src/session-do.ts` — ChatSession implementation
-- `apps/worker-api/src/rate-limiter-do.ts` — RateLimiter implementation
+- [`apps/worker-api/src/session-do.ts`](../../apps/worker-api/src/session-do.ts) — ChatSession implementation
+- [`apps/worker-api/src/rate-limiter-do.ts`](../../apps/worker-api/src/rate-limiter-do.ts) — RateLimiter implementation

@@ -271,10 +271,10 @@ Every isolation mechanism has corresponding tests:
 
 | Test | Verifies |
 |------|----------|
-| `session-isolation.test.ts` | Tenant-scoped DO naming for sessions and rate limiters; cross-tenant access denied |
-| `rate-limit.test.ts` | Per-tenant rate limit enforcement (429 rejection); rate limit headers |
-| `rate-limiter.test.ts` | Sliding window allow/deny logic; remaining count tracking |
-| `session-retention.test.ts` | Time-based message pruning; maxMessages cap enforcement |
+| [`session-isolation.test.ts`](../tests/session-isolation.test.ts) | Tenant-scoped DO naming for sessions and rate limiters; cross-tenant access denied |
+| [`rate-limit.test.ts`](../tests/rate-limit.test.ts) | Per-tenant rate limit enforcement (429 rejection); rate limit headers |
+| [`rate-limiter.test.ts`](../tests/rate-limiter.test.ts) | Sliding window allow/deny logic; remaining count tracking |
+| [`session-retention.test.ts`](../tests/session-retention.test.ts) | Time-based message pruning; maxMessages cap enforcement |
 
 Planned tests (M2+) will verify Vectorize namespace boundary enforcement and AI Gateway tenant attribution.
 

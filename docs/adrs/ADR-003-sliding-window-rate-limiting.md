@@ -41,6 +41,6 @@ KV counters were rejected due to eventual consistency (~60s propagation) making 
 ## References
 
 - [docs/rate-limiting.md](../rate-limiting.md) — full specification
-- `apps/worker-api/src/rate-limiter-do.ts` — implementation
-- `tests/rate-limiter.test.ts` — unit tests
-- `tests/rate-limit.test.ts` — integration test
+- [`apps/worker-api/src/rate-limiter-do.ts`](../../apps/worker-api/src/rate-limiter-do.ts) — implementation
+- [`tests/rate-limiter.test.ts`](../../tests/rate-limiter.test.ts) — unit tests
+- [`tests/rate-limit.test.ts`](../../tests/rate-limit.test.ts) — integration test

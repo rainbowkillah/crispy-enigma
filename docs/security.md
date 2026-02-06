@@ -23,7 +23,7 @@ Every request must resolve to a tenant before any business logic, storage access
 
 - **Enforcement:** `resolveTenant()` runs as the first step in the request lifecycle. Unresolved requests receive `400 Tenant required`.
 - **Scope:** All storage keys (KV), Durable Object IDs, Vectorize namespaces, and AI Gateway metadata include the tenant ID.
-- **Testing:** `resolveTenant.test.ts`, `session-isolation.test.ts`, `kv-prefix.test.ts`, `do-name.test.ts`
+- **Testing:** [`resolveTenant.test.ts`](../tests/resolveTenant.test.ts), [`session-isolation.test.ts`](../tests/session-isolation.test.ts), [`kv-prefix.test.ts`](../tests/kv-prefix.test.ts), [`do-name.test.ts`](../tests/do-name.test.ts)
 
 See [tenancy.md](tenancy.md) for the complete isolation model and enforcement rules.
 
@@ -47,7 +47,7 @@ Rate limiting prevents abuse and ensures fair resource allocation across tenants
 - **Configuration:** `rateLimit.perMinute` and `rateLimit.burst` in `tenant.config.json`
 - **Response:** `429 Too Many Requests` with standard headers (`X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`)
 - **Isolation:** Separate `RATE_LIMITER_DO` binding (see [ADR-002](adrs/ADR-002-separate-do-namespaces.md)). One tenant's rate limit state cannot affect another's.
-- **Testing:** `rate-limit.test.ts`, `rate-limiter.test.ts`
+- **Testing:** [`rate-limit.test.ts`](../tests/rate-limit.test.ts), [`rate-limiter.test.ts`](../tests/rate-limiter.test.ts)
 
 ### 4. Request tracing (M0)
 
@@ -114,13 +114,13 @@ The current `x-api-key` resolution is a tenant identification mechanism, not a f
 
 | Test | What it verifies |
 |------|-----------------|
-| `resolveTenant.test.ts` | Unresolvable requests are rejected; priority order is correct |
-| `health.test.ts` | Missing tenant returns 400; wrong tenant returns 404 |
-| `session-isolation.test.ts` | DO names encode tenant; cross-tenant access denied |
-| `rate-limit.test.ts` | Over-limit requests receive 429 with correct headers |
-| `rate-limiter.test.ts` | Sliding window correctly tracks and enforces limits |
-| `request-size.test.ts` | Oversized payloads rejected with 413 |
-| `chat.test.ts` | Invalid chat requests rejected; tenant context required |
+| [`resolveTenant.test.ts`](../tests/resolveTenant.test.ts) | Unresolvable requests are rejected; priority order is correct |
+| [`health.test.ts`](../tests/health.test.ts) | Missing tenant returns 400; wrong tenant returns 404 |
+| [`session-isolation.test.ts`](../tests/session-isolation.test.ts) | DO names encode tenant; cross-tenant access denied |
+| [`rate-limit.test.ts`](../tests/rate-limit.test.ts) | Over-limit requests receive 429 with correct headers |
+| [`rate-limiter.test.ts`](../tests/rate-limiter.test.ts) | Sliding window correctly tracks and enforces limits |
+| [`request-size.test.ts`](../tests/request-size.test.ts) | Oversized payloads rejected with 413 |
+| [`chat.test.ts`](../tests/chat.test.ts) | Invalid chat requests rejected; tenant context required |
 
 ## Anti-patterns
 

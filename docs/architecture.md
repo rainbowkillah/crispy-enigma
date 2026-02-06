@@ -258,17 +258,17 @@ Vitest runs all tests in the `tests/` directory. Current coverage (M0+M1):
 
 | Test | Focus | Milestone |
 |------|-------|-----------|
-| `health.test.ts` | /health endpoint with header, host, and API key tenant resolution | M0 |
-| `resolveTenant.test.ts` | Resolution priority order; null for unresolvable requests | M0 |
-| `kv-prefix.test.ts` | TenantKVAdapter key prefixing + cache key correctness | M0+M1 |
-| `do-name.test.ts` | DO name encoding pattern | M0 |
-| `request-size.test.ts` | Request body size validation (413 responses) | M0 |
-| `chat.test.ts` | /chat endpoint validation, streaming default, history, session clear | M1 |
-| `streaming.test.ts` | SSE streaming and JSON fallback behavior | M1 |
-| `session-isolation.test.ts` | Tenant-scoped DO naming, cross-tenant isolation | M1 |
-| `rate-limit.test.ts` | 429 rejection and rate limit header generation | M1 |
-| `rate-limiter.test.ts` | `applyRateLimit()` allow/deny logic, remaining count | M1 |
-| `session-retention.test.ts` | `pruneMessages()` time-based cleanup, maxMessages cap | M1 |
+| [`health.test.ts`](../tests/health.test.ts) | /health endpoint with header, host, and API key tenant resolution | M0 |
+| [`resolveTenant.test.ts`](../tests/resolveTenant.test.ts) | Resolution priority order; null for unresolvable requests | M0 |
+| [`kv-prefix.test.ts`](../tests/kv-prefix.test.ts) | TenantKVAdapter key prefixing + cache key correctness | M0+M1 |
+| [`do-name.test.ts`](../tests/do-name.test.ts) | DO name encoding pattern | M0 |
+| [`request-size.test.ts`](../tests/request-size.test.ts) | Request body size validation (413 responses) | M0 |
+| [`chat.test.ts`](../tests/chat.test.ts) | /chat endpoint validation, streaming default, history, session clear | M1 |
+| [`streaming.test.ts`](../tests/streaming.test.ts) | SSE streaming and JSON fallback behavior | M1 |
+| [`session-isolation.test.ts`](../tests/session-isolation.test.ts) | Tenant-scoped DO naming, cross-tenant isolation | M1 |
+| [`rate-limit.test.ts`](../tests/rate-limit.test.ts) | 429 rejection and rate limit header generation | M1 |
+| [`rate-limiter.test.ts`](../tests/rate-limiter.test.ts) | `applyRateLimit()` allow/deny logic, remaining count | M1 |
+| [`session-retention.test.ts`](../tests/session-retention.test.ts) | `pruneMessages()` time-based cleanup, maxMessages cap | M1 |
 
 **32 tests across 11 files** (296ms). Planned (M2+): Vectorize tenant isolation tests, tool permission tests, load/stress tests.
 

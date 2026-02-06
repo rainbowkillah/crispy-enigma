@@ -34,4 +34,4 @@ NDJSON was rejected because it requires manual reconnection logic and has no sta
 ## References
 
 - [docs/streaming.md](../streaming.md) — full contract specification
-- `apps/worker-api/src/index.ts` — SSE implementation
+- [`apps/worker-api/src/index.ts`](../../apps/worker-api/src/index.ts) — SSE implementation
