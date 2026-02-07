@@ -63,7 +63,7 @@
   "migrations": [
     {
       "tag": "v1",
-      "new_classes": ["RateLimiter", "ChatSession"]
+      "new_sqlite_classes": ["RateLimiter", "ChatSession"]
     }
   ],
   "env": {

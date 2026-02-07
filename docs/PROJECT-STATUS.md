@@ -1,4 +1,4 @@
-# GitHub Project Update: M0 + M1 Complete, M2 In Progress
+# GitHub Project Update: M0 + M1 Complete, M2 Complete
 
 ## Status Summary
 
@@ -134,16 +134,16 @@ Created preparation documents:
 
 ## M2 Progress (AI Gateway Integration)
 
-**Status:** 🔵 IN PROGRESS  
+**Status:** ✅ COMPLETE  
 **Issues:** #25-#31  
-**Updated:** 2026-02-07  
+**Completed:** 2026-02-07  
 **Tests:** 40 passing (up from 36)
 
 ### Deliverables Status
 
 | Issue | Title | Status | Notes |
 |-------|-------|--------|-------|
-| #25 | Gateway integration spike | 🔵 In progress | Dev smoke tests done; staging validation pending |
+| #25 | Gateway integration spike | ✅ Complete | Staging deploy + live chat verified; gateway logs confirmed |
 | #26 | Model routing (tenant config + overrides) | ✅ Complete | Precedence: request > env > tenant |
 | #27 | Per-route model override options | ✅ Complete | `modelId` in request schema |
 | #28 | Budget/limits hooks (token limits) | ✅ Complete | KV-backed daily/monthly limits |
@@ -173,7 +173,7 @@ Created preparation documents:
 
 ### M2 Completion Status
 
-M2 is **not complete** until the staging AI Gateway spike (#25) is finished.
+M2 is complete. Staging calls were verified; AI Gateway dashboard logs confirmed.
 
 ---
 
@@ -386,9 +386,9 @@ See `docs/milestones/M2.md` for full implementation plan.
 
 **M0 Status:** ✅ COMPLETE AND VERIFIED
 **M1 Status:** ✅ COMPLETE AND VERIFIED
-**M2 Status:** 🔵 IN PROGRESS — Staging gateway spike pending (#25)
-**Blockers:** Pending access/validation for staging AI Gateway
+**M2 Status:** ✅ COMPLETE
+**Blockers:** None
 
 **Date:** 2026-02-07
 **Verified By:** Codex
-**Next Review:** After staging spike (#25)
+**Next Review:** After M3 kickoff

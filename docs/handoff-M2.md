@@ -17,6 +17,9 @@ M2 is complete ✅. All issues (#25-#31) are finished. Dev smoke tests validated
 - Wrangler dev remote binding updates:
   - `tenants/mrrainbowsmoke/wrangler.jsonc`
   - `tenants/rainbowsmokeofficial/wrangler.jsonc`
+- Durable Objects migration updated for free plan deploys (`new_sqlite_classes`):
+  - `tenants/mrrainbowsmoke/wrangler.jsonc`
+  - `tenants/rainbowsmokeofficial/wrangler.jsonc`
 - Changelog: `CHANGELOG.md`
 
 ## Dev Smoke Tests (2026-02-07)
@@ -106,6 +109,44 @@ data: {"code":"ai_error","message":"AI provider unavailable"}
 event: done
 data: {"done":true,"usage":{"modelId":"@cf/meta/llama-3.1-8b-instruct","tokensIn":4,"latencyMs":0}}
 ```
+
+### mrrainbowsmoke (staging deploy)
+
+Deploy:
+```bash
+npx wrangler deploy --config tenants/mrrainbowsmoke/wrangler.jsonc --env staging
+```
+Deployed URL:
+`https://bluey-ai-worker-staging.mrrainbowsmoke.workers.dev`
+
+Health:
+```bash
+curl -s https://bluey-ai-worker-staging.mrrainbowsmoke.workers.dev/health -H 'x-tenant-id: mrrainbowsmoke'
+```
+```json
+{"ok":true,"data":{"status":"ok","tenantId":"mrrainbowsmoke","environment":"staging","modelId":"@cf/meta/llama-3.1-8b-instruct-fast","fallbackModelId":"@cf/meta/llama-3.1-8b-instruct"},"traceId":"9ca1680afd1cd6d3"}
+```
+
+Chat (non-stream):
+```bash
+curl -s https://bluey-ai-worker-staging.mrrainbowsmoke.workers.dev/chat -H 'content-type: application/json' -H 'x-tenant-id: mrrainbowsmoke' -d '{"sessionId":"11111111-1111-1111-1111-111111111111","message":"hello","stream":false}'
+```
+```json
+{"ok":true,"data":{"status":"accepted","sessionId":"11111111-1111-1111-1111-111111111111","stream":false,"message":"Hello! How can I assist you today?"},"traceId":"9ca16821dfa95974"}
+```
+
+Chat (stream):
+```bash
+timeout 10 curl -sN https://bluey-ai-worker-staging.mrrainbowsmoke.workers.dev/chat -H 'content-type: application/json' -H 'x-tenant-id: mrrainbowsmoke' -d '{"sessionId":"11111111-1111-1111-1111-111111111111","message":"hello","stream":true}'
+```
+```
+data: {"sessionId":"11111111-1111-1111-1111-111111111111","role":"assistant","content":"It looks like we're having a friendly hello conversation! Is there something I can help you with, or would you like to chat for a bit?","tenantId":"mrrainbowsmoke","traceId":"9ca16851feece63b"}
+
+event: done
+data: {"done":true,"usage":{"modelId":"@cf/meta/llama-3.1-8b-instruct-fast","tokensIn":32,"tokensOut":31,"totalTokens":63,"latencyMs":1009}}
+```
+
+Note: Gateway dashboard verification of `metadata.tenantId` complete (gateway logs show data).
 
 ## Commands Run
 - `npm test` ✅ (40 tests passing)

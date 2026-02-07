@@ -20,12 +20,14 @@ All notable changes for this project are documented here.
 - ADR for model selection precedence (`docs/adrs/ADR-004-model-selection-precedence.md`).
 - Token budget enforcement tests (`tests/token-budget.test.ts`).
 - Model override tests (`tests/ai-gateway.test.ts`).
+- Staging AI Gateway spike results + commands in `docs/milestones/M2.md` and `docs/handoff-M2.md`.
 
 ### Changed
 - AI Gateway wrapper now emits usage metrics and estimates tokens when missing.
 - Chat handler records token counts per message.
 - Alpha tenant config includes token budget and allowed model list for validation coverage.
 - AI Gateway example doc now uses placeholder tokens and .env reference.
+- Durable Object migrations use `new_sqlite_classes` for free-plan compatibility.
 - Tenant AI Gateway IDs aligned with actual Cloudflare gateway slugs (`ai-gate`, `ai_gateway`) for staging validation.
 - Remote bindings configured in `wrangler.jsonc` for `mrrainbowsmoke` and `rainbowsmokeofficial`.
 

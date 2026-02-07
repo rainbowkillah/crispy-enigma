@@ -20,6 +20,70 @@
   "nxJsonPlugins": [],
   "fileMap": {
     "projectFileMap": {
+      "worker-api": [
+        {
+          "file": "apps/worker-api/project.json",
+          "hash": "807840864903812667"
+        },
+        {
+          "file": "apps/worker-api/src/index.ts",
+          "hash": "17908681428632980410"
+        },
+        {
+          "file": "apps/worker-api/src/rate-limiter-do.ts",
+          "hash": "4934197882651790622"
+        },
+        {
+          "file": "apps/worker-api/src/session-do.ts",
+          "hash": "15106447200388021791"
+        }
+      ],
+      "rag": [
+        {
+          "file": "packages/rag/project.json",
+          "hash": "14824669124213728116"
+        },
+        {
+          "file": "packages/rag/src/index.ts",
+          "hash": "4595979742548113990"
+        }
+      ],
+      "ai": [
+        {
+          "file": "packages/ai/project.json",
+          "hash": "2447358976378343147"
+        },
+        {
+          "file": "packages/ai/src/gateway.ts",
+          "hash": "8159515835548601124"
+        },
+        {
+          "file": "packages/ai/src/index.ts",
+          "hash": "14569501487334179972"
+        }
+      ],
+      "storage": [
+        {
+          "file": "packages/storage/project.json",
+          "hash": "18417496484336993390"
+        },
+        {
+          "file": "packages/storage/src/do.ts",
+          "hash": "15124964690760613976"
+        },
+        {
+          "file": "packages/storage/src/index.ts",
+          "hash": "4260946828283953203"
+        },
+        {
+          "file": "packages/storage/src/kv.ts",
+          "hash": "1755166976520487066"
+        },
+        {
+          "file": "packages/storage/src/vectorize.ts",
+          "hash": "17847552451332353089"
+        }
+      ],
       "observability": [
         {
           "file": "packages/observability/project.json",
@@ -32,16 +96,6 @@
         {
           "file": "packages/observability/src/logger.ts",
           "hash": "14216585224841379369"
-        }
-      ],
-      "rag": [
-        {
-          "file": "packages/rag/project.json",
-          "hash": "14824669124213728116"
-        },
-        {
-          "file": "packages/rag/src/index.ts",
-          "hash": "4595979742548113990"
         }
       ],
       "core": [
@@ -84,60 +138,6 @@
         {
           "file": "packages/core/src/tenant/types.ts",
           "hash": "10852238908151055834"
-        }
-      ],
-      "storage": [
-        {
-          "file": "packages/storage/project.json",
-          "hash": "18417496484336993390"
-        },
-        {
-          "file": "packages/storage/src/do.ts",
-          "hash": "15124964690760613976"
-        },
-        {
-          "file": "packages/storage/src/index.ts",
-          "hash": "4260946828283953203"
-        },
-        {
-          "file": "packages/storage/src/kv.ts",
-          "hash": "1755166976520487066"
-        },
-        {
-          "file": "packages/storage/src/vectorize.ts",
-          "hash": "17847552451332353089"
-        }
-      ],
-      "ai": [
-        {
-          "file": "packages/ai/project.json",
-          "hash": "2447358976378343147"
-        },
-        {
-          "file": "packages/ai/src/gateway.ts",
-          "hash": "8159515835548601124"
-        },
-        {
-          "file": "packages/ai/src/index.ts",
-          "hash": "14569501487334179972"
-        }
-      ],
-      "worker-api": [
-        {
-          "file": "apps/worker-api/project.json",
-          "hash": "807840864903812667"
-        },
-        {
-          "file": "apps/worker-api/src/index.ts",
-          "hash": "17908681428632980410"
-        },
-        {
-          "file": "apps/worker-api/src/rate-limiter-do.ts",
-          "hash": "4934197882651790622"
-        },
-        {
-          "file": "apps/worker-api/src/session-do.ts",
-          "hash": "15106447200388021791"
         }
       ]
     },
