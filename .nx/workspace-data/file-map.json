@@ -52,6 +52,20 @@
           "hash": "4595979742548113990"
         }
       ],
+      "ai": [
+        {
+          "file": "packages/ai/project.json",
+          "hash": "2447358976378343147"
+        },
+        {
+          "file": "packages/ai/src/gateway.ts",
+          "hash": "8159515835548601124"
+        },
+        {
+          "file": "packages/ai/src/index.ts",
+          "hash": "14569501487334179972"
+        }
+      ],
       "worker-api": [
         {
           "file": "apps/worker-api/project.json",
@@ -68,20 +82,6 @@
         {
           "file": "apps/worker-api/src/session-do.ts",
           "hash": "15106447200388021791"
-        }
-      ],
-      "observability": [
-        {
-          "file": "packages/observability/project.json",
-          "hash": "1632021096686162711"
-        },
-        {
-          "file": "packages/observability/src/index.ts",
-          "hash": "8864206489639079382"
-        },
-        {
-          "file": "packages/observability/src/logger.ts",
-          "hash": "14216585224841379369"
         }
       ],
       "core": [
@@ -126,29 +126,29 @@
           "hash": "10852238908151055834"
         }
       ],
-      "ai": [
+      "observability": [
         {
-          "file": "packages/ai/project.json",
-          "hash": "2447358976378343147"
+          "file": "packages/observability/project.json",
+          "hash": "1632021096686162711"
         },
         {
-          "file": "packages/ai/src/gateway.ts",
-          "hash": "8159515835548601124"
+          "file": "packages/observability/src/index.ts",
+          "hash": "8864206489639079382"
         },
         {
-          "file": "packages/ai/src/index.ts",
-          "hash": "14569501487334179972"
+          "file": "packages/observability/src/logger.ts",
+          "hash": "14216585224841379369"
         }
       ]
     },
     "nonProjectFiles": [
       {
         "file": ".github/copilot-instructions.md",
-        "hash": "16211135910764443416"
+        "hash": "280870983513376752"
       },
       {
         "file": ".gitignore",
-        "hash": "1889333392240182223"
+        "hash": "3501635454039698188"
       },
       {
         "file": ".prettierrc.json",
@@ -160,7 +160,7 @@
       },
       {
         "file": "CHANGELOG.md",
-        "hash": "5173718900893032543"
+        "hash": "16870860635665319983"
       },
       {
         "file": "LICENSE",
@@ -168,11 +168,11 @@
       },
       {
         "file": "PR-SUMMARY.md",
-        "hash": "2307039521334272567"
+        "hash": "9832592419251495782"
       },
       {
         "file": "README.md",
-        "hash": "16441420741386853279"
+        "hash": "17530319531451003465"
       },
       {
         "file": "WIKI-SETUP.md",
@@ -184,7 +184,7 @@
       },
       {
         "file": "docs/ALIGNMENT-SUMMARY.md",
-        "hash": "8098782247291751636"
+        "hash": "12212590577103971042"
       },
       {
         "file": "docs/M0-COMPLETE.md",
@@ -200,11 +200,11 @@
       },
       {
         "file": "docs/PR.md",
-        "hash": "15194575782978195549"
+        "hash": "16722071428211536516"
       },
       {
         "file": "docs/PROJECT-STATUS.md",
-        "hash": "12416143577052323020"
+        "hash": "9920827023077562400"
       },
       {
         "file": "docs/adrs/ADR-001-sse-streaming.md",
@@ -268,7 +268,7 @@
       },
       {
         "file": "docs/handoff-M2.md",
-        "hash": "15882011758287460844"
+        "hash": "7346017170464346170"
       },
       {
         "file": "docs/handoff-PR.md",
@@ -292,7 +292,7 @@
       },
       {
         "file": "docs/milestones/M2.md",
-        "hash": "17254595057569385374"
+        "hash": "11510624698714978691"
       },
       {
         "file": "docs/plan.md",
@@ -340,7 +340,7 @@
       },
       {
         "file": "package-lock.json",
-        "hash": "11830938031816815033"
+        "hash": "16609361416980864904"
       },
       {
         "file": "package.json",
