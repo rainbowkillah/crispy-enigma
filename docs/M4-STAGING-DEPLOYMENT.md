@@ -191,9 +191,9 @@ cat wrangler.jsonc | grep -A 10 "vectorize\|kv_namesp"
 
 ```bash
 # Test basic search
-curl -X POST https://staging.example.com/search \
+curl -X POST https://bluey-ai-worker-staging.mrrainbowsmoke.workers.dev/search \
   -H "Content-Type: application/json" \
-  -H "X-Tenant-ID: staging" \
+  -H "X-Tenant-ID: mrrainbowsmoke" \
   -d '{
     "sessionId": "test-session",
     "query": "What is rate limiting?",
