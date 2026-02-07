@@ -20,6 +20,38 @@
   "nxJsonPlugins": [],
   "fileMap": {
     "projectFileMap": {
+      "ai": [
+        {
+          "file": "packages/ai/project.json",
+          "hash": "2447358976378343147"
+        },
+        {
+          "file": "packages/ai/src/gateway.ts",
+          "hash": "8159515835548601124"
+        },
+        {
+          "file": "packages/ai/src/index.ts",
+          "hash": "14569501487334179972"
+        }
+      ],
+      "observability": [
+        {
+          "file": "packages/observability/project.json",
+          "hash": "1632021096686162711"
+        },
+        {
+          "file": "packages/observability/src/index.ts",
+          "hash": "4341750429153816421"
+        },
+        {
+          "file": "packages/observability/src/logger.ts",
+          "hash": "14216585224841379369"
+        },
+        {
+          "file": "packages/observability/src/metrics.ts",
+          "hash": "2511408882714007930"
+        }
+      ],
       "rag": [
         {
           "file": "packages/rag/project.json",
@@ -35,7 +67,11 @@
         },
         {
           "file": "packages/rag/src/index.ts",
-          "hash": "3000073072662878847"
+          "hash": "5039142732593223866"
+        },
+        {
+          "file": "packages/rag/src/query-rewriting.ts",
+          "hash": "17774815662147208706"
         },
         {
           "file": "packages/rag/src/rag.ts",
@@ -43,51 +79,11 @@
         },
         {
           "file": "packages/rag/src/retrieval.ts",
-          "hash": "2567597320573347763"
+          "hash": "9231222042039079253"
         },
         {
           "file": "packages/rag/src/vectorize.ts",
-          "hash": "4795782062888840375"
-        }
-      ],
-      "worker-api": [
-        {
-          "file": "apps/worker-api/project.json",
-          "hash": "807840864903812667"
-        },
-        {
-          "file": "apps/worker-api/src/index.ts",
-          "hash": "18335613893979937121"
-        },
-        {
-          "file": "apps/worker-api/src/rate-limiter-do.ts",
-          "hash": "4934197882651790622"
-        },
-        {
-          "file": "apps/worker-api/src/session-do.ts",
-          "hash": "15106447200388021791"
-        }
-      ],
-      "storage": [
-        {
-          "file": "packages/storage/project.json",
-          "hash": "18417496484336993390"
-        },
-        {
-          "file": "packages/storage/src/do.ts",
-          "hash": "15124964690760613976"
-        },
-        {
-          "file": "packages/storage/src/index.ts",
-          "hash": "4260946828283953203"
-        },
-        {
-          "file": "packages/storage/src/kv.ts",
-          "hash": "1755166976520487066"
-        },
-        {
-          "file": "packages/storage/src/vectorize.ts",
-          "hash": "17847552451332353089"
+          "hash": "18045353671699105213"
         }
       ],
       "core": [
@@ -117,7 +113,7 @@
         },
         {
           "file": "packages/core/src/rag/schema.ts",
-          "hash": "5542337266818395721"
+          "hash": "15612640730154510971"
         },
         {
           "file": "packages/core/src/tenant/loader.ts",
@@ -136,32 +132,48 @@
           "hash": "10852238908151055834"
         }
       ],
-      "observability": [
+      "worker-api": [
         {
-          "file": "packages/observability/project.json",
-          "hash": "1632021096686162711"
+          "file": "apps/worker-api/project.json",
+          "hash": "807840864903812667"
         },
         {
-          "file": "packages/observability/src/index.ts",
-          "hash": "8864206489639079382"
+          "file": "apps/worker-api/src/index.ts",
+          "hash": "12036700606141053291"
         },
         {
-          "file": "packages/observability/src/logger.ts",
-          "hash": "14216585224841379369"
+          "file": "apps/worker-api/src/rate-limiter-do.ts",
+          "hash": "4934197882651790622"
+        },
+        {
+          "file": "apps/worker-api/src/session-do.ts",
+          "hash": "15106447200388021791"
         }
       ],
-      "ai": [
+      "storage": [
         {
-          "file": "packages/ai/project.json",
-          "hash": "2447358976378343147"
+          "file": "packages/storage/project.json",
+          "hash": "18417496484336993390"
         },
         {
-          "file": "packages/ai/src/gateway.ts",
-          "hash": "8159515835548601124"
+          "file": "packages/storage/src/do.ts",
+          "hash": "15124964690760613976"
         },
         {
-          "file": "packages/ai/src/index.ts",
-          "hash": "14569501487334179972"
+          "file": "packages/storage/src/index.ts",
+          "hash": "9537076970660712090"
+        },
+        {
+          "file": "packages/storage/src/kv.ts",
+          "hash": "1755166976520487066"
+        },
+        {
+          "file": "packages/storage/src/search-cache.ts",
+          "hash": "12744560118745660087"
+        },
+        {
+          "file": "packages/storage/src/vectorize.ts",
+          "hash": "17847552451332353089"
         }
       ]
     },
@@ -172,11 +184,11 @@
       },
       {
         "file": ".github/copilot-instructions.md",
-        "hash": "280870983513376752"
+        "hash": "847351498250183752"
       },
       {
         "file": ".gitignore",
-        "hash": "3501635454039698188"
+        "hash": "12838507779097564153"
       },
       {
         "file": ".mcp.json",
@@ -196,7 +208,7 @@
       },
       {
         "file": "CHANGELOG.md",
-        "hash": "2848824513629301736"
+        "hash": "4236798015024718753"
       },
       {
         "file": "CLAUDE.md",
@@ -207,12 +219,8 @@
         "hash": "15598910314814648805"
       },
       {
-        "file": "PR-SUMMARY.md",
-        "hash": "9832592419251495782"
-      },
-      {
         "file": "README.md",
-        "hash": "17530319531451003465"
+        "hash": "10670412807483662662"
       },
       {
         "file": "WIKI-SETUP.md",
@@ -224,7 +232,7 @@
       },
       {
         "file": "docs/ALIGNMENT-SUMMARY.md",
-        "hash": "4940397636626863075"
+        "hash": "2783198485593840616"
       },
       {
         "file": "docs/M0-COMPLETE.md",
@@ -243,12 +251,56 @@
         "hash": "16406284072233240984"
       },
       {
+        "file": "docs/M4-CODEX-PLAN.md",
+        "hash": "4624577681751315012"
+      },
+      {
+        "file": "docs/M4-CODEX-PROMPTS.md",
+        "hash": "7542213301945201770"
+      },
+      {
+        "file": "docs/M4-COMPLETION-ROLLUP.md",
+        "hash": "14926368982258290569"
+      },
+      {
+        "file": "docs/M4-ISSUES-QUICK-REF.md",
+        "hash": "17943357013567935828"
+      },
+      {
+        "file": "docs/M4-NOTES.md",
+        "hash": "14978227516616338626"
+      },
+      {
+        "file": "docs/M4-PR-SUMMARY.md",
+        "hash": "480544804085353218"
+      },
+      {
+        "file": "docs/M4-PREP.md",
+        "hash": "1355976090899746199"
+      },
+      {
+        "file": "docs/M4-STAGING-DEPLOYMENT.md",
+        "hash": "5097213535630781064"
+      },
+      {
+        "file": "docs/M4-STAGING-VALIDATION-RESULTS.md",
+        "hash": "12262430802699409846"
+      },
+      {
+        "file": "docs/M5-PREP.md",
+        "hash": "11835909322289788650"
+      },
+      {
+        "file": "docs/PR-SUMMARY.md",
+        "hash": "9832592419251495782"
+      },
+      {
         "file": "docs/PR.md",
         "hash": "16722071428211536516"
       },
       {
         "file": "docs/PROJECT-STATUS.md",
-        "hash": "11745733870069408348"
+        "hash": "12694970084632731400"
       },
       {
         "file": "docs/adrs/ADR-001-sse-streaming.md",
@@ -280,11 +332,11 @@
       },
       {
         "file": "docs/architecture.md",
-        "hash": "1983624914332516534"
+        "hash": "4556112683853532837"
       },
       {
         "file": "docs/bindings.md",
-        "hash": "6366004584223375942"
+        "hash": "7110446619026774478"
       },
       {
         "file": "docs/examples/chat.md",
@@ -315,6 +367,10 @@
         "hash": "6821766102219709392"
       },
       {
+        "file": "docs/handoff-M3.md",
+        "hash": "14628487875505547009"
+      },
+      {
         "file": "docs/handoff-PR.md",
         "hash": "13624183059217584126"
       },
@@ -324,7 +380,7 @@
       },
       {
         "file": "docs/milestones.md",
-        "hash": "15392071484073912194"
+        "hash": "5036775618480185116"
       },
       {
         "file": "docs/milestones/M0.md",
@@ -340,7 +396,7 @@
       },
       {
         "file": "docs/plan.md",
-        "hash": "14112207489671107185"
+        "hash": "18227178769066851129"
       },
       {
         "file": "docs/quick-reference.md",
@@ -364,7 +420,7 @@
       },
       {
         "file": "docs/tenancy.md",
-        "hash": "5361556891377928661"
+        "hash": "2031972629326183975"
       },
       {
         "file": "docs/testing.md",
@@ -388,11 +444,23 @@
       },
       {
         "file": "package-lock.json",
-        "hash": "16609361416980864904"
+        "hash": "11830938031816815033"
       },
       {
         "file": "package.json",
         "hash": "3845589171169041147"
+      },
+      {
+        "file": "response-cache.json",
+        "hash": "257995052885587607"
+      },
+      {
+        "file": "response-search.json",
+        "hash": "15599939905842819241"
+      },
+      {
+        "file": "response.json",
+        "hash": "17779405836247897644"
       },
       {
         "file": "scripts/chat-dev.mjs",
@@ -412,7 +480,7 @@
       },
       {
         "file": "tenants/alpha/tenant.config.json",
-        "hash": "8422568709226764419"
+        "hash": "9326290205527048223"
       },
       {
         "file": "tenants/alpha/wrangler.jsonc",
@@ -420,7 +488,7 @@
       },
       {
         "file": "tenants/example/tenant.config.json",
-        "hash": "15922214223165577465"
+        "hash": "10327191164666491741"
       },
       {
         "file": "tenants/example/wrangler.jsonc",
@@ -436,11 +504,11 @@
       },
       {
         "file": "tenants/mrrainbowsmoke/tenant.config.json",
-        "hash": "4848078305183124185"
+        "hash": "12797205899409073293"
       },
       {
         "file": "tenants/mrrainbowsmoke/wrangler.jsonc",
-        "hash": "7433163846453776513"
+        "hash": "2086182801845316110"
       },
       {
         "file": "tenants/rainbowsmokeofficial/.gitignore",
@@ -448,11 +516,11 @@
       },
       {
         "file": "tenants/rainbowsmokeofficial/tenant.config.json",
-        "hash": "5839401784425796736"
+        "hash": "14684590634843381022"
       },
       {
         "file": "tenants/rainbowsmokeofficial/wrangler.jsonc",
-        "hash": "6306428219027080859"
+        "hash": "3945362314990550134"
       },
       {
         "file": "tests/ai-gateway.test.ts",
@@ -472,7 +540,7 @@
       },
       {
         "file": "tests/ingest-search.test.ts",
-        "hash": "14644091999124984710"
+        "hash": "13167631776492458902"
       },
       {
         "file": "tests/kv-prefix.test.ts",
@@ -488,19 +556,19 @@
       },
       {
         "file": "tests/rag-embeddings.test.ts",
-        "hash": "6998568726329581107"
+        "hash": "17912618479013030435"
       },
       {
         "file": "tests/rag-fixture-retrieval.test.ts",
-        "hash": "8585146066975126231"
+        "hash": "3350131406024296721"
       },
       {
         "file": "tests/rag-retrieval.test.ts",
-        "hash": "10989548970577196224"
+        "hash": "2335864841230478305"
       },
       {
         "file": "tests/rag-vectorize-upsert.test.ts",
-        "hash": "13246326791955668681"
+        "hash": "16340493083262774497"
       },
       {
         "file": "tests/rate-limit.test.ts",
@@ -517,6 +585,14 @@
       {
         "file": "tests/resolveTenant.test.ts",
         "hash": "6690891934882864550"
+      },
+      {
+        "file": "tests/search-caching.test.ts",
+        "hash": "14991162456820075138"
+      },
+      {
+        "file": "tests/search-schema-validation.test.ts",
+        "hash": "16783807545080910933"
       },
       {
         "file": "tests/session-isolation.test.ts",
@@ -536,7 +612,7 @@
       },
       {
         "file": "tests/vectorize-tenant-scope.test.ts",
-        "hash": "13776830779683846896"
+        "hash": "2376060968852045914"
       },
       {
         "file": "tsconfig.base.json",
@@ -560,7 +636,7 @@
       },
       {
         "file": "wiki-content/Development-Guide.md",
-        "hash": "14913009778131382287"
+        "hash": "16633235938800755092"
       },
       {
         "file": "wiki-content/Getting-Started.md",
@@ -572,7 +648,7 @@
       },
       {
         "file": "wiki-content/Milestones.md",
-        "hash": "14883124914730557094"
+        "hash": "8936417959466024781"
       },
       {
         "file": "wiki-content/Multi-Tenancy.md",
