@@ -8,6 +8,7 @@ import {
   loadTenantConfig,
   ok,
   searchRequestSchema,
+  type SearchResponse,
   type Env,
   type TenantConfig
 } from '../../../packages/core/src';
@@ -22,10 +23,17 @@ import {
   assembleRagPrompt,
   chunkText,
   runGatewayEmbeddings,
-  runVectorizeRetrieval,
-  upsertTenantVectors
+  upsertTenantVectors,
+  detectQueryIntent
 } from '../../../packages/rag/src';
 import { getTenantDurableObject } from '../../../packages/storage/src/do';
+import { TenantVectorizeAdapter } from '../../../packages/storage/src/vectorize';
+import {
+  getCachedSearch,
+  hashSearchQuery,
+  setCachedSearch
+} from '../../../packages/storage/src/search-cache';
+import { getSearchCacheMetrics } from '../../../packages/observability/src/metrics';
 
 const textEncoder = new TextEncoder();
 const tokenUsagePrefix = 'token-usage';
@@ -41,6 +49,36 @@ type UsageMetrics = {
   status: 'success' | 'error';
   traceId?: string;
   route?: string;
+};
+
+type SearchMetrics = {
+  tenantId: string;
+  traceId?: string;
+  route: 'search';
+  status: 'success' | 'error' | 'cache-hit';
+  cacheHit: boolean;
+  latencies: {
+    totalMs: number;
+    rewriteMs?: number;
+    embeddingMs?: number;
+    retrievalMs?: number;
+    ragAssemblyMs?: number;
+    generationMs?: number;
+    followUpGenerationMs?: number;
+  };
+  tokensUsed?: {
+    rewrite?: { in: number; out: number };
+    followUpGeneration?: { in: number; out: number };
+  };
+  topK: number;
+  matchesReturned: number;
+};
+
+type CacheCheckEvent = {
+  timestamp: number;
+  hit: boolean;
+  latencyMs: number;
+  queryHash: string;
 };
 
 const configs = tenantConfigs.map((config) => loadTenantConfig(config));
@@ -174,6 +212,109 @@ async function applyUsageUpdate(
     writeUsageValue(kv, snapshot.dailyKey, nextDaily),
     writeUsageValue(kv, snapshot.monthlyKey, nextMonthly)
   ]);
+}
+
+function buildRagMessages(prompt: string): ChatModelMessage[] {
+  const lines = prompt.split('\n');
+  const systemLine = lines[0] ?? '';
+  const instructionLine = lines[1] ?? '';
+  const systemPrefix = 'System:';
+  const instructionPrefix = 'Instruction:';
+  const system =
+    systemLine.startsWith(systemPrefix)
+      ? systemLine.slice(systemPrefix.length).trim()
+      : '';
+  const instruction =
+    instructionLine.startsWith(instructionPrefix)
+      ? instructionLine.slice(instructionPrefix.length).trim()
+      : '';
+  const systemContent = [system, instruction].filter(Boolean).join('\n');
+  const userContent = lines.slice(2).join('\n').trim();
+  const messages: ChatModelMessage[] = [];
+  if (systemContent) {
+    messages.push({ role: 'system', content: systemContent });
+  }
+  messages.push({
+    role: 'user',
+    content: userContent || prompt
+  });
+  return messages;
+}
+
+function computeConfidence(scores: Array<number | undefined>, limit = 3): number {
+  const filtered = scores.filter((score) => typeof score === 'number') as number[];
+  if (filtered.length === 0) {
+    return 0;
+  }
+  const topScores = filtered.slice(0, limit);
+  const average = topScores.reduce((sum, score) => sum + score, 0) / topScores.length;
+  return Math.max(0, Math.min(1, average));
+}
+
+function extractJsonArray(text: string): string[] {
+  const trimmed = text.trim();
+  const candidate =
+    trimmed.startsWith('[') && trimmed.endsWith(']')
+      ? trimmed
+      : trimmed.match(/\[[\s\S]*\]/)?.[0];
+  if (!candidate) {
+    return [];
+  }
+  try {
+    const parsed = JSON.parse(candidate) as unknown;
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+    return parsed
+      .filter((item) => typeof item === 'string')
+      .map((item) => item.trim())
+      .filter((item) => item.length > 0);
+  } catch {
+    return [];
+  }
+}
+
+async function recordSearchMetrics(
+  env: Env,
+  tenantId: string,
+  metrics: SearchMetrics
+): Promise<void> {
+  if (!env.CACHE?.put) {
+    return;
+  }
+  const key = `${tenantId}:search:metrics:${Date.now()}`;
+  try {
+    await env.CACHE.put(key, JSON.stringify(metrics), {
+      expirationTtl: 604800
+    });
+  } catch (error) {
+    if (env.DEBUG_LOGGING) {
+      console.warn('Failed to write search metrics', { tenantId, error });
+    }
+  }
+}
+
+async function recordCacheCheck(
+  env: Env,
+  tenantId: string,
+  event: CacheCheckEvent
+): Promise<void> {
+  if (!env.CACHE?.put) {
+    return;
+  }
+  const suffix = typeof crypto.randomUUID === 'function'
+    ? crypto.randomUUID()
+    : String(Math.random()).slice(2);
+  const key = `${tenantId}:search:cache-check:${event.timestamp}:${suffix}`;
+  try {
+    await env.CACHE.put(key, JSON.stringify(event), {
+      expirationTtl: 86400
+    });
+  } catch (error) {
+    if (env.DEBUG_LOGGING) {
+      console.warn('Failed to write cache check', { tenantId, error });
+    }
+  }
 }
 
 async function handleChatRequest(
@@ -526,6 +667,7 @@ async function handleChatRequest(
 
 export { ChatSession } from './session-do';
 export { RateLimiter } from './rate-limiter-do';
+export type { SearchMetrics };
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -566,6 +708,23 @@ export default {
         },
         traceId
       );
+    }
+
+    if (url.pathname === '/metrics/search-cache') {
+      if (request.method !== 'GET') {
+        return fail('method_not_allowed', 'Method not allowed', 405, traceId);
+      }
+      const periodParam = url.searchParams.get('period') ?? '24h';
+      const allowedPeriods = new Set(['1h', '24h', '7d']);
+      if (!allowedPeriods.has(periodParam)) {
+        return fail('invalid_request', 'Invalid period', 400, traceId);
+      }
+      const metrics = await getSearchCacheMetrics(
+        config.tenantId,
+        periodParam as '1h' | '24h' | '7d',
+        env
+      );
+      return ok(metrics, traceId);
     }
 
     const ragRoute = getRagRoute(url.pathname);
@@ -659,25 +818,132 @@ export default {
         return fail('invalid_request', 'Invalid request', 400, traceId);
       }
 
-      const embeddingModelId = env.MODEL_ID ?? config.aiModels.embeddings;
-      let retrieval;
+      const searchStartedAt = performance.now();
+      const originalQuery = parsed.data.query;
+      const requestedTopK = parsed.data.topK ?? 5;
+
+      let rewriteMs: number | undefined;
+      let rewrittenQuery = originalQuery;
       try {
-        retrieval = await runVectorizeRetrieval(
+        const rewriteEnv = env.MODEL_ID
+          ? env
+          : { ...env, MODEL_ID: config.aiModels.chat };
+        const rewriteStart = performance.now();
+        const rewriteResult = await detectQueryIntent(
+          config.tenantId,
+          config.aiGatewayId,
+          originalQuery,
+          rewriteEnv
+        );
+        rewrittenQuery = rewriteResult.rewritten || originalQuery;
+        rewriteMs = performance.now() - rewriteStart;
+      } catch {
+        rewrittenQuery = originalQuery;
+      }
+
+      const cacheStart = performance.now();
+      const cached = await getCachedSearch(config.tenantId, rewrittenQuery, env);
+      if (cached) {
+        const cacheLatency = performance.now() - cacheStart;
+        try {
+          const queryHash = await hashSearchQuery(rewrittenQuery);
+          void recordCacheCheck(env, config.tenantId, {
+            timestamp: Date.now(),
+            hit: true,
+            latencyMs: cacheLatency,
+            queryHash
+          });
+        } catch {
+          // Ignore cache check hashing failures.
+        }
+        void recordSearchMetrics(env, config.tenantId, {
+          tenantId: config.tenantId,
+          traceId,
+          route: 'search',
+          status: 'cache-hit',
+          cacheHit: true,
+          latencies: {
+            totalMs: performance.now() - searchStartedAt,
+            rewriteMs
+          },
+          topK: requestedTopK,
+          matchesReturned: cached.sources.length
+        });
+        return ok(cached, traceId);
+      }
+
+      const embeddingModelId = env.MODEL_ID ?? config.aiModels.embeddings;
+      let embeddingResult;
+      let embeddingMs: number | undefined;
+      try {
+        const embeddingStart = performance.now();
+        embeddingResult = await runGatewayEmbeddings(
           config.tenantId,
           config.aiGatewayId,
           embeddingModelId,
+          [rewrittenQuery],
+          env,
           {
-            query: parsed.data.query,
-            topK: parsed.data.topK,
-            filter: parsed.data.filter
-          },
-          env
+            metadata: {
+              traceId,
+              route: '/search',
+              query: 'vectorize'
+            }
+          }
         );
+        embeddingMs = performance.now() - embeddingStart;
       } catch {
-        return fail('ai_error', 'Retrieval provider unavailable', 502, traceId);
+        void recordSearchMetrics(env, config.tenantId, {
+          tenantId: config.tenantId,
+          traceId,
+          route: 'search',
+          status: 'error',
+          cacheHit: false,
+          latencies: {
+            totalMs: performance.now() - searchStartedAt,
+            rewriteMs,
+            embeddingMs
+          },
+          topK: requestedTopK,
+          matchesReturned: 0
+        });
+        return fail('ai_error', 'Embedding provider unavailable', 502, traceId);
       }
 
-      const chunks = (retrieval.matches ?? []).map((match) => {
+      const vector = embeddingResult.embeddings[0] ?? [];
+      let retrievalMs: number | undefined;
+      let rawMatches: VectorizeMatches = { matches: [], count: 0 } as VectorizeMatches;
+      if (vector.length > 0) {
+        try {
+          const retrievalStart = performance.now();
+          const adapter = new TenantVectorizeAdapter(env.VECTORIZE);
+          rawMatches = await adapter.query(config.tenantId, vector, {
+            topK: requestedTopK,
+            filter: parsed.data.filter
+          });
+          retrievalMs = performance.now() - retrievalStart;
+        } catch {
+          void recordSearchMetrics(env, config.tenantId, {
+            tenantId: config.tenantId,
+            traceId,
+            route: 'search',
+            status: 'error',
+            cacheHit: false,
+            latencies: {
+              totalMs: performance.now() - searchStartedAt,
+              rewriteMs,
+              embeddingMs,
+              retrievalMs
+            },
+            topK: requestedTopK,
+            matchesReturned: 0
+          });
+          return fail('ai_error', 'Retrieval provider unavailable', 502, traceId);
+        }
+      }
+
+      const matches = rawMatches.matches ?? [];
+      const chunks = matches.map((match) => {
         const metadata = (match.metadata ?? {}) as Record<string, unknown>;
         return {
           id: match.id,
@@ -694,19 +960,177 @@ export default {
         };
       });
 
-      const rag = assembleRagPrompt(parsed.data.query, chunks);
+      const ragStart = performance.now();
+      const rag = assembleRagPrompt(originalQuery, chunks);
+      const ragAssemblyMs = performance.now() - ragStart;
 
-      return ok(
-        {
+      if (rag.safety && !rag.safety.allowed) {
+        const response: SearchResponse = {
           status: 'ok',
-          modelId: retrieval.modelId,
-          prompt: rag.prompt,
-          citations: rag.citations,
-          citationsText: rag.citationsText,
-          matches: chunks
+          traceId,
+          answer: "I'm sorry, I can't help with that.",
+          sources: [],
+          confidence: 0,
+          followUps: []
+        };
+        void recordSearchMetrics(env, config.tenantId, {
+          tenantId: config.tenantId,
+          traceId,
+          route: 'search',
+          status: 'success',
+          cacheHit: false,
+          latencies: {
+            totalMs: performance.now() - searchStartedAt,
+            rewriteMs,
+            embeddingMs,
+            retrievalMs,
+            ragAssemblyMs
+          },
+          topK: requestedTopK,
+          matchesReturned: 0
+        });
+        return ok(response, traceId);
+      }
+
+      const chatModelId = env.MODEL_ID ?? config.aiModels.chat;
+      const fallbackModelId = env.FALLBACK_MODEL_ID ?? config.aiModels.chat;
+      let answerText = '';
+      let generationMs: number | undefined;
+      try {
+        const generationStart = performance.now();
+        const result = await runGatewayChat(
+          config.tenantId,
+          config.aiGatewayId,
+          chatModelId,
+          buildRagMessages(rag.prompt),
+          env,
+          {
+            stream: false,
+            fallbackModelId,
+            metadata: {
+              traceId,
+              route: '/search'
+            }
+          }
+        );
+        if (result.kind !== 'text') {
+          throw new Error('Expected text result');
+        }
+        answerText = result.content.trim();
+        generationMs = performance.now() - generationStart;
+      } catch {
+        void recordSearchMetrics(env, config.tenantId, {
+          tenantId: config.tenantId,
+          traceId,
+          route: 'search',
+          status: 'error',
+          cacheHit: false,
+          latencies: {
+            totalMs: performance.now() - searchStartedAt,
+            rewriteMs,
+            embeddingMs,
+            retrievalMs,
+            ragAssemblyMs,
+            generationMs
+          },
+          topK: requestedTopK,
+          matchesReturned: matches.length
+        });
+        return fail('ai_error', 'AI provider unavailable', 502, traceId);
+      }
+
+      const followUpPrompt =
+        'Given this Q&A pair, suggest 3-5 follow-up questions in JSON array format.\n' +
+        `Q: ${originalQuery}\n` +
+        `A: ${answerText}\n` +
+        'Return only a JSON array like ["question1","question2"].';
+      let followUps: string[] = [];
+      let followUpGenerationMs: number | undefined;
+      let followUpUsage: { in: number; out: number } | undefined;
+      try {
+        const followUpStart = performance.now();
+        const followUpResult = await runGatewayChat(
+          config.tenantId,
+          config.aiGatewayId,
+          chatModelId,
+          [{ role: 'user', content: followUpPrompt }],
+          env,
+          {
+            stream: false,
+            fallbackModelId,
+            metadata: {
+              traceId,
+              route: '/search'
+            },
+            onUsage: (usage) => {
+              followUpUsage = {
+                in: usage.tokensIn ?? 0,
+                out: usage.tokensOut ?? 0
+              };
+            }
+          }
+        );
+        if (followUpResult.kind === 'text') {
+          followUps = extractJsonArray(followUpResult.content).slice(0, 5);
+        }
+        followUpGenerationMs = performance.now() - followUpStart;
+      } catch {
+        followUps = [];
+      }
+
+      const sources = chunks.map((chunk) => ({
+        id: chunk.id,
+        docId: chunk.metadata.docId,
+        chunkId: chunk.metadata.chunkId,
+        title: chunk.metadata.title,
+        url: chunk.metadata.url,
+        source: chunk.metadata.source,
+        text: chunk.text,
+        score: chunk.score
+      }));
+
+      const response: SearchResponse = {
+        status: 'ok',
+        traceId,
+        answer: answerText || 'No answer available.',
+        sources,
+        confidence: computeConfidence(chunks.map((chunk) => chunk.score)),
+        followUps
+      };
+
+      void setCachedSearch(config.tenantId, rewrittenQuery, response, 86400, env);
+      try {
+        const queryHash = await hashSearchQuery(rewrittenQuery);
+        void recordCacheCheck(env, config.tenantId, {
+          timestamp: Date.now(),
+          hit: false,
+          latencyMs: performance.now() - searchStartedAt,
+          queryHash
+        });
+      } catch {
+        // Ignore cache check hashing failures.
+      }
+      void recordSearchMetrics(env, config.tenantId, {
+        tenantId: config.tenantId,
+        traceId,
+        route: 'search',
+        status: 'success',
+        cacheHit: false,
+        latencies: {
+          totalMs: performance.now() - searchStartedAt,
+          rewriteMs,
+          embeddingMs,
+          retrievalMs,
+          ragAssemblyMs,
+          generationMs,
+          followUpGenerationMs
         },
-        traceId
-      );
+        tokensUsed: followUpUsage ? { followUpGeneration: followUpUsage } : undefined,
+        topK: requestedTopK,
+        matchesReturned: matches.length
+      });
+
+      return ok(response, traceId);
     }
 
     const chatRoute = getChatRoute(url.pathname);

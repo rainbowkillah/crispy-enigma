@@ -1,0 +1,86 @@
+> npm test
+
+
+> test
+> vitest run
+
+(node:98590) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ RUN  v4.0.18 /home/dfox/projects-cf/crispy-enigma
+
+(node:98720) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:98742) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:98695) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:98747) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:98712) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:98731) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:98705) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:98969) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:99053) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:98877) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:98927) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:98954) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:98891) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:98907) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:99005) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:98842) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:99025) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:98943) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:98863) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:99065) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:99042) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:98983) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:99079) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ tests/vectorize-tenant-scope.test.ts (2 tests) 4ms
+ ✓ tests/do-name.test.ts (1 test) 3ms
+ ✓ tests/rate-limiter.test.ts (2 tests) 7ms
+ ✓ tests/kv-prefix.test.ts (3 tests) 6ms
+ ✓ tests/session-retention.test.ts (2 tests) 8ms
+ ✓ tests/search-caching.test.ts (10 tests) 19ms
+ ✓ tests/search-schema-validation.test.ts (11 tests) 11ms
+ ✓ tests/resolveTenant.test.ts (4 tests) 34ms
+ ✓ tests/rag-assembly.test.ts (2 tests) 7ms
+ ✓ tests/rag-vectorize-upsert.test.ts (3 tests) 9ms
+ ✓ tests/rag-embeddings.test.ts (3 tests) 8ms
+ ✓ tests/rag-retrieval.test.ts (5 tests) 11ms
+ ✓ tests/rag-fixture-retrieval.test.ts (4 tests) 9ms
+ ✓ tests/rag-chunking.test.ts (3 tests) 7ms
+ ✓ tests/request-size.test.ts (2 tests) 21ms
+ ✓ tests/session-isolation.test.ts (2 tests) 26ms
+ ✓ tests/token-budget.test.ts (2 tests) 27ms
+ ✓ tests/health.test.ts (4 tests) 29ms
+ ✓ tests/ingest-search.test.ts (2 tests) 28ms
+ ✓ tests/streaming.test.ts (2 tests) 29ms
+ ✓ tests/rate-limit.test.ts (1 test) 31ms
+ ✓ tests/ai-gateway.test.ts (6 tests) 39ms
+ ✓ tests/chat.test.ts (9 tests) 38ms
+
+ Test Files  23 passed (23)
+      Tests  85 passed (85)
+   Start at  07:31:08
+   Duration  1.01s (transform 5.99s, setup 0ms, import 8.04s, tests 409ms, environment 4ms)
+

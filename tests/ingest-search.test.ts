@@ -31,25 +31,36 @@ class FakeVectorize {
 
   async upsert(vectors: VectorizeVector[]): Promise<VectorizeAsyncMutation> {
     this.lastUpsert = vectors;
-    return { count: vectors.length } as VectorizeAsyncMutation;
+    return { count: vectors.length, mutationId: 'test' } as VectorizeAsyncMutation;
   }
 
   async query(_vector: number[], options?: VectorizeQueryOptions): Promise<VectorizeMatches> {
     this.lastQuery = options;
-    return {
-      matches: [
-        {
-          id: 'doc-1:0',
-          score: 0.9,
-          metadata: {
-            tenantId: 'example',
-            docId: 'doc-1',
-            chunkId: '0',
-            text: 'Hello from vectorize'
-          }
+    const matches = [
+      {
+        id: 'doc-1:0',
+        score: 0.9,
+        metadata: {
+          tenantId: 'example',
+          docId: 'doc-1',
+          chunkId: '0',
+          text: 'Hello from vectorize'
         }
-      ]
-    } as VectorizeMatches;
+      }
+    ];
+    return { matches, count: matches.length } as VectorizeMatches;
+  }
+}
+
+class FakeKV {
+  public store = new Map<string, string>();
+
+  async get(key: string): Promise<string | null> {
+    return this.store.get(key) ?? null;
+  }
+
+  async put(key: string, value: string): Promise<void> {
+    this.store.set(key, value);
   }
 }
 
@@ -75,16 +86,31 @@ const rateLimiterNamespace = new FakeNamespace(async (request) => {
   return new Response('Not found', { status: 404 });
 });
 
-function makeEnv(vectorize: FakeVectorize, aiResult: unknown): Env {
+function makeEnv(
+  vectorize: FakeVectorize,
+  aiRun?: (modelId: string, input: unknown) => Promise<unknown>
+): Env {
   const fakeAi = {
-    run: async () => aiResult
+    run: aiRun
+      ? async (modelId: string, input: unknown) => aiRun(modelId, input)
+      : async (_modelId: string, input: unknown) => {
+          if (input && typeof input === 'object' && 'text' in input) {
+            const record = input as { text?: string[] };
+            const texts = record.text ?? [];
+            return {
+              data: texts.map(() => ({ embedding: [0.1, 0.2] }))
+            };
+          }
+          return 'Mock response';
+        }
   };
 
+  const kv = new FakeKV();
   return {
     AI: fakeAi as unknown as Ai,
     VECTORIZE: vectorize as unknown as Vectorize,
     CONFIG: {} as KVNamespace,
-    CACHE: {} as KVNamespace,
+    CACHE: kv as unknown as KVNamespace,
     RATE_LIMITER: {} as KVNamespace,
     DB: {} as D1Database,
     CHAT_SESSION: sessionNamespace as unknown as DurableObjectNamespace,
@@ -95,7 +121,7 @@ function makeEnv(vectorize: FakeVectorize, aiResult: unknown): Env {
 describe('ingest/search endpoints', () => {
   it('ingests text and upserts vectors', async () => {
     const vectorize = new FakeVectorize();
-    const env = makeEnv(vectorize, { data: [{ embedding: [0.1, 0.2] }] });
+    const env = makeEnv(vectorize);
 
     const response = await worker.fetch(
       new Request('https://example.local/ingest', {
@@ -120,7 +146,7 @@ describe('ingest/search endpoints', () => {
 
   it('searches and returns citations', async () => {
     const vectorize = new FakeVectorize();
-    const env = makeEnv(vectorize, { data: [{ embedding: [0.1, 0.2] }] });
+    const env = makeEnv(vectorize);
 
     const response = await worker.fetch(
       new Request('https://example.local/search', {
@@ -140,10 +166,10 @@ describe('ingest/search endpoints', () => {
     expect(response.status).toBe(200);
     const body = (await response.json()) as {
       ok: boolean;
-      data: { citationsText?: string; matches?: unknown[] };
+      data: { answer?: string; sources?: Array<{ docId?: string }> };
     };
     expect(body.ok).toBe(true);
-    expect(body.data.citationsText).toContain('doc-1#0');
-    expect(body.data.matches?.length).toBe(1);
+    expect(body.data.answer).toBeTruthy();
+    expect(body.data.sources?.[0]?.docId).toBe('doc-1');
   });
 });

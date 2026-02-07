@@ -1,18 +1,73 @@
 {
   "run": {
-    "command": "nx run worker-api:test",
-    "startTime": "2026-02-06T19:37:04.902Z",
-    "endTime": "2026-02-06T19:37:05.827Z",
+    "command": "nx run-many -t typecheck",
+    "startTime": "2026-02-07T12:31:10.368Z",
+    "endTime": "2026-02-07T12:31:13.346Z",
     "inner": false
   },
   "tasks": [
     {
-      "taskId": "worker-api:test",
-      "target": "test",
+      "taskId": "core:typecheck",
+      "target": "typecheck",
+      "projectName": "core",
+      "hash": "13443657554488200884",
+      "startTime": "2026-02-07T12:31:10.374Z",
+      "endTime": "2026-02-07T12:31:11.885Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "storage:typecheck",
+      "target": "typecheck",
+      "projectName": "storage",
+      "hash": "12951170907787410533",
+      "startTime": "2026-02-07T12:31:10.374Z",
+      "endTime": "2026-02-07T12:31:11.892Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "ai:typecheck",
+      "target": "typecheck",
+      "projectName": "ai",
+      "hash": "13240934374476738429",
+      "startTime": "2026-02-07T12:31:10.374Z",
+      "endTime": "2026-02-07T12:31:11.898Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "observability:typecheck",
+      "target": "typecheck",
+      "projectName": "observability",
+      "hash": "6001225927209374528",
+      "startTime": "2026-02-07T12:31:11.886Z",
+      "endTime": "2026-02-07T12:31:13.303Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "worker-api:typecheck",
+      "target": "typecheck",
       "projectName": "worker-api",
-      "hash": "3093993880300311541",
-      "startTime": "2026-02-06T19:37:04.905Z",
-      "endTime": "2026-02-06T19:37:05.827Z",
+      "hash": "4561910803019081352",
+      "startTime": "2026-02-07T12:31:11.892Z",
+      "endTime": "2026-02-07T12:31:13.322Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "rag:typecheck",
+      "target": "typecheck",
+      "projectName": "rag",
+      "hash": "8002467714876900083",
+      "startTime": "2026-02-07T12:31:11.898Z",
+      "endTime": "2026-02-07T12:31:13.345Z",
       "params": "",
       "cacheStatus": "cache-miss",
       "status": 0

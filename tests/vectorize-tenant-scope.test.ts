@@ -7,12 +7,12 @@ class FakeVectorize {
 
   async query(_vector: number[], options?: VectorizeQueryOptions): Promise<VectorizeMatches> {
     this.lastQuery = options;
-    return { matches: [] } as VectorizeMatches;
+    return { matches: [], count: 0 } as VectorizeMatches;
   }
 
   async upsert(vectors: VectorizeVector[]): Promise<VectorizeAsyncMutation> {
     this.lastUpsert = vectors;
-    return { count: vectors.length } as VectorizeAsyncMutation;
+    return { count: vectors.length, mutationId: 'test' } as VectorizeAsyncMutation;
   }
 }
 

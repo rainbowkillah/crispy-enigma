@@ -56,7 +56,7 @@ export async function runVectorizeRetrieval(
       modelId: embeddingResult.modelId,
       queryEmbedding: [],
       matches: [],
-      raw: { matches: [] } as VectorizeMatches
+      raw: { matches: [], count: 0 } as VectorizeMatches
     };
   }
 

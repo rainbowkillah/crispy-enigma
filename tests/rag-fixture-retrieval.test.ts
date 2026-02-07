@@ -4,19 +4,21 @@ import { makeEnv } from './rag-embeddings.test';
 
 class DeterministicVectorize {
   async query(): Promise<VectorizeMatches> {
+    const matches = [
+      {
+        id: 'doc-1:chunk-1',
+        score: 0.9,
+        metadata: { tenantId: 'tenant-a', docId: 'doc-1', chunkId: 'chunk-1' }
+      },
+      {
+        id: 'doc-2:chunk-3',
+        score: 0.8,
+        metadata: { tenantId: 'tenant-a', docId: 'doc-2', chunkId: 'chunk-3' }
+      }
+    ];
     return {
-      matches: [
-        {
-          id: 'doc-1:chunk-1',
-          score: 0.9,
-          metadata: { tenantId: 'tenant-a', docId: 'doc-1', chunkId: 'chunk-1' }
-        },
-        {
-          id: 'doc-2:chunk-3',
-          score: 0.8,
-          metadata: { tenantId: 'tenant-a', docId: 'doc-2', chunkId: 'chunk-3' }
-        }
-      ]
+      matches,
+      count: matches.length
     } as VectorizeMatches;
   }
 

@@ -12,19 +12,24 @@ class FakeVectorize {
   public lastQuery?: VectorizeQueryOptions;
   async upsert(vectors: VectorizeVector[]): Promise<VectorizeAsyncMutation> {
     this.lastVectors = vectors;
-    return { count: vectors.length } as VectorizeAsyncMutation;
+    return {
+      count: vectors.length,
+      mutationId: 'test'
+    } as VectorizeAsyncMutation;
   }
 
   async query(_vector: number[], options?: VectorizeQueryOptions): Promise<VectorizeMatches> {
     this.lastQuery = options;
+    const matches = [
+      {
+        id: 'doc-1:chunk-1',
+        score: 0.9,
+        metadata: { tenantId: 'tenant-a', docId: 'doc-1', chunkId: 'chunk-1' }
+      }
+    ];
     return {
-      matches: [
-        {
-          id: 'doc-1:chunk-1',
-          score: 0.9,
-          metadata: { tenantId: 'tenant-a', docId: 'doc-1', chunkId: 'chunk-1' }
-        }
-      ]
+      matches,
+      count: matches.length
     } as VectorizeMatches;
   }
 }

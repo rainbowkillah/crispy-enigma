@@ -35,15 +35,23 @@ export async function upsertTenantVectors(
   records: VectorizeUpsertRecord[]
 ): Promise<VectorizeUpsertResult> {
   if (records.length === 0) {
-    return { count: 0, raw: { count: 0 } as VectorizeAsyncMutation };
+    return {
+      count: 0,
+      raw: { count: 0, mutationId: 'noop' } as VectorizeAsyncMutation
+    };
   }
 
   const adapter = new TenantVectorizeAdapter(index);
-  const vectors: VectorizeVector[] = records.map((record) => ({
-    id: record.id,
-    values: record.values,
-    metadata: record.metadata
-  }));
+  const vectors: VectorizeVector[] = records.map((record) => {
+    const cleaned = Object.fromEntries(
+      Object.entries(record.metadata).filter(([, value]) => value !== undefined)
+    ) as Record<string, VectorizeVectorMetadata>;
+    return {
+      id: record.id,
+      values: record.values,
+      metadata: cleaned
+    };
+  });
 
   const result = await adapter.upsert(tenantId, vectors);
   return { count: records.length, raw: result };
