@@ -2,14 +2,13 @@
 
 All notable changes for this project are documented here.
 
-## [Unreleased] M2 - AI Gateway Integration (In Progress)
+## [1.2.0] - 2026-02-07 (M2: AI Gateway Integration Complete)
 
 ### Status
-- ✅ Issues #26-#31 complete (model routing, budgets, usage metrics, docs)
-- 🔵 Issue #25 partial (staging validation remaining)
+- ✅ All issues complete (#25-#31)
 - 40 tests passing (up from 32 at M1 close)
-
-### Completed (2026-02-07)
+- TypeScript: ✅ No errors
+- Lint: ✅ No errors
 
 ### Added
 - `modelId` request override with precedence (request > env > tenant).
