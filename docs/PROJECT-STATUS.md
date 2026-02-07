@@ -134,16 +134,16 @@ Created preparation documents:
 
 ## M2 Progress (AI Gateway Integration)
 
-**Status:** ✅ COMPLETE  
+**Status:** 🔵 IN PROGRESS  
 **Issues:** #25-#31  
-**Completed:** 2026-02-07  
+**Updated:** 2026-02-07  
 **Tests:** 40 passing (up from 36)
 
 ### Deliverables Status
 
 | Issue | Title | Status | Notes |
 |-------|-------|--------|-------|
-| #25 | Gateway integration spike | ✅ Complete | Dev smoke tests validated, staging follow-up deferred |
+| #25 | Gateway integration spike | 🔵 In progress | Dev smoke tests done; staging validation pending |
 | #26 | Model routing (tenant config + overrides) | ✅ Complete | Precedence: request > env > tenant |
 | #27 | Per-route model override options | ✅ Complete | `modelId` in request schema |
 | #28 | Budget/limits hooks (token limits) | ✅ Complete | KV-backed daily/monthly limits |
@@ -171,11 +171,15 @@ Created preparation documents:
 - Current test count: **40 tests** across **13 files** (up from 32 at M1 close).
 - All tests passing, TypeScript compiles cleanly.
 
-### Remaining Work for M3
+### M2 Completion Status
 
-M2 is now complete. All code implementation, testing, and documentation are finished. Optional staging validation with production AI Gateway can be performed as an operational verification step but does not block M2 completion.
+M2 is **not complete** until the staging AI Gateway spike (#25) is finished.
 
-**Next:** Begin M3 planning (Embeddings + Vectorize + RAG)
+---
+
+## M3 Prep
+
+- Draft prep started: `docs/M3-PREP.md`.
 
 ### Handoffs
 
@@ -354,10 +358,10 @@ Duration:   317ms
 
 | Gate | Result | Details |
 |------|--------|---------|
-| Tests | ✅ 36/36 passing | 12 test files, 864ms |
+| Tests | ✅ 40/40 passing | 13 test files |
 | TypeScript | ✅ Zero errors | Clean compilation |
-| Lint | ⚠️ 10 errors | Pre-existing (logging/observability), deferred to M7 |
-| AI Gateway lint | ✅ Fixed | Removed `no-explicit-any` from gateway.ts and ai-gateway.test.ts |
+| Lint | ✅ Clean | No errors |
+| AI Gateway lint | ✅ Fixed | `no-explicit-any` resolved |
 
 ### M2 Foundation Already In Place
 
@@ -365,19 +369,14 @@ Duration:   317ms
 |-----------|------|--------|
 | Gateway wrapper | `packages/ai/src/gateway.ts` | ✅ Implemented |
 | Chat integration | `apps/worker-api/src/index.ts` | ✅ Uses `runGatewayChat()` |
-| Gateway tests | `tests/ai-gateway.test.ts` | ✅ 4 tests passing |
+| Gateway tests | `tests/ai-gateway.test.ts` | ✅ 6 tests passing |
 | Tenant model config | `tenants/*/tenant.config.json` | ✅ `aiModels.chat` + `aiGatewayId` |
 | Streaming support | `aiStreamToTokenStream()` | ✅ SSE stream parsing |
 | Fallback logic | `runGatewayChat()` | ✅ Primary -> fallback |
 
 ### M2 Remaining Work
 
-1. **#25 Gateway spike** — Validate real AI Gateway connectivity
-2. **#27 Per-request model override** — Add `modelId` to chat request schema
-3. **#28 Budget/limits hooks** — Token tracking and budget enforcement
-4. **#29 Observability hooks** — Latency, token counts, cost metrics
-5. **#30 AI Gateway docs** — Create `docs/ai-gateway.md`
-6. **#31 Fallback docs** — Document fallback behavior
+1. **#25 Gateway spike** — Validate real AI Gateway connectivity in staging
 
 See `docs/milestones/M2.md` for full implementation plan.
 
@@ -387,9 +386,9 @@ See `docs/milestones/M2.md` for full implementation plan.
 
 **M0 Status:** ✅ COMPLETE AND VERIFIED
 **M1 Status:** ✅ COMPLETE AND VERIFIED
-**M2 Status:** 🔵 IN PROGRESS — Foundation verified, implementation plan ready
-**Blockers:** None
+**M2 Status:** 🔵 IN PROGRESS — Staging gateway spike pending (#25)
+**Blockers:** Pending access/validation for staging AI Gateway
 
 **Date:** 2026-02-07
-**Verified By:** Claude Code Agent
-**Next Review:** After M2 completion
+**Verified By:** Codex
+**Next Review:** After staging spike (#25)

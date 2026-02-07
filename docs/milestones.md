@@ -34,6 +34,7 @@ Build the Retrieval-Augmented Generation (RAG) pipeline for AI Search capabiliti
   - Retrieval pipeline for querying Vectorize.
   - RAG response assembly with prompt templates and source citations.
   - Tenant isolation enforced at the Vectorize level using namespaces.
+ - **Prep:** `docs/M3-PREP.md` (draft)
 
 ## M4: AI Search Endpoint
 Expose the RAG pipeline through a user-facing `/search` endpoint.
