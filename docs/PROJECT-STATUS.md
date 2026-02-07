@@ -203,6 +203,8 @@ M2 is complete. Staging calls were verified; AI Gateway dashboard logs confirmed
 - #42 Deterministic retrieval fixtures — fixture tests added.
 - #44 Metadata integrity tests — metadata shape tests added.
 - #45 Vectorize local emulation doc — `docs/vectorize-dev.md` added.
+- /ingest endpoint wired to chunk → embed → upsert pipeline.
+- /search endpoint wired to embed → retrieve → assemble prompt + citations.
 
 ### Tests
 

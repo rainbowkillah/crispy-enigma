@@ -2,10 +2,12 @@ import { tenantConfigs } from '../../../tenants/index';
 import {
   buildTenantIndex,
   chatRequestSchema,
+  ingestRequestSchema,
   fail,
   getTraceId,
   loadTenantConfig,
   ok,
+  searchRequestSchema,
   type Env,
   type TenantConfig
 } from '../../../packages/core/src';
@@ -16,6 +18,13 @@ import {
   runGatewayChat,
   type ChatModelMessage
 } from '../../../packages/ai/src/gateway';
+import {
+  assembleRagPrompt,
+  chunkText,
+  runGatewayEmbeddings,
+  runVectorizeRetrieval,
+  upsertTenantVectors
+} from '../../../packages/rag/src';
 import { getTenantDurableObject } from '../../../packages/storage/src/do';
 
 const textEncoder = new TextEncoder();
@@ -67,6 +76,16 @@ function getChatRoute(pathname: string): {
     return { kind: 'clear', sessionId };
   }
   return { kind: 'unknown' };
+}
+
+function getRagRoute(pathname: string): 'ingest' | 'search' | 'unknown' {
+  if (pathname === '/ingest') {
+    return 'ingest';
+  }
+  if (pathname === '/search') {
+    return 'search';
+  }
+  return 'unknown';
 }
 
 function assertSessionId(sessionId: string | undefined, traceId?: string): Response | null {
@@ -544,6 +563,147 @@ export default {
           environment: env.ENVIRONMENT ?? 'unknown',
           modelId,
           fallbackModelId
+        },
+        traceId
+      );
+    }
+
+    const ragRoute = getRagRoute(url.pathname);
+    if (ragRoute === 'ingest') {
+      if (request.method !== 'POST') {
+        return fail('method_not_allowed', 'Method not allowed', 405, traceId);
+      }
+      let payload: unknown;
+      try {
+        payload = await request.json();
+      } catch {
+        return fail('invalid_json', 'Invalid JSON', 400, traceId);
+      }
+
+      const parsed = ingestRequestSchema.safeParse(payload);
+      if (!parsed.success) {
+        return fail('invalid_request', 'Invalid request', 400, traceId);
+      }
+
+      const { docId, text, source, title, url: sourceUrl, chunking } = parsed.data;
+      const chunks = chunkText(text, {
+        maxChunkSize: chunking?.maxChunkSize,
+        overlap: chunking?.overlap
+      });
+
+      if (chunks.length === 0) {
+        return fail('invalid_request', 'No content to ingest', 400, traceId);
+      }
+
+      const embeddingModelId = env.MODEL_ID ?? config.aiModels.embeddings;
+      let embeddingsResult;
+      try {
+        embeddingsResult = await runGatewayEmbeddings(
+          config.tenantId,
+          config.aiGatewayId,
+          embeddingModelId,
+          chunks.map((chunk) => chunk.text),
+          env,
+          {
+            metadata: {
+              traceId,
+              route: '/ingest'
+            }
+          }
+        );
+      } catch {
+        return fail('ai_error', 'Embedding provider unavailable', 502, traceId);
+      }
+
+      const snippetLength = 512;
+      const records = chunks.map((chunk, index) => ({
+        id: `${docId}:${chunk.index}`,
+        values: embeddingsResult.embeddings[index] ?? [],
+        metadata: {
+          tenantId: config.tenantId,
+          docId,
+          chunkId: String(chunk.index),
+          source,
+          title,
+          url: sourceUrl,
+          text: chunk.text.slice(0, snippetLength)
+        }
+      }));
+
+      await upsertTenantVectors(config.tenantId, env.VECTORIZE, records);
+
+      return ok(
+        {
+          status: 'ingested',
+          docId,
+          chunks: chunks.length,
+          embeddingModelId: embeddingsResult.modelId
+        },
+        traceId
+      );
+    }
+
+    if (ragRoute === 'search') {
+      if (request.method !== 'POST') {
+        return fail('method_not_allowed', 'Method not allowed', 405, traceId);
+      }
+      let payload: unknown;
+      try {
+        payload = await request.json();
+      } catch {
+        return fail('invalid_json', 'Invalid JSON', 400, traceId);
+      }
+
+      const parsed = searchRequestSchema.safeParse(payload);
+      if (!parsed.success) {
+        return fail('invalid_request', 'Invalid request', 400, traceId);
+      }
+
+      const embeddingModelId = env.MODEL_ID ?? config.aiModels.embeddings;
+      let retrieval;
+      try {
+        retrieval = await runVectorizeRetrieval(
+          config.tenantId,
+          config.aiGatewayId,
+          embeddingModelId,
+          {
+            query: parsed.data.query,
+            topK: parsed.data.topK,
+            filter: parsed.data.filter
+          },
+          env
+        );
+      } catch {
+        return fail('ai_error', 'Retrieval provider unavailable', 502, traceId);
+      }
+
+      const chunks = (retrieval.matches ?? []).map((match) => {
+        const metadata = (match.metadata ?? {}) as Record<string, unknown>;
+        return {
+          id: match.id,
+          text: String(metadata.text ?? ''),
+          metadata: {
+            tenantId: String(metadata.tenantId ?? config.tenantId),
+            docId: String(metadata.docId ?? ''),
+            chunkId: String(metadata.chunkId ?? ''),
+            source: metadata.source ? String(metadata.source) : undefined,
+            title: metadata.title ? String(metadata.title) : undefined,
+            url: metadata.url ? String(metadata.url) : undefined
+          },
+          score: match.score
+        };
+      });
+
+      const rag = assembleRagPrompt(parsed.data.query, chunks);
+
+      return ok(
+        {
+          status: 'ok',
+          modelId: retrieval.modelId,
+          prompt: rag.prompt,
+          citations: rag.citations,
+          citationsText: rag.citationsText,
+          matches: chunks
         },
         traceId
       );
