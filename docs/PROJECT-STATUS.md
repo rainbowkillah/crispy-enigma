@@ -3,9 +3,9 @@
 ## Status Summary
 
 **Date:** 2026-02-07  
-**Current Milestone:** M2 ✅ COMPLETE  
-**Previous Milestone:** M1 ✅ COMPLETE  
-**Next Milestone:** M3 🔵 Embeddings + Vectorize + RAG  
+**Current Milestone:** M3 🔵 In Progress  
+**Previous Milestone:** M2 ✅ COMPLETE  
+**Next Milestone:** M4 🔵 AI Search Endpoint  
 
 ---
 
@@ -137,7 +137,7 @@ Created preparation documents:
 **Status:** ✅ COMPLETE  
 **Issues:** #25-#31  
 **Completed:** 2026-02-07  
-**Tests:** 40 passing (up from 36)
+**Tests:** 40 passing at M2 close (up from 36)
 
 ### Deliverables Status
 
@@ -180,6 +180,21 @@ M2 is complete. Staging calls were verified; AI Gateway dashboard logs confirmed
 ## M3 Prep
 
 - Draft prep started: `docs/M3-PREP.md`.
+
+## M3 Progress (Embeddings + Vectorize + RAG)
+
+**Status:** 🔵 IN PROGRESS  
+**Issues:** #32-#45  
+**Updated:** 2026-02-07  
+
+### Started
+
+- #32 Ingestion pipeline (chunking strategy) — chunking utility + tests added.
+- #33 Embedding generation — gateway embedding helper + tests added.
+
+### Tests
+
+- Current test count: **46 tests** across **15 files**.
 
 ### Handoffs
 
@@ -358,7 +373,7 @@ Duration:   317ms
 
 | Gate | Result | Details |
 |------|--------|---------|
-| Tests | ✅ 40/40 passing | 13 test files |
+| Tests | ✅ 46/46 passing | 15 test files |
 | TypeScript | ✅ Zero errors | Clean compilation |
 | Lint | ✅ Clean | No errors |
 | AI Gateway lint | ✅ Fixed | `no-explicit-any` resolved |
@@ -387,8 +402,9 @@ See `docs/milestones/M2.md` for full implementation plan.
 **M0 Status:** ✅ COMPLETE AND VERIFIED
 **M1 Status:** ✅ COMPLETE AND VERIFIED
 **M2 Status:** ✅ COMPLETE
+**M3 Status:** 🔵 IN PROGRESS — #32 chunking pipeline started
 **Blockers:** None
 
 **Date:** 2026-02-07
 **Verified By:** Codex
-**Next Review:** After M3 kickoff
+**Next Review:** After M3 #32 review

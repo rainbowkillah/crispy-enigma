@@ -39,8 +39,8 @@ Prepare the scope, risks, and validation plan for M3: ingestion + embeddings, Ve
 - [x] Complete M2 Issue #25 (AI Gateway staging spike). Gateway dashboard metadata check is a manual follow-up.
 
 ### M3 Issues (from Project Board)
-- [ ] #32 Implement ingestion pipeline (chunking strategy)
-- [ ] #33 Implement embedding generation
+- [~] #32 Implement ingestion pipeline (chunking strategy) — in progress (chunking utility + tests)
+- [~] #33 Implement embedding generation — in progress (gateway embeddings helper + tests)
 - [ ] #34 Implement Vectorize upsert with metadata
 - [ ] #35 Implement retrieval pipeline (query embedding)
 - [ ] #36 Implement Vectorize search

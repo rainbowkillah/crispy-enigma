@@ -1,7 +1,7 @@
 # Documentation Alignment Summary
 
 **Date:** 2026-02-07  
-**Status:** ✅ Complete - Updated for M2 completion
+**Status:** ✅ Complete - Updated for M2 sign-off and M3 kickoff
 
 ## Overview
 
@@ -13,20 +13,20 @@ This document summarizes the repository-wide documentation alignment performed o
 - **M0 (Foundation):** ✅ Complete (Issues #3-#14)
 - **M1 (Chat + Sessions):** ✅ Complete (Issues #15-#24)
 - **M2 (AI Gateway Integration):** ✅ Complete (Issues #25-#31)
-  - All issues complete, dev smoke tests validated
-  - Optional staging validation deferred to operational deployment
+  - Staging spike verified; gateway logs confirmed
+- **M3 (Embeddings + Vectorize + RAG):** 🔵 In Progress (Issue #32 started)
 
 ### Test Coverage
-- **Total Tests:** 40 passing across 13 test files
-- **Duration:** ~310ms
+- **Total Tests:** 46 passing across 15 test files
+- **Duration:** ~600ms
 - **TypeScript:** ✅ Clean compilation (0 errors)
-- **Lint:** Minor style warnings only (non-blocking)
+- **Lint:** ✅ Clean
 
 ### Key Metrics
 | Metric | Value | Change from M1 |
 |--------|-------|----------------|
 | Test Files | 13 | +2 |
-| Tests Passing | 40 | +8 |
+| Tests Passing | 46 | +14 |
 | Test Coverage | Comprehensive | Extended |
 | TypeScript Errors | 0 | No change |
 

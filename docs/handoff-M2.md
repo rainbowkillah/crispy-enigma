@@ -1,7 +1,7 @@
 # Handoff: M2 AI Gateway Integration (Complete)
 
 ## Status
-M2 is complete ✅. All issues (#25-#31) are finished. Dev smoke tests validated the integration. Optional staging validation with production AI Gateway can be performed as operational verification but does not block M2 completion.
+M2 is complete ✅. All issues (#25-#31) are finished. Dev and staging validations completed; AI Gateway logs confirmed.
 
 ## What Shipped (Key Files)
 - AI Gateway wrapper + usage metrics: `packages/ai/src/gateway.ts`

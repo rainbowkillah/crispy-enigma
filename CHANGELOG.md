@@ -37,6 +37,16 @@ All notable changes for this project are documented here.
 
 ---
 
+## [1.3.0] - 2026-02-07 (M3: Ingestion Pipeline Kickoff)
+
+### Added
+- Initial chunking utility for ingestion pipeline (`packages/rag/src/chunking.ts`).
+- Chunking tests (`tests/rag-chunking.test.ts`).
+- Gateway embeddings helper for M3 (`packages/rag/src/embeddings.ts`).
+- Embedding tests (`tests/rag-embeddings.test.ts`).
+
+---
+
 ## [1.1.0] - 2026-02-06 (M1: Chat + Sessions Complete)
 
 ### Added
