@@ -1,7 +1,7 @@
 {
   "tenantId": "rainbowsmokeofficial",
   "accountId": "7fde695caf9cc41efca391316eb71003",
-  "aiGatewayId": "rainbowsmokeofficial-gateway",
+  "aiGatewayId": "ai_gateway",
   "aiModels": {
     "chat": "@cf/meta/llama-3.1-8b-instruct-fast",
     "embeddings": "@cf/baai/bge-base-en-v1.5"
