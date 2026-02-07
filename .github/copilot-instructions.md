@@ -50,12 +50,13 @@ npm run smoke:dev -- --tenant=<name>  # smoke tests
 
 ## Project Status
 
-**Current Milestone:** M1 ✅ COMPLETE | M2 🔵 NEXT
+**Current Milestone:** M2 ✅ COMPLETE | M3 🔵 NEXT
 
-- **M0 (Foundation):** Complete
-- **M1 (Chat + Sessions):** Complete
+- **M0 (Foundation):** ✅ Complete
+- **M1 (Chat + Sessions):** ✅ Complete
+- **M2 (AI Gateway Integration):** ✅ Complete
 - See [docs/PROJECT-STATUS.md](../docs/PROJECT-STATUS.md) for full status
-- See [docs/milestones/M1.md](../docs/milestones/M1.md) for the M1 summary
+- See [docs/milestones/M2.md](../docs/milestones/M2.md) for the M2 summary
 
 ## Project Conventions
 

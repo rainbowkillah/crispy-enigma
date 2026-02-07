@@ -20,6 +20,38 @@
   "nxJsonPlugins": [],
   "fileMap": {
     "projectFileMap": {
+      "storage": [
+        {
+          "file": "packages/storage/project.json",
+          "hash": "18417496484336993390"
+        },
+        {
+          "file": "packages/storage/src/do.ts",
+          "hash": "15124964690760613976"
+        },
+        {
+          "file": "packages/storage/src/index.ts",
+          "hash": "4260946828283953203"
+        },
+        {
+          "file": "packages/storage/src/kv.ts",
+          "hash": "1755166976520487066"
+        },
+        {
+          "file": "packages/storage/src/vectorize.ts",
+          "hash": "17847552451332353089"
+        }
+      ],
+      "rag": [
+        {
+          "file": "packages/rag/project.json",
+          "hash": "14824669124213728116"
+        },
+        {
+          "file": "packages/rag/src/index.ts",
+          "hash": "4595979742548113990"
+        }
+      ],
       "worker-api": [
         {
           "file": "apps/worker-api/project.json",
@@ -27,7 +59,7 @@
         },
         {
           "file": "apps/worker-api/src/index.ts",
-          "hash": "2639007816701363443"
+          "hash": "17908681428632980410"
         },
         {
           "file": "apps/worker-api/src/rate-limiter-do.ts",
@@ -36,6 +68,20 @@
         {
           "file": "apps/worker-api/src/session-do.ts",
           "hash": "15106447200388021791"
+        }
+      ],
+      "observability": [
+        {
+          "file": "packages/observability/project.json",
+          "hash": "1632021096686162711"
+        },
+        {
+          "file": "packages/observability/src/index.ts",
+          "hash": "8864206489639079382"
+        },
+        {
+          "file": "packages/observability/src/logger.ts",
+          "hash": "14216585224841379369"
         }
       ],
       "core": [
@@ -80,16 +126,6 @@
           "hash": "10852238908151055834"
         }
       ],
-      "rag": [
-        {
-          "file": "packages/rag/project.json",
-          "hash": "14824669124213728116"
-        },
-        {
-          "file": "packages/rag/src/index.ts",
-          "hash": "4595979742548113990"
-        }
-      ],
       "ai": [
         {
           "file": "packages/ai/project.json",
@@ -103,42 +139,6 @@
           "file": "packages/ai/src/index.ts",
           "hash": "14569501487334179972"
         }
-      ],
-      "storage": [
-        {
-          "file": "packages/storage/project.json",
-          "hash": "18417496484336993390"
-        },
-        {
-          "file": "packages/storage/src/do.ts",
-          "hash": "15124964690760613976"
-        },
-        {
-          "file": "packages/storage/src/index.ts",
-          "hash": "4260946828283953203"
-        },
-        {
-          "file": "packages/storage/src/kv.ts",
-          "hash": "1755166976520487066"
-        },
-        {
-          "file": "packages/storage/src/vectorize.ts",
-          "hash": "17847552451332353089"
-        }
-      ],
-      "observability": [
-        {
-          "file": "packages/observability/project.json",
-          "hash": "1632021096686162711"
-        },
-        {
-          "file": "packages/observability/src/index.ts",
-          "hash": "8864206489639079382"
-        },
-        {
-          "file": "packages/observability/src/logger.ts",
-          "hash": "14216585224841379369"
-        }
       ]
     },
     "nonProjectFiles": [
@@ -148,7 +148,7 @@
       },
       {
         "file": ".gitignore",
-        "hash": "13811883314200795389"
+        "hash": "1889333392240182223"
       },
       {
         "file": ".prettierrc.json",
@@ -160,7 +160,7 @@
       },
       {
         "file": "CHANGELOG.md",
-        "hash": "17448953474919166173"
+        "hash": "5173718900893032543"
       },
       {
         "file": "LICENSE",
@@ -199,8 +199,12 @@
         "hash": "4743987393108621864"
       },
       {
+        "file": "docs/PR.md",
+        "hash": "15194575782978195549"
+      },
+      {
         "file": "docs/PROJECT-STATUS.md",
-        "hash": "13638873304727486271"
+        "hash": "12416143577052323020"
       },
       {
         "file": "docs/adrs/ADR-001-sse-streaming.md",
@@ -228,7 +232,7 @@
       },
       {
         "file": "docs/ai-gateway.md",
-        "hash": "11462480903284213607"
+        "hash": "13497355691374054749"
       },
       {
         "file": "docs/architecture.md",
@@ -264,7 +268,7 @@
       },
       {
         "file": "docs/handoff-M2.md",
-        "hash": "17795914960456014564"
+        "hash": "15882011758287460844"
       },
       {
         "file": "docs/handoff-PR.md",
@@ -384,7 +388,7 @@
       },
       {
         "file": "tenants/mrrainbowsmoke/tenant.config.json",
-        "hash": "11940482737868841353"
+        "hash": "4848078305183124185"
       },
       {
         "file": "tenants/mrrainbowsmoke/wrangler.jsonc",
@@ -396,7 +400,7 @@
       },
       {
         "file": "tenants/rainbowsmokeofficial/tenant.config.json",
-        "hash": "15066460314622688215"
+        "hash": "5839401784425796736"
       },
       {
         "file": "tenants/rainbowsmokeofficial/wrangler.jsonc",
@@ -404,7 +408,7 @@
       },
       {
         "file": "tests/ai-gateway.test.ts",
-        "hash": "3186389706377312352"
+        "hash": "2984000238424745484"
       },
       {
         "file": "tests/chat.test.ts",
