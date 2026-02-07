@@ -20,48 +20,38 @@
   "nxJsonPlugins": [],
   "fileMap": {
     "projectFileMap": {
-      "storage": [
+      "rag": [
         {
-          "file": "packages/storage/project.json",
-          "hash": "18417496484336993390"
+          "file": "packages/rag/project.json",
+          "hash": "14824669124213728116"
         },
         {
-          "file": "packages/storage/src/do.ts",
-          "hash": "15124964690760613976"
+          "file": "packages/rag/src/chunking.ts",
+          "hash": "10037265286897906198"
         },
         {
-          "file": "packages/storage/src/index.ts",
-          "hash": "9537076970660712090"
+          "file": "packages/rag/src/embeddings.ts",
+          "hash": "1394563273749333933"
         },
         {
-          "file": "packages/storage/src/kv.ts",
-          "hash": "1755166976520487066"
+          "file": "packages/rag/src/index.ts",
+          "hash": "5039142732593223866"
         },
         {
-          "file": "packages/storage/src/search-cache.ts",
-          "hash": "12744560118745660087"
+          "file": "packages/rag/src/query-rewriting.ts",
+          "hash": "17774815662147208706"
         },
         {
-          "file": "packages/storage/src/vectorize.ts",
-          "hash": "17847552451332353089"
-        }
-      ],
-      "observability": [
-        {
-          "file": "packages/observability/project.json",
-          "hash": "1632021096686162711"
+          "file": "packages/rag/src/rag.ts",
+          "hash": "5772275632108161166"
         },
         {
-          "file": "packages/observability/src/index.ts",
-          "hash": "4341750429153816421"
+          "file": "packages/rag/src/retrieval.ts",
+          "hash": "9231222042039079253"
         },
         {
-          "file": "packages/observability/src/logger.ts",
-          "hash": "14216585224841379369"
-        },
-        {
-          "file": "packages/observability/src/metrics.ts",
-          "hash": "2511408882714007930"
+          "file": "packages/rag/src/vectorize.ts",
+          "hash": "18045353671699105213"
         }
       ],
       "worker-api": [
@@ -128,40 +118,6 @@
           "hash": "10852238908151055834"
         }
       ],
-      "rag": [
-        {
-          "file": "packages/rag/project.json",
-          "hash": "14824669124213728116"
-        },
-        {
-          "file": "packages/rag/src/chunking.ts",
-          "hash": "10037265286897906198"
-        },
-        {
-          "file": "packages/rag/src/embeddings.ts",
-          "hash": "1394563273749333933"
-        },
-        {
-          "file": "packages/rag/src/index.ts",
-          "hash": "5039142732593223866"
-        },
-        {
-          "file": "packages/rag/src/query-rewriting.ts",
-          "hash": "17774815662147208706"
-        },
-        {
-          "file": "packages/rag/src/rag.ts",
-          "hash": "5772275632108161166"
-        },
-        {
-          "file": "packages/rag/src/retrieval.ts",
-          "hash": "9231222042039079253"
-        },
-        {
-          "file": "packages/rag/src/vectorize.ts",
-          "hash": "18045353671699105213"
-        }
-      ],
       "ai": [
         {
           "file": "packages/ai/project.json",
@@ -174,6 +130,50 @@
         {
           "file": "packages/ai/src/index.ts",
           "hash": "14569501487334179972"
+        }
+      ],
+      "observability": [
+        {
+          "file": "packages/observability/project.json",
+          "hash": "1632021096686162711"
+        },
+        {
+          "file": "packages/observability/src/index.ts",
+          "hash": "4341750429153816421"
+        },
+        {
+          "file": "packages/observability/src/logger.ts",
+          "hash": "14216585224841379369"
+        },
+        {
+          "file": "packages/observability/src/metrics.ts",
+          "hash": "2511408882714007930"
+        }
+      ],
+      "storage": [
+        {
+          "file": "packages/storage/project.json",
+          "hash": "18417496484336993390"
+        },
+        {
+          "file": "packages/storage/src/do.ts",
+          "hash": "15124964690760613976"
+        },
+        {
+          "file": "packages/storage/src/index.ts",
+          "hash": "9537076970660712090"
+        },
+        {
+          "file": "packages/storage/src/kv.ts",
+          "hash": "1755166976520487066"
+        },
+        {
+          "file": "packages/storage/src/search-cache.ts",
+          "hash": "12744560118745660087"
+        },
+        {
+          "file": "packages/storage/src/vectorize.ts",
+          "hash": "17847552451332353089"
         }
       ]
     },

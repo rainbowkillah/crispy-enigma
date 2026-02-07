@@ -12,3 +12,6 @@
 - For Nx plugin best practices, check `node_modules/@nx/<plugin>/PLUGIN.md`. Not all plugins have this file - proceed without it if unavailable.
 
 <!-- nx configuration end-->
+
+- ContextDirectory: `~/projects-cf/crispy-enigma/docs/` # Directory containing the context files for the agents
+- ContextFileName: `~/projects-cf/crispy-enigma/docs/agents.prompt.yaml` # File containing the prompt for the agents
