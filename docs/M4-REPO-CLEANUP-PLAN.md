@@ -1,362 +1,160 @@
 # M4 Repository Cleanup Plan
 
-**Status:** Updated 2026-02-07
-
-## Findings (reindex snapshot)
-
-- Total repo size (working copy): ~353M
-- Largest areas are local-only artifacts:
-  - node_modules/: ~343M
-  - .git/: ~6.6M
-  - .nx/cache/: ~728K
-- Content-heavy but modest folders:
-  - docs/: ~480K
-  - archive/: ~736K (already ignored by .gitignore)
-  - tests/: ~116K
-- **Documentation Sprawl**: There is significant duplication and fragmentation of milestone-related documents. For a single milestone, there can be `PREP`, `PLAN`, `HANDOFF`, `COMPLETION`, `PR-SUMMARY`, and `CODEX-PROMPTS` files, making it hard to find the single source of truth.
-- **Inconsistent Ignores**: `.gitignore` is missing entries for common local development artifacts like `.nx/cache`, `.claude/`, and `.gemini/`.
-
-Note: `.gitignore` already excludes `node_modules/`, `archive/*`, and `.wrangler/`.
-
-## Goals
-
-- Keep the repo lean for M4 staging deployment.
-- Reduce noise from generated/cache folders.
-- Consolidate documentation sources to avoid drift.
-- Improve documentation discoverability.
-- Establish clear patterns for future documentation.
-
-## Proposed cleanup plan (no code changes yet)
-## Proposed Cleanup Plan
-
-1) Tighten ignores for local artifacts
-   - Add .gitignore entries for .nx/, .claude/, .gemini/, test-output.log, and any other local tool caches.
-   - Verify no cache folders are tracked in git history; if they are, remove from index (git rm --cached).
-### 1. Tighten `.gitignore` for Local Artifacts
-Add the following to the root `.gitignore` file to exclude tool-specific caches and logs.
-
-2) Consolidate documentation sources
-   - Decide one canonical documentation root between docs/ and wiki-content/.
-   - If docs/ is canonical, move wiki-content/ into docs/wiki/ and add a short index page mapping old wiki paths.
-   - If wiki-content/ is canonical, move docs/ guides into wiki-content/sections/ and update README.md references.
-```gitignore
-# Nx
-.nx/cache
-
-3) Archive historical M0-M3 materials
-   - Move older milestone prep/hand-off docs into docs/archive/ (or keep only the latest milestone summary in docs/).
-   - Keep M4 staging docs in docs/milestones/M4/ with a single entry index to reduce duplication.
-# AI Assistant Tooling
-.claude/
-.gemini/
-
-4) Trim historical logs and artifacts
-   - Remove any tracked *.log or test-output.log from the repo.
-   - Add a standard location for temporary artifacts (e.g., .local/) and ignore it.
-# Local logs
-*.log
-```
-Ensure these files are not tracked using `git rm --cached <file>`.
-
-5) Optional: split archival data
-   - If archive/ needs to be preserved, migrate it to a separate repo or attach as a release asset.
-### 2. Consolidate and Restructure Documentation
-The `docs/` directory should be reorganized to group files by purpose and archive completed milestones.
-
-## Suggested sequencing
-**A. Create a new structure:**
-
-- Phase 1: Update .gitignore and remove tracked cache files.
-- Phase 2: Documentation consolidation and redirects/links.
-- Phase 3: Archive split (if needed).
-```
-docs/
-├── architecture/         # Core, persistent architecture docs
-│   ├── index.md          # (previously architecture.md)
-│   ├── failure-modes.md
-│   ├── footguns.md
-│   └── metrics.md
-├── milestones/           # Active and planned milestone work
-│   ├── M4/
-│   └── M5/
-├── archive/              # Completed milestone docs
-│   ├── M0/
-│   ├── M1/
-│   ├── M2/
-│   └── M3/
-└── tooling/              # Agent prompts and templates
-    ├── AGENTS.md
-    ├── M4-CODEX-PROMPTS.md
-    └── PR-TEMPLATE.md
-```
-
-## Verification checklist
-**B. Consolidate Milestone Documents:**
-
-For each milestone (e.g., M4), consolidate the numerous files into a few key documents within `docs/milestones/M4/`:
-- **`PLAN.md`**: The initial scope, deliverables, and prep work. (Merges `M4-PREP.md`, `M4-CODEX-PLAN.md`).
-- **`STATUS.md`**: A living document for results and completion reports. (Merges `M4-COMPLETION-ROLLUP.md`, `M4-STAGING-VALIDATION-RESULTS.md`).
-- **`NOTES.md`**: Any relevant implementation notes.
-
-**C. Archive Old Milestones:**
-
-Move the consolidated folders for M0, M1, M2, and M3 into `docs/archive/`. The primary historical record should be `CHANGELOG.md` and `PROJECT-STATUS.md`.
-
-### 3. Standardize PR and Handoff Documentation
-
-- Create a single `PR-TEMPLATE.md` in `docs/tooling/`.
-- Retire the various `PR.md`, `PR-SUMMARY.md`, and `handoff-*.md` files for each milestone. The PR description in the Git provider should be the source of truth for a pull request, using the new template.
-
-### 4. Trim Redundant Root Documents
-
-- After restructuring, remove the now-duplicated files from the root of `docs/` (e.g., `M3-PREP.md`, `handoff-M2.md`, etc.).
-- Keep high-level documents like `README.md`, `CHANGELOG.md`, and `PROJECT-STATUS.md` at the project root.
-
-## Suggested Sequencing
-
-- **Phase 1:** Update `.gitignore` and remove any tracked cache files from the index.
-- **Phase 2:** Restructure the `docs/` directory and consolidate milestone files.
-- **Phase 3:** Update `README.md` and other top-level documents to point to the new locations.
-
-## Verification Checklist
-
-- `git status` is clean after removing cached files from the index.
-- `npm test` and `nx` workflows are unchanged.
-- Links in `README.md` and `PROJECT-STATUS.md` are updated and resolve correctly.
+**Status:** Final - Ready for Execution
+**Date:** 2026-02-07
+**Context:** Pre-M4 staging deployment cleanup
 
 ---
 
-## DETAILED REINDEX ANALYSIS (2026-02-07 16:20 UTC)
+## Executive Summary
 
-### Repository Statistics
+Repository reindex reveals **three critical issues** blocking clean M4 staging deployment:
+1. **Build artifacts tracked in git** (.nx/ with 29 files, ~728K) causing dirty git status
+2. **Duplicate documentation** (docs/ + wiki-content/) creating maintenance burden
+3. **Milestone file sprawl** (21 files across M0-M4) cluttering docs/
 
-**Nx Workspace Overview:**
-- **Projects**: 6 total (5 libraries + 1 application)
+**Impact:** Remove ~912K from git tracking (13.8% reduction), establish single source of truth for docs, improve discoverability.
+
+**Timeline:** P0 items (~15 min) required before M4 staging; P1-P2 items can follow.
+
+---
+
+## Repository Analysis
+
+### Workspace Overview
+- **Nx Projects**: 6 total (5 libraries + 1 application)
   - Libraries: `ai`, `core`, `observability`, `rag`, `storage`
   - Application: `worker-api`
-- **Source Files**: Clean, well-organized in packages/
-- **Dependencies**: Properly managed via npm
+- **Working Directory Size**: ~353M
+- **Git-Tracked Size**: ~6.6M (excluding node_modules)
 
-**Disk Usage Breakdown:**
+### Size Breakdown
 ```
-343M  node_modules/         (✅ .gitignored)
-736K  archive/              (✅ .gitignored)
-728K  .nx/                  (⚠️ PARTIALLY TRACKED - 29 files in git)
-484K  docs/                 (📝 needs consolidation)
-428K  tenants/
-200K  package-lock.json
-196K  packages/
-176K  wiki-content/         (⚠️ DUPLICATE docs, tracked in git)
-116K  tests/
-60K   apps/
-20K   scripts/
-8K    .wrangler/            (✅ .gitignored)
+343M  node_modules/         ✅ .gitignored
+736K  archive/              ✅ .gitignored
+728K  .nx/                  ⚠️ TRACKED (29 files) - MUST REMOVE
+484K  docs/                 📝 Needs consolidation
+428K  tenants/              ✅ Clean
+200K  package-lock.json     ✅ Required
+196K  packages/             ✅ Clean source code
+176K  wiki-content/         ⚠️ TRACKED - Duplicate docs
+116K  tests/                ✅ Clean
+60K   apps/                 ✅ Clean
+8K    .wrangler/            ✅ .gitignored
 ```
 
-### Critical Issues Requiring Immediate Action
+### Current Git Status
+```
+M  .nx/workspace-data/file-map.json      # Modified build cache
+M  .nx/workspace-data/nx_files.nxt       # Modified build cache
+?? docs/M4-REPO-CLEANUP-PLAN.md          # This file
+```
 
-#### Issue #1: Build Artifacts Tracked in Git
-**Severity**: HIGH
-**Impact**: Pollutes git history, causes merge conflicts, wastes storage
+---
 
-**Files Currently Tracked:**
+## Critical Issues
+
+### Issue #1: Build Artifacts in Git ⚠️ HIGH PRIORITY
+**Problem:** .nx/ directory has 29 files tracked (~728K)
+- `.nx/cache/run.json`
+- `.nx/cache/terminalOutputs/*` (21 terminal output files)
+- `.nx/workspace-data/*.{db,json,nxt,hash}` (build cache, currently modified)
+
+**Root Cause:** `.gitignore` missing `.nx/` entry
+**Impact:** Pollutes git history, causes merge conflicts, wastes storage
+**Blocks:** Clean git status for M4 staging
+
+**Solution:**
 ```bash
-.nx/cache/run.json
-.nx/cache/terminalOutputs/*    # 21 terminal output cache files
-.nx/workspace-data/*.db        # SQLite cache
-.nx/workspace-data/*.json      # file-map, project-graph (currently modified)
-.nx/workspace-data/*.nxt       # Binary cache index
-.nx/workspace-data/*.hash      # Lockfile hash cache
-```
-
-**Root Cause**: `.gitignore` has `.wrangler/` but missing `.nx/`
-
-**Fix:**
-```bash
-# Remove from git tracking
 git rm --cached -r .nx/
-
-# Add to .gitignore
 echo "" >> .gitignore
 echo "# Nx build cache and workspace data" >> .gitignore
 echo ".nx/" >> .gitignore
-
-# Commit
 git add .gitignore
 git commit -m "chore: remove .nx build cache from git tracking"
 ```
 
-#### Issue #2: Log Files Tracked in Git
-**Severity**: MEDIUM
-**Files**: `test-output.log` (4K, at repo root)
+### Issue #2: Log Files in Git ⚠️ MEDIUM PRIORITY
+**Problem:** `test-output.log` (4K) tracked at repo root
 
-**Fix:**
+**Root Cause:** `*.log` in .gitignore not applied retroactively
+**Impact:** Noise in git status
+
+**Solution:**
 ```bash
 git rm --cached test-output.log
-# Note: *.log already in .gitignore but wasn't applied retroactively
+# *.log already in .gitignore, will prevent future tracking
 ```
 
-#### Issue #3: Personal Tool Config Tracked
-**Severity**: LOW
-**Files**: `.gemini/settings.json` (personal AI assistant settings)
+### Issue #3: Personal Tool Config in Git ℹ️ LOW PRIORITY
+**Problem:** `.gemini/settings.json` tracked (personal AI assistant config)
 
-**Discussion**: `.vscode/settings.json` is tracked (acceptable for team workspace settings), but `.gemini/` is personal preference
+**Discussion:** `.vscode/settings.json` is acceptable (team workspace), but `.gemini/` is personal preference
 
-**Fix:**
+**Solution:**
 ```bash
 git rm --cached -r .gemini/
-
-# Add to .gitignore
 echo "" >> .gitignore
 echo "# Personal AI assistant configs" >> .gitignore
-echo ".claude/        # Claude Code settings" >> .gitignore
-echo ".gemini/        # Gemini settings" >> .gitignore
+echo ".claude/" >> .gitignore
+echo ".gemini/" >> .gitignore
 ```
 
-### Documentation Duplication Analysis
-
-#### docs/ vs wiki-content/ Content Overlap
-
-**Overlapping Topics:**
+### Issue #4: Documentation Duplication 📚 MEDIUM PRIORITY
+**Problem:** Two documentation systems creating content drift
 
 | docs/ File | wiki-content/ File | Status |
 |-----------|-------------------|--------|
-| `architecture.md` (16K) | `Architecture.md` (unknown) | DUPLICATE |
+| `architecture.md` (16K) | `Architecture.md` | DUPLICATE |
 | `tenancy.md` (16K) | `Multi-Tenancy.md` | DUPLICATE |
 | `security.md` (8K) | `Security-Best-Practices.md` | DUPLICATE |
 | `testing.md` (8K) | `Testing-Guide.md` | DUPLICATE |
-| N/A | `Getting-Started.md` | UNIQUE ✓ |
-| N/A | `Troubleshooting.md` | UNIQUE ✓ |
-| N/A | `API-Reference.md` | UNIQUE ✓ |
-| N/A | `Development-Guide.md` | UNIQUE ✓ |
+| N/A | `Getting-Started.md` | UNIQUE |
+| N/A | `Troubleshooting.md` | UNIQUE |
+| N/A | `API-Reference.md` | UNIQUE |
+| N/A | `Development-Guide.md` | UNIQUE |
 
-**Problem**: Two sources of truth → content drift is inevitable
+**Decision:** Keep `docs/` as canonical source
+- Reason 1: Contains ADRs, examples, m4-results (structured reference)
+- Reason 2: Referenced in `CLAUDE.md` (`agents.prompt.yaml`)
+- Reason 3: Integrated milestone tracking
 
-**Recommendation**: **Keep docs/ as canonical**
-- Reason 1: docs/ has ADRs, examples, m4-results (structured reference material)
-- Reason 2: docs/ referenced in CLAUDE.md (`agents.prompt.yaml`)
-- Reason 3: docs/ has milestone tracking integrated
+**Solution:** See "Phase 2: Documentation Consolidation" below
 
-**Migration Plan**:
-1. Extract unique content from wiki-content/:
-   - `Getting-Started.md` → merge into root `README.md` or create `docs/getting-started.md`
-   - `Troubleshooting.md` → create `docs/troubleshooting.md`
-   - `API-Reference.md` → create `docs/api-reference.md`
-   - `Development-Guide.md` → merge into `docs/` appropriate files
-2. Delete wiki-content/ directory
-3. Update any references in README.md
+### Issue #5: Milestone File Sprawl 📁 MEDIUM PRIORITY
+**Problem:** 21 milestone files scattered in docs/ root making navigation difficult
 
-### Milestone File Sprawl
-
-#### Current Milestone Files in docs/ (Root Level)
-
-**M0-M3 Historical Files** (should be archived):
+**M0-M3 Historical Files** (11 files, ~88K):
 ```
-M0-COMPLETE.md         (12K)
-M1-PREP.md             (16K)
-M2-PREP.md             (16K)
-M3-PREP.md             (4K)
-handoff-M0.md          (4K)
-handoff-M1.md          (4K)
-handoff-M2.md          (8K)
-handoff-M3.md          (4K)
-handoff-PR.md          (4K)
-PR.md                  (4K)
-PR-SUMMARY.md          (8K)
-```
-**Total**: 11 files, ~88K
-
-**M4 Active Files** (should be consolidated):
-```
-M4-PREP.md                          (4K)
-M4-CODEX-PLAN.md                   (16K)
-M4-CODEX-PROMPTS.md                (20K)
-M4-COMPLETION-ROLLUP.md            (16K)
-M4-ISSUES-QUICK-REF.md             (4K)
-M4-NOTES.md                        (4K)
-M4-PR-SUMMARY.md                   (4K)
-M4-STAGING-DEPLOYMENT.md           (20K)
-M4-STAGING-VALIDATION-RESULTS.md   (8K)
-M4-REPO-CLEANUP-PLAN.md (this file) (4K)
-```
-**Total**: 10 files, ~104K
-
-**M5 Preview**:
-```
-M5-PREP.md             (20K)
+M0-COMPLETE.md, M1-PREP.md, M2-PREP.md, M3-PREP.md
+handoff-M0.md, handoff-M1.md, handoff-M2.md, handoff-M3.md
+handoff-PR.md, PR.md, PR-SUMMARY.md
 ```
 
-#### Recommendation: Consolidation Strategy
-
-**For M0-M3** (completed milestones):
-```bash
-mkdir -p docs/archive/milestones/M0 M1 M2 M3
-git mv docs/M0-COMPLETE.md docs/archive/milestones/M0/
-git mv docs/handoff-M0.md docs/archive/milestones/M0/
-# ... repeat for M1, M2, M3
-git mv docs/PR*.md docs/archive/milestones/
-git mv docs/handoff-PR.md docs/archive/milestones/
+**M4 Current Files** (10 files, ~104K):
+```
+M4-PREP.md, M4-CODEX-PLAN.md, M4-CODEX-PROMPTS.md
+M4-COMPLETION-ROLLUP.md, M4-ISSUES-QUICK-REF.md, M4-NOTES.md
+M4-PR-SUMMARY.md, M4-STAGING-DEPLOYMENT.md
+M4-STAGING-VALIDATION-RESULTS.md, M4-REPO-CLEANUP-PLAN.md
 ```
 
-**For M4** (current):
-```bash
-mkdir -p docs/milestones/M4
-git mv docs/M4-*.md docs/milestones/M4/
+**Impact:** Hard to find single source of truth, poor discoverability
 
-# Then consolidate within M4/:
-# - Combine M4-PREP + M4-CODEX-PLAN → PLAN.md
-# - Combine M4-COMPLETION-ROLLUP + M4-STAGING-VALIDATION-RESULTS → STATUS.md
-# - Keep M4-STAGING-DEPLOYMENT as DEPLOYMENT.md
-# - Keep M4-NOTES as NOTES.md
-# - Move M4-CODEX-PROMPTS to docs/tooling/
-```
+**Solution:** See "Phase 3: Milestone Restructure" below
 
-**Keep in docs/ root**:
-- `plan.md` (28K) - master project plan
-- `PROJECT-STATUS.md` (16K) - current status dashboard
-- `quick-reference.md` (4K) - quick reference guide
-- `agents.prompt.yaml` (16K) - agent orchestration config
+---
 
-### Additional Observations
+## Cleanup Strategy
 
-#### ✅ Well-Organized Areas
-- `packages/*/src/` - clean source structure, no orphaned files
-- `apps/worker-api/src/` - minimal, only essential files
-- `tenants/*/` - proper tenant configs with .gitignore
-- Root configs (package.json, tsconfig.json, nx.json, etc.) - appropriate
+### Goals
+1. ✅ Achieve clean git status for M4 staging deployment
+2. ✅ Reduce git-tracked size by ~912K (13.8%)
+3. ✅ Establish single documentation source of truth
+4. ✅ Improve documentation discoverability
+5. ✅ Set pattern for future milestone organization
 
-#### 📂 Directory Structure Analysis
-```
-crispy-enigma/
-├── .github/                    (1 file: copilot-instructions.md)
-├── .nx/                        ⚠️ 29 files tracked (should be .gitignored)
-├── .gemini/                    ⚠️ tracked (should be .gitignored)
-├── .vscode/                    ✅ (workspace settings, OK to track)
-├── apps/worker-api/            ✅ clean
-├── archive/                    ✅ .gitignored
-├── docs/                       ⚠️ needs consolidation (54 files)
-│   ├── adrs/                   ✅ (4 ADRs)
-│   ├── examples/               ✅ (2 examples)
-│   ├── m4-results/             ✅ (3 JSON test results)
-│   └── milestones/             ⚠️ only M0-M2 (incomplete)
-├── packages/                   ✅ clean (5 packages, source only)
-├── scripts/                    ✅ clean
-├── tenants/                    ✅ clean
-├── tests/                      ✅ clean
-├── wiki-content/               ⚠️ duplicate docs (13 files, 176K)
-└── [root configs]              ✅ appropriate
-```
-
-### Git Status at Time of Reindex
-```
-M  .nx/workspace-data/file-map.json      # modified build cache
-M  .nx/workspace-data/nx_files.nxt       # modified build cache
-?? docs/M4-REPO-CLEANUP-PLAN.md          # this file
-```
-
-### Recommended .gitignore Additions
-
-**Complete additions to append to .gitignore:**
+### Proposed .gitignore Additions
 ```gitignore
 # Nx build cache and workspace data
 .nx/
@@ -365,7 +163,7 @@ M  .nx/workspace-data/nx_files.nxt       # modified build cache
 .claude/
 .gemini/
 
-# Test artifacts (*.log already present, but ensure no exceptions)
+# Test artifacts (*.log already present)
 test-output.log
 *.test.log
 
@@ -373,132 +171,463 @@ test-output.log
 .local/
 temp/
 tmp/
+
+# Tenant-specific build artifacts (if needed)
+tenants/**/.wrangler/
 ```
 
-### Size Impact Analysis
+### Target Documentation Structure
+```
+docs/
+├── README.md                    # Documentation index (NEW)
+├── plan.md                      # Master project plan (KEEP)
+├── PROJECT-STATUS.md            # Current status dashboard (KEEP)
+├── quick-reference.md           # Quick reference guide (KEEP)
+├── agents.prompt.yaml           # Agent orchestration (KEEP)
+│
+├── architecture/                # Core technical docs (NEW)
+│   ├── architecture.md          # System architecture
+│   ├── tenancy.md              # Multi-tenancy design
+│   ├── bindings.md             # Cloudflare bindings
+│   ├── failure-modes.md        # Failure analysis
+│   ├── footguns.md             # Anti-patterns
+│   └── metrics.md              # Observability
+│
+├── guides/                      # User-facing guides (NEW)
+│   ├── getting-started.md      # From wiki-content
+│   ├── development-guide.md    # From wiki-content
+│   ├── testing.md              # Existing
+│   ├── security.md             # Existing
+│   ├── troubleshooting.md      # From wiki-content
+│   └── api-reference.md        # From wiki-content
+│
+├── adrs/                        # Architecture Decision Records (KEEP)
+│   ├── ADR-001-sse-streaming.md
+│   ├── ADR-002-separate-do-namespaces.md
+│   ├── ADR-003-sliding-window-rate-limiting.md
+│   └── ADR-004-model-selection-precedence.md
+│
+├── examples/                    # Code examples (KEEP)
+│   ├── chat.md
+│   └── tenant-aware-handler.ts
+│
+├── milestones/                  # Active & planned milestones
+│   ├── M4/                      # Current milestone (CONSOLIDATED)
+│   │   ├── PLAN.md             # Scope & prep (M4-PREP + M4-CODEX-PLAN)
+│   │   ├── STATUS.md           # Results & completion (M4-COMPLETION-ROLLUP + M4-STAGING-VALIDATION-RESULTS)
+│   │   ├── DEPLOYMENT.md       # M4-STAGING-DEPLOYMENT
+│   │   ├── NOTES.md            # M4-NOTES + M4-ISSUES-QUICK-REF
+│   │   └── REPO-CLEANUP.md     # This file
+│   └── M5/                      # Next milestone
+│       └── PREP.md
+│
+├── archive/                     # Completed milestones (NEW)
+│   └── milestones/
+│       ├── M0/
+│       │   ├── COMPLETE.md
+│       │   └── handoff.md
+│       ├── M1/
+│       │   ├── PREP.md
+│       │   └── handoff.md
+│       ├── M2/
+│       │   ├── PREP.md
+│       │   └── handoff.md
+│       └── M3/
+│           ├── PREP.md
+│           └── handoff.md
+│
+├── tooling/                     # Development tooling (NEW)
+│   ├── CODEX-PROMPTS.md        # M4-CODEX-PROMPTS
+│   └── PR-TEMPLATE.md          # Standardized PR template
+│
+└── m4-results/                  # Test results (KEEP)
+    ├── response.json
+    ├── response-cache.json
+    └── response-search.json
+```
 
-**Current Git-Tracked Size**: ~6.6M (excluding node_modules)
+---
 
-**Removals**:
+## Implementation Plan
+
+### Phase 1: Remove Build Artifacts (P0 - REQUIRED FOR M4 STAGING)
+**Effort:** ~15 minutes
+**Blocks:** M4 staging deployment
+
+**Steps:**
+1. Remove tracked cache files:
+   ```bash
+   git rm --cached -r .nx/
+   git rm --cached test-output.log
+   git rm --cached -r .gemini/
+   ```
+
+2. Update .gitignore:
+   ```bash
+   cat >> .gitignore << 'EOF'
+
+   # Nx build cache and workspace data
+   .nx/
+
+   # Personal AI assistant configs
+   .claude/
+   .gemini/
+
+   # Local temporary directories
+   .local/
+   temp/
+   tmp/
+   EOF
+   ```
+
+3. Commit changes:
+   ```bash
+   git add .gitignore
+   git commit -m "chore: remove build artifacts and tool configs from git tracking
+
+   - Remove .nx/ build cache (29 files, ~728K)
+   - Remove test-output.log
+   - Remove .gemini/ personal config
+   - Update .gitignore to prevent future tracking
+
+   Impact: Reduces git-tracked size by ~736K"
+   ```
+
+4. Verify:
+   ```bash
+   git status                    # Should show clean working tree
+   ls -la .nx/                   # Should still exist locally
+   git ls-files .nx/             # Should return nothing
+   nx run-many -t test           # Should pass
+   ```
+
+**Success Criteria:**
+- ✅ `git status` shows clean working tree
+- ✅ `.nx/` still exists locally but not tracked
+- ✅ All Nx commands still work
+
+### Phase 2: Documentation Consolidation (P1 - RECOMMENDED FOR M4 STAGING)
+**Effort:** ~30 minutes
+**Improves:** Documentation clarity and maintenance
+
+**Steps:**
+1. Create new directory structure:
+   ```bash
+   mkdir -p docs/architecture
+   mkdir -p docs/guides
+   mkdir -p docs/tooling
+   ```
+
+2. Move existing files to architecture/:
+   ```bash
+   git mv docs/architecture.md docs/architecture/
+   git mv docs/tenancy.md docs/architecture/
+   git mv docs/bindings.md docs/architecture/
+   git mv docs/failure-modes.md docs/architecture/
+   git mv docs/footguns.md docs/architecture/
+   git mv docs/metrics.md docs/architecture/
+   ```
+
+3. Move existing files to guides/:
+   ```bash
+   git mv docs/testing.md docs/guides/
+   git mv docs/security.md docs/guides/
+   git mv docs/streaming.md docs/guides/
+   git mv docs/sessions.md docs/guides/
+   git mv docs/rate-limiting.md docs/guides/
+   git mv docs/ai-gateway.md docs/guides/
+   git mv docs/ai-gateway-fallbacks.md docs/guides/
+   git mv docs/vectorize-dev.md docs/guides/
+   git mv docs/wrangler.md docs/guides/
+   ```
+
+4. Migrate unique content from wiki-content/:
+   ```bash
+   # Review and merge unique content
+   cp wiki-content/Getting-Started.md docs/guides/getting-started.md
+   cp wiki-content/Troubleshooting.md docs/guides/troubleshooting.md
+   cp wiki-content/API-Reference.md docs/guides/api-reference.md
+   cp wiki-content/Development-Guide.md docs/guides/development-guide.md
+
+   # Stage merged files
+   git add docs/guides/getting-started.md
+   git add docs/guides/troubleshooting.md
+   git add docs/guides/api-reference.md
+   git add docs/guides/development-guide.md
+   ```
+
+5. Remove wiki-content/:
+   ```bash
+   git rm -r wiki-content/
+   ```
+
+6. Create documentation index:
+   ```bash
+   # Create docs/README.md with navigation links
+   # (Content to be determined based on final structure)
+   git add docs/README.md
+   ```
+
+7. Commit changes:
+   ```bash
+   git commit -m "docs: consolidate documentation into single source of truth
+
+   - Reorganize docs/ into architecture/, guides/, and tooling/
+   - Migrate unique content from wiki-content/
+   - Remove wiki-content/ directory (~176K)
+   - Create docs/README.md as documentation index
+
+   Impact: Eliminates documentation duplication, improves discoverability"
+   ```
+
+8. Update cross-references:
+   ```bash
+   # Update README.md links
+   # Update CLAUDE.md if needed
+   # Verify all internal links resolve
+   git add README.md CLAUDE.md
+   git commit -m "docs: update cross-references after reorganization"
+   ```
+
+**Success Criteria:**
+- ✅ Single documentation source (docs/)
+- ✅ All unique wiki-content/ merged
+- ✅ docs/README.md provides clear navigation
+- ✅ All cross-references in README.md and CLAUDE.md resolve
+
+### Phase 3: Milestone Restructure (P2 - POST-STAGING)
+**Effort:** ~35 minutes
+**Improves:** Documentation organization
+
+**Steps:**
+1. Create archive structure:
+   ```bash
+   mkdir -p docs/archive/milestones/{M0,M1,M2,M3}
+   mkdir -p docs/milestones/M4
+   mkdir -p docs/tooling
+   ```
+
+2. Archive M0-M3:
+   ```bash
+   # M0
+   git mv docs/M0-COMPLETE.md docs/archive/milestones/M0/COMPLETE.md
+   git mv docs/handoff-M0.md docs/archive/milestones/M0/handoff.md
+
+   # M1
+   git mv docs/M1-PREP.md docs/archive/milestones/M1/PREP.md
+   git mv docs/handoff-M1.md docs/archive/milestones/M1/handoff.md
+
+   # M2
+   git mv docs/M2-PREP.md docs/archive/milestones/M2/PREP.md
+   git mv docs/handoff-M2.md docs/archive/milestones/M2/handoff.md
+
+   # M3
+   git mv docs/M3-PREP.md docs/archive/milestones/M3/PREP.md
+   git mv docs/handoff-M3.md docs/archive/milestones/M3/handoff.md
+
+   # PR-related (generic)
+   git mv docs/PR.md docs/archive/milestones/PR.md
+   git mv docs/PR-SUMMARY.md docs/archive/milestones/PR-SUMMARY.md
+   git mv docs/handoff-PR.md docs/archive/milestones/handoff-PR.md
+   ```
+
+3. Consolidate M4:
+   ```bash
+   # Move all M4 files
+   git mv docs/M4-PREP.md docs/milestones/M4/
+   git mv docs/M4-CODEX-PLAN.md docs/milestones/M4/
+   git mv docs/M4-COMPLETION-ROLLUP.md docs/milestones/M4/
+   git mv docs/M4-STAGING-VALIDATION-RESULTS.md docs/milestones/M4/
+   git mv docs/M4-STAGING-DEPLOYMENT.md docs/milestones/M4/
+   git mv docs/M4-NOTES.md docs/milestones/M4/
+   git mv docs/M4-ISSUES-QUICK-REF.md docs/milestones/M4/
+   git mv docs/M4-PR-SUMMARY.md docs/milestones/M4/
+   git mv docs/M4-REPO-CLEANUP-PLAN.md docs/milestones/M4/
+
+   # Move codex prompts to tooling
+   git mv docs/M4-CODEX-PROMPTS.md docs/tooling/CODEX-PROMPTS.md
+
+   # Create consolidated files (merge content manually)
+   # PLAN.md: M4-PREP + M4-CODEX-PLAN
+   # STATUS.md: M4-COMPLETION-ROLLUP + M4-STAGING-VALIDATION-RESULTS
+   # DEPLOYMENT.md: M4-STAGING-DEPLOYMENT
+   # NOTES.md: M4-NOTES + M4-ISSUES-QUICK-REF
+   ```
+
+4. Update M5:
+   ```bash
+   git mv docs/M5-PREP.md docs/milestones/M5/PREP.md
+   ```
+
+5. Commit changes:
+   ```bash
+   git commit -m "docs: restructure milestone documentation
+
+   - Archive M0-M3 to docs/archive/milestones/
+   - Consolidate M4 files into docs/milestones/M4/
+   - Move M5-PREP to docs/milestones/M5/
+   - Extract codex prompts to docs/tooling/
+
+   Impact: Improved organization, clear milestone structure"
+   ```
+
+**Success Criteria:**
+- ✅ M0-M3 archived in docs/archive/milestones/
+- ✅ M4 consolidated in docs/milestones/M4/
+- ✅ Tooling extracted to docs/tooling/
+- ✅ Clear pattern established for future milestones
+
+---
+
+## Priority Matrix
+
+| Task | Priority | Impact | Effort | Required For |
+|------|----------|--------|--------|--------------|
+| Remove .nx/ from git | **P0** | High | 5 min | M4 staging ✓ |
+| Remove test-output.log | **P0** | Low | 2 min | Clean status ✓ |
+| Update .gitignore | **P0** | High | 5 min | Phase 1 ✓ |
+| Remove .gemini/ | P1 | Low | 2 min | - |
+| Consolidate wiki-content/ | P1 | Medium | 30 min | Doc clarity |
+| Restructure docs/ | P1 | Medium | 15 min | Organization |
+| Archive M0-M3 | P2 | Medium | 15 min | - |
+| Consolidate M4 | P2 | Medium | 20 min | M4 closeout |
+
+**Pre-M4 Staging Requirements:**
+- ✅ **MUST DO (P0):** Phase 1 - Remove build artifacts (~15 min)
+- 🔄 **SHOULD DO (P1):** Phase 2 - Documentation consolidation (~30 min)
+- ⏸️ **CAN DEFER (P2):** Phase 3 - Milestone restructure (~35 min)
+
+---
+
+## Validation & Verification
+
+### After Phase 1 (Build Artifacts Removal)
+```bash
+# Verify git status
+git status                           # Should be clean (or only intended changes)
+
+# Verify .nx/ not tracked
+ls -la .nx/                          # Should exist locally
+git ls-files .nx/                    # Should return nothing
+
+# Verify functionality
+nx run-many -t test                  # All tests should pass
+nx run worker-api:dev                # Development should work
+```
+
+**Expected:**
+- ✅ Clean git status
+- ✅ `.nx/` exists locally but not tracked
+- ✅ All nx commands functional
+
+### After Phase 2 (Documentation Consolidation)
+```bash
+# Verify structure
+find docs/ -type d                   # Should show new directory structure
+find docs/ -name "*.md" | wc -l      # Should be reduced from 54
+
+# Verify wiki-content removed
+git ls-files wiki-content/           # Should return nothing
+ls -la wiki-content/                 # Should not exist
+
+# Verify cross-references
+grep -r "wiki-content/" README.md    # Should return nothing
+grep -r "wiki-content/" docs/        # Should return nothing (except archives)
+```
+
+**Expected:**
+- ✅ Organized docs/ structure
+- ✅ wiki-content/ removed
+- ✅ All cross-references updated
+
+### After Phase 3 (Milestone Restructure)
+```bash
+# Verify milestone organization
+ls -la docs/archive/milestones/      # Should contain M0-M3
+ls -la docs/milestones/              # Should contain M4, M5
+
+# Verify root docs/ cleanup
+ls docs/*.md                         # Should only show key files
+
+# Full test suite
+npm test                             # All tests pass
+nx run-many -t test typecheck        # All projects pass
+```
+
+**Expected:**
+- ✅ Milestones archived/consolidated
+- ✅ Clean docs/ root directory
+- ✅ All tests passing
+
+### Final Verification
+```bash
+# Review changes
+git log --oneline -10                # Review commit history
+git diff main --stat                 # Review file changes
+
+# Size verification
+du -sh docs/                         # Should be reduced
+git ls-files | wc -l                 # Fewer tracked files
+
+# Full validation
+npm test                             # Complete test suite
+nx graph                             # Verify project graph
+```
+
+---
+
+## Size Impact Summary
+
+**Current State:**
+- Git-tracked: ~6.6M
+- Working directory: ~353M
+
+**Removals:**
 - .nx/ cache: ~728K
 - .gemini/: ~4K
 - test-output.log: ~4K
 - wiki-content/: ~176K (after content merge)
-**Total Reduction**: ~912K (13.8% reduction)
+- **Total**: ~912K
 
-**Expected Git-Tracked Size After Cleanup**: ~5.7M
+**After Cleanup:**
+- Git-tracked: ~5.7M (**13.8% reduction**)
+- Working directory: ~353M (no change - local caches retained)
 
-### Implementation Priority Matrix
+---
 
-| Task | Priority | Impact | Effort | Blocker For |
-|------|----------|--------|--------|-------------|
-| Remove .nx/ from git | P0 | High | 5 min | M4 staging |
-| Remove test-output.log | P0 | Low | 2 min | Clean git status |
-| Remove .gemini/ | P1 | Low | 2 min | - |
-| Update .gitignore | P0 | High | 5 min | All removals |
-| Consolidate wiki-content/ | P1 | Medium | 30 min | Doc clarity |
-| Archive M0-M3 files | P2 | Medium | 15 min | Doc organization |
-| Consolidate M4 files | P2 | Medium | 20 min | M4 closeout |
+## Notes
 
-### Pre-M4 Staging Checklist
+### What This Cleanup Preserves
+- ✅ All source code unchanged
+- ✅ All package configurations unchanged
+- ✅ Local .nx/ cache (for build performance)
+- ✅ All unique documentation content
+- ✅ Complete milestone history (in archives)
+- ✅ All test files and configurations
 
-**MUST DO before staging deploy:**
-- [ ] Remove .nx/ from git tracking
-- [ ] Update .gitignore with comprehensive ignore patterns
-- [ ] Verify `git status` shows clean working tree
-- [ ] Test: `nx run-many -t test` still works
-- [ ] Commit: "chore: remove build artifacts from git tracking"
+### What This Cleanup Removes from Git
+- ⚠️ Build cache artifacts (.nx/)
+- ⚠️ Duplicate documentation (wiki-content/)
+- ⚠️ Personal tool configs (.gemini/)
+- ⚠️ Test output logs
 
-**SHOULD DO before staging deploy:**
-- [ ] Consolidate wiki-content/ into docs/
-- [ ] Update README.md references
-- [ ] Verify all docs/ cross-references resolve
+### Post-Cleanup Maintenance
+- Use `docs/milestones/MX/` pattern for future milestones
+- Keep root docs/ for master plan and status only
+- Archive completed milestones to `docs/archive/milestones/`
+- Maintain single source of truth in `docs/`
 
-**CAN DEFER to post-staging:**
-- [ ] Archive M0-M3 milestone files
-- [ ] Consolidate M4 files into milestones/M4/
-- [ ] Create docs/README.md index
+---
 
-### Validation Commands
+## Approval & Execution
 
-**After Phase 1 (artifact removal):**
-```bash
-git status                           # Should show only intended changes
-ls -la .nx/                          # Should still exist (local cache)
-git ls-files .nx/                    # Should return nothing
-nx run-many -t test                  # Should pass
-```
+**Ready for execution:** Yes ✓
+**Blocking issues:** None
+**Risk level:** Low (changes are reversible, no code modifications)
 
-**After Phase 2 (docs consolidation):**
-```bash
-find docs/ -name "*.md" | wc -l      # Should be significantly reduced
-grep -r "wiki-content/" README.md    # Should return no matches
-```
+**Recommended approach:**
+1. Execute Phase 1 (P0) before M4 staging deployment
+2. Execute Phase 2 (P1) during M4 staging window
+3. Defer Phase 3 (P2) to post-staging cleanup
 
-**Final verification:**
-```bash
-git log --oneline -5                 # Review commit history
-git diff HEAD~3 --stat               # Review all changes
-npm test                             # Full test suite
-```
-
-## Reindex Snapshot (2026-02-07)
-
-- Total repo size (working copy): ~353M
-- Top-level size hotspots:
-  - node_modules/: ~343M
-  - .git/: ~6.6M
-  - .nx/: ~728K (cache + workspace data, currently tracked)
-  - archive/: ~736K (ignored; contains historical wrangler state)
-  - docs/: ~484K
-  - tenants/: ~428K
-  - packages/: ~196K
-  - wiki-content/: ~176K
-  - tests/: ~116K
-- Tracked cache/state that should be removed from git:
-  - .nx/** (cache + workspace-data; git status shows modified .nx/workspace-data/file-map.json and .nx/workspace-data/nx_files.nxt)
-  - tenants/mrrainbowsmoke/.wrangler/state/** (sqlite + shm/wal)
-- Tracked tool configs that may be optional:
-  - .gemini/settings.json
-  - .vscode/settings.json
-- Ignored but present locally:
-  - .wrangler/tmp/
-  - .claude/settings.local.json
-  - test-output.log
-  - archive/2026-02-07/**
-
-## Additional Cleanup Plan (Organization + Slimming)
-
-1) Purge tracked caches/state from index
-   - Remove .nx/** and tenants/*/.wrangler/** from git history (keep locally if needed).
-   - Confirm clean git status after removing from index.
-
-2) Tighten ignore rules
-   - Add .nx/, .claude/, .gemini/, and tenants/**/.wrangler/.
-   - Decide whether .vscode/ is shared config or local-only; ignore if local.
-
-3) Consolidate documentation sources
-   - Pick a single canonical doc root: docs/ or wiki-content/.
-   - Map duplicates (examples): docs/architecture.md vs wiki-content/Architecture.md, docs/tenancy.md vs wiki-content/Multi-Tenancy.md, docs/testing.md vs wiki-content/Testing-Guide.md, docs/security.md vs wiki-content/Security-Best-Practices.md.
-   - Migrate and leave a short index/redirect note to avoid drift.
-
-4) Rationalize milestone docs
-   - Move M0–M3 materials into docs/milestones/legacy/.
-   - Keep M4 items in docs/milestones/M4/ with a single index page.
-   - Keep only one “current status” doc (e.g., docs/PROJECT-STATUS.md).
-
-5) Optional: externalize archive
-   - If archive/ must be preserved, move to a separate repo or release assets.
-
-## Sequencing Update
-
-1) Remove tracked cache/state + update ignores.
-2) Consolidate docs and de-duplicate wiki content.
-3) Restructure milestones and archive.
-
-## Verification Checklist (Updated)
-
-- git status clean after cache/state removal
-- No .nx/** or tenants/**/.wrangler/** tracked
-- README/doc links updated to canonical doc root
-- Staging deploy references only canonical docs
+**Sign-off required from:** Repository owner / Project lead
