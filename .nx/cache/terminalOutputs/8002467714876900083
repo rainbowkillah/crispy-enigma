@@ -1,6 +1,0 @@
-> npm run typecheck
-
-
-> typecheck
-> tsc -p tsconfig.json --noEmit
-

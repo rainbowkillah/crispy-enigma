@@ -145,3 +145,15 @@ archive/*
 .wrangler/
 M4-CODEX-PROMPTS.sh
 m4-codex-prompt.sh
+
+# Nx build cache and workspace data
+.nx/
+
+# Personal AI assistant configs
+.claude/
+.gemini/
+
+# Local temporary directories
+.local/
+temp/
+tmp/
