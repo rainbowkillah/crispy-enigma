@@ -9,6 +9,16 @@ All model requests use `env.AI.run()` with a `gateway` parameter. This ensures:
 - Centralized policy enforcement.
 - Consistent observability and cost signals.
 
+## Setup
+
+Before deploying, you must create an AI Gateway for each tenant in the Cloudflare Dashboard:
+
+1. Navigate to **AI** > **AI Gateway**.
+2. Create a new gateway using the ID specified in your `tenant.config.json` (e.g., `mrrainbowsmoke-gateway`).
+3. Ensure the gateway ID matches exactly what is in the config file.
+
+No token is required for internal Worker usage via the `env.AI` binding, but the gateway resource must exist.
+
 ## Gateway Options
 
 Gateway routing is configured by `packages/ai/src/gateway.ts`:
