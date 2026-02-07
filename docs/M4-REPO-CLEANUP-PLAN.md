@@ -441,3 +441,64 @@ git log --oneline -5                 # Review commit history
 git diff HEAD~3 --stat               # Review all changes
 npm test                             # Full test suite
 ```
+
+## Reindex Snapshot (2026-02-07)
+
+- Total repo size (working copy): ~353M
+- Top-level size hotspots:
+  - node_modules/: ~343M
+  - .git/: ~6.6M
+  - .nx/: ~728K (cache + workspace data, currently tracked)
+  - archive/: ~736K (ignored; contains historical wrangler state)
+  - docs/: ~484K
+  - tenants/: ~428K
+  - packages/: ~196K
+  - wiki-content/: ~176K
+  - tests/: ~116K
+- Tracked cache/state that should be removed from git:
+  - .nx/** (cache + workspace-data; git status shows modified .nx/workspace-data/file-map.json and .nx/workspace-data/nx_files.nxt)
+  - tenants/mrrainbowsmoke/.wrangler/state/** (sqlite + shm/wal)
+- Tracked tool configs that may be optional:
+  - .gemini/settings.json
+  - .vscode/settings.json
+- Ignored but present locally:
+  - .wrangler/tmp/
+  - .claude/settings.local.json
+  - test-output.log
+  - archive/2026-02-07/**
+
+## Additional Cleanup Plan (Organization + Slimming)
+
+1) Purge tracked caches/state from index
+   - Remove .nx/** and tenants/*/.wrangler/** from git history (keep locally if needed).
+   - Confirm clean git status after removing from index.
+
+2) Tighten ignore rules
+   - Add .nx/, .claude/, .gemini/, and tenants/**/.wrangler/.
+   - Decide whether .vscode/ is shared config or local-only; ignore if local.
+
+3) Consolidate documentation sources
+   - Pick a single canonical doc root: docs/ or wiki-content/.
+   - Map duplicates (examples): docs/architecture.md vs wiki-content/Architecture.md, docs/tenancy.md vs wiki-content/Multi-Tenancy.md, docs/testing.md vs wiki-content/Testing-Guide.md, docs/security.md vs wiki-content/Security-Best-Practices.md.
+   - Migrate and leave a short index/redirect note to avoid drift.
+
+4) Rationalize milestone docs
+   - Move M0–M3 materials into docs/milestones/legacy/.
+   - Keep M4 items in docs/milestones/M4/ with a single index page.
+   - Keep only one “current status” doc (e.g., docs/PROJECT-STATUS.md).
+
+5) Optional: externalize archive
+   - If archive/ must be preserved, move to a separate repo or release assets.
+
+## Sequencing Update
+
+1) Remove tracked cache/state + update ignores.
+2) Consolidate docs and de-duplicate wiki content.
+3) Restructure milestones and archive.
+
+## Verification Checklist (Updated)
+
+- git status clean after cache/state removal
+- No .nx/** or tenants/**/.wrangler/** tracked
+- README/doc links updated to canonical doc root
+- Staging deploy references only canonical docs
