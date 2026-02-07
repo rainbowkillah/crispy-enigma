@@ -140,3 +140,6 @@ vite.config.ts.timestamp-*
 docs/session-copilot02062026.md
 docs/examples/AI_GATEWAY.md
 archive/
+
+# Wrangler cache
+.wrangler/
