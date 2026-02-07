@@ -35,7 +35,7 @@ describe('runGatewayEmbeddings', () => {
     const result = await runGatewayEmbeddings(
       'tenant-a',
       'gateway-a',
-      '@cf/baai/bge-base-en-v1.5',
+      '@cf/baai/bge-m3',
       ['hello', 'world'],
       env
     );
@@ -56,7 +56,7 @@ describe('runGatewayEmbeddings', () => {
     const result = await runGatewayEmbeddings(
       'tenant-a',
       'gateway-a',
-      '@cf/baai/bge-base-en-v1.5',
+      '@cf/baai/bge-m3',
       ['hello'],
       env
     );
@@ -69,7 +69,7 @@ describe('runGatewayEmbeddings', () => {
       runGatewayEmbeddings(
         'tenant-a',
         'gateway-a',
-        '@cf/baai/bge-base-en-v1.5',
+        '@cf/baai/bge-m3',
         ['hello'],
         env
       )

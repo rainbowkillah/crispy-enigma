@@ -35,7 +35,7 @@ describe('deterministic retrieval fixtures', () => {
     const result = await runVectorizeRetrieval(
       'tenant-a',
       'gateway-a',
-      '@cf/baai/bge-base-en-v1.5',
+      '@cf/baai/bge-m3',
       { query: 'fixture', topK: 2 },
       env
     );

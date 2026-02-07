@@ -34,7 +34,7 @@ describe('runVectorizeRetrieval', () => {
     const result = await runVectorizeRetrieval(
       'tenant-a',
       'gateway-a',
-      '@cf/baai/bge-base-en-v1.5',
+      '@cf/baai/bge-m3',
       { query: 'hello', topK: 3 },
       env
     );
@@ -61,7 +61,7 @@ describe('runVectorizeRetrieval', () => {
     const result = await runVectorizeRetrieval(
       'tenant-a',
       'gateway-a',
-      '@cf/baai/bge-base-en-v1.5',
+      '@cf/baai/bge-m3',
       { query: 'hello', topK: 3 },
       env,
       rerankHook
