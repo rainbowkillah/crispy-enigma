@@ -13,6 +13,9 @@ npm install
 # Run local dev for a tenant (once M0 scaffolding complete)
 npm run dev -- --tenant=<tenant-name>
 
+# Call the /chat endpoint (non-streaming by default)
+npm run chat:dev -- --tenant=<tenant-name> --message="Hello"
+
 # Run tests
 npm test
 ```
@@ -29,6 +32,7 @@ Key endpoints:
 See [docs/plan.md](docs/plan.md) for full architecture and milestones.
 See [docs/milestones/M1.md](docs/milestones/M1.md) for the M1 summary.
 See [docs/streaming.md](docs/streaming.md), [docs/sessions.md](docs/sessions.md), and [docs/rate-limiting.md](docs/rate-limiting.md) for the M1 contracts.
+See [docs/examples/chat.md](docs/examples/chat.md) for local /chat examples.
 See [docs/wrangler.md](docs/wrangler.md) for the Wrangler version pin and ESM module format decision.
 
 ## Critical Patterns

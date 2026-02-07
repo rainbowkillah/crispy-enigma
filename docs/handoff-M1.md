@@ -2,6 +2,7 @@
 
 ## Status
 M1 is complete. Core features, tests, configuration updates, and typecheck are done.
+GitHub issues #15-#24 are moved to Done and assigned to the M1 milestone.
 
 ## What Shipped (Key Files)
 - Worker entry + routes: `apps/worker-api/src/index.ts`

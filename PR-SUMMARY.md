@@ -38,6 +38,10 @@ This PR completes **M1 (Chat + Sessions)**. It adds streaming chat, session stat
 - ✅ #23 Session isolation tests
 - ✅ #24 Rate limit enforcement tests
 
+## Project Status
+
+- GitHub issues #15–#24 moved to Done and assigned to the M1 milestone.
+
 ## Test Results
 
 ```

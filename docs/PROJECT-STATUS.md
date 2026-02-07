@@ -184,11 +184,11 @@ Created preparation documents:
 
 ### Verification Date: 2026-02-06
 
-### GitHub Issues Gap
+### GitHub Project Update
 
-**Finding:** Issues #15-#24 referenced in `docs/plan.md` have not been created in the GitHub repository yet. No M1 milestone or labels exist in GitHub.
+**Finding:** Issues #15-#24 are created, moved to Done, and assigned to the M1 milestone in GitHub.
 
-**Recommendation:** Create issues #15-#24 in `crispy-enigma` and close them as completed, or track via [GitHub Project #13](https://github.com/users/rainbowkillah/projects/13).
+**Outcome:** Project board and milestone now reflect M1 completion.
 
 ### Code Verification (All Files Confirmed Present)
 
@@ -217,7 +217,7 @@ Created preparation documents:
 - `maxMessagesPerSession` (optional, default 1000) — added to schema ✅
 - `rateLimit.perMinute` and `rateLimit.burst` — present in schema ✅
 
-### Test Results (2026-02-06)
+### Test Results (2026-02-06 19:41)
 
 ```
 ✓ tests/rate-limiter.test.ts (2 tests)
@@ -234,7 +234,7 @@ Created preparation documents:
 
 Test Files: 11 passed (11)
 Tests:      32 passed (32)
-Duration:   296ms
+Duration:   317ms
 ```
 
 ### TypeScript: ✅ Compiles with no errors
