@@ -13,6 +13,7 @@ M2 is in progress. Issues #26–#31 are complete. Issue #25 (Gateway integration
 - AI Gateway docs: `docs/ai-gateway.md`, `docs/ai-gateway-fallbacks.md`
 - Streaming contract updates: `docs/streaming.md`
 - ADR: `docs/adrs/ADR-004-model-selection-precedence.md`
+- AI Gateway error logging now includes `tenantId` and `traceId`: `apps/worker-api/src/index.ts`
 - Wrangler dev remote binding updates:
   - `tenants/mrrainbowsmoke/wrangler.jsonc`
   - `tenants/rainbowsmokeofficial/wrangler.jsonc`
@@ -107,6 +108,7 @@ data: {"done":true,"usage":{"modelId":"@cf/meta/llama-3.1-8b-instruct","tokensIn
 ```
 
 ## Commands Run
+- `npm test` ✅
 - `npm run lint` ✅
 - `npm run typecheck` ✅
 
@@ -119,3 +121,4 @@ data: {"done":true,"usage":{"modelId":"@cf/meta/llama-3.1-8b-instruct","tokensIn
 ## Notes
 - Remote bindings are now configured in `wrangler.jsonc` (no `--remote` needed).
 - AI Gateway auth tokens remain in tenant `.env` only; Worker uses `env.AI` binding.
+- Issue #25 staging `ai_error` root cause likely mismatched gateway slug; tenant configs now aligned to real gateway IDs (`ai-gate`, `ai_gateway`).

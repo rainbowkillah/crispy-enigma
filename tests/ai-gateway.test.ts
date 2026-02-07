@@ -133,7 +133,7 @@ describe('AI Gateway integration', () => {
 
     expect(calls).toHaveLength(1);
     expect(calls[0]?.modelId).toBe('@cf/meta/llama-3.1-8b-instruct-fast');
-    expect(calls[0]?.options?.gateway?.id).toBe('mrrainbowsmoke-gateway');
+    expect(calls[0]?.options?.gateway?.id).toBe('ai-gate');
     expect(calls[0]?.options?.gateway?.metadata?.tenantId).toBe('mrrainbowsmoke');
   });
 

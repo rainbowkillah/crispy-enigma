@@ -159,7 +159,9 @@ Created preparation documents:
 - Added documentation: `docs/ai-gateway.md`, `docs/ai-gateway-fallbacks.md`.
 - Added ADR: `docs/adrs/ADR-004-model-selection-precedence.md`.
 - Added dev preview domain format: `<worker-name>-<env>.<tenant>.workers.dev`.
+- Aligned tenant AI Gateway IDs with Cloudflare gateway slugs (`ai-gate`, `ai_gateway`) to unblock staging validation.
 - Configured remote bindings in tenant `wrangler.jsonc` files.
+- Added structured AI Gateway error logging with `tenantId` and `traceId` for debugging.
 
 ### Tests Added
 

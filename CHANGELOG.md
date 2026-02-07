@@ -27,6 +27,7 @@ All notable changes for this project are documented here.
 - Chat handler records token counts per message.
 - Alpha tenant config includes token budget and allowed model list for validation coverage.
 - AI Gateway example doc now uses placeholder tokens and .env reference.
+- Tenant AI Gateway IDs aligned with actual Cloudflare gateway slugs (`ai-gate`, `ai_gateway`) for staging validation.
 - Remote bindings configured in `wrangler.jsonc` for `mrrainbowsmoke` and `rainbowsmokeofficial`.
 
 ### Dev Smoke Test Results

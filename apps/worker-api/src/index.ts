@@ -375,7 +375,12 @@ async function handleChatRequest(
             maxMessages: tenant.maxMessagesPerSession
           })
         });
-      } catch {
+      } catch (err) {
+        console.error('AI Gateway Error (stream):', {
+          tenantId: tenant.tenantId,
+          traceId,
+          error: err
+        });
         await safeWrite(
           sseEvent(
             {
@@ -448,7 +453,12 @@ async function handleChatRequest(
     }
     assistantContent = result.content;
     resolvedModelId = result.modelId;
-  } catch {
+  } catch (err) {
+    console.error('AI Gateway Error (non-stream):', {
+      tenantId: tenant.tenantId,
+      traceId,
+      error: err
+    });
     return fail('ai_error', 'AI provider unavailable', 502, traceId);
   }
 
