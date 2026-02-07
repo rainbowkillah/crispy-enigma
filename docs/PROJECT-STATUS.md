@@ -369,7 +369,7 @@ Duration:   317ms
 - **M1 Handoff:** [docs/handoff-M1.md](handoff-M1.md)
 - **GitHub Project:** https://github.com/users/rainbowkillah/projects/13
 - **Repository:** https://github.com/rainbowkillah/crispy-enigma
-- **Issues:** https://github.com/rainbowkillah/cloudflare-mono-repo/issues/
+- **Issues:** https://github.com/rainbowkillah/crispy-enigma/issues/
 
 ---
 
