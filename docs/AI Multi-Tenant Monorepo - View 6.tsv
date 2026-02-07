@@ -1,0 +1,123 @@
+Title	URL	Assignees	Status	Linked pull requests	Sub-issues progress
+[M0] Create monorepo skeleton (apps/packages/tenants/docs/scripts/tests)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/3		Done		
+[M0] Set up TypeScript baseline + tsconfig for Workers runtime	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/4		Done		
+[M0] Configure ESLint + Prettier	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/5		Done		
+[M0] Set up Vitest test runner	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/6		Done		
+[M0] Create project.json for each apps/* and packages/* target	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/7		Done		
+[M0] Implement tenant resolution middleware (header/hostname priority)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/8		Done		
+[M0] Define tenant.config.json schema + Zod validation	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/9		Done		
+[M0] Create core error handling + response envelopes	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/10		Done		
+[M0] Set up local dev with wrangler dev	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/11		Done		
+[M0] Create hello endpoint per tenant + smoke tests	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/12		Done		
+[M0] Define Env typings source of truth (packages/core/src/env.ts)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/13		Done		
+[M0] Document wrangler version, ESM format decision	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/14		Done		
+[M1] Build /chat endpoint with request schema	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/15		Done		
+[M1] Define streaming response contract (SSE vs chunked)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/16		Done		
+[M1] Implement Durable Object session store (tenant-scoped)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/17		Done		
+[M1] Add conversation history with retention policy	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/18		Done		
+[M1] Implement KV cache layer (tenant-scoped keys)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/19		Done		
+[M1] Implement DO-based rate limiter (per tenant + per IP/user)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/20		Done		
+[M1] Define rate limit keying strategy (tenant+user+ip)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/21		Done		
+[M1] Create streaming behavior tests	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/22		Done		
+[M1] Create session isolation tests	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/23		Done		
+[M1] Create rate limit enforcement tests	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/24		Done		
+[M2] Gateway integration spike - prove connectivity + configuration	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/25		Todo		
+[M2] Implement model routing (tenant config chooses models)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/26		Todo		
+[M2] Add per-route model override options	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/27		Todo		
+[M2] Implement budget/limits hooks (token limits)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/28		Todo		
+[M2] Add observability hooks (latency, status, tokens in/out)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/29		Todo		
+[M2] Document AI Gateway integration in .llm/docs/ai-gateway.md	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/30		Todo		
+[M2] Document fallback behavior for API changes	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/31		Todo		
+[M3] Implement ingestion pipeline (chunking strategy)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/32		Todo		
+[M3] Implement embedding generation	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/33		Todo		
+[M3] Implement Vectorize upsert with metadata	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/34		Todo		
+[M3] Implement retrieval pipeline (query embedding)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/35		Todo		
+[M3] Implement Vectorize search	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/36		Todo		
+[M3] Add optional rerank hook interface	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/37		Todo		
+[M3] Implement RAG response assembly with prompt template	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/38		Todo		
+[M3] Add citations to RAG responses	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/39		Todo		
+[M3] Implement basic safety filters	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/40		Todo		
+[M3] Ensure Vectorize indexes are tenant-scoped	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/41		Todo		
+[M3] Create deterministic fixture retrieval tests	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/42		Todo		
+[M3] Create tenant isolation tests for Vectorize	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/43		Todo		
+[M3] Create metadata integrity tests	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/44		Todo		
+[M3] Document Vectorize local emulation limitations + staging strategy	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/45		Todo		
+[M4] Build /search endpoint with output schema	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/46		Todo		
+[M4] Define output schema: answer + sources + confidence + follow-ups	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/47		Todo		
+[M4] Implement query rewriting / intent detection	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/48		Todo		
+[M4] Implement caching for common queries (tenant-scoped KV)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/49		Todo		
+[M4] Add search latency metrics	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/50		Todo		
+[M4] Add cache hit rate metrics	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/51		Todo		
+[M4] Create schema validation tests	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/52		Todo		
+[M4] Create caching behavior tests	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/53		Todo		
+[M5] Define tool schema (JSON schema for name, args, permissions)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/54		Todo		
+[M5] Implement tool dispatcher with registry	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/55		Todo		
+[M5] Implement validation + auth/permission gating	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/56		Todo		
+[M5] Implement tool: summarize	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/57		Todo		
+[M5] Implement tool: extract entities	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/58		Todo		
+[M5] Implement tool: classify intent	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/59		Todo		
+[M5] Implement tool: tag/chunk docs	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/60		Todo		
+[M5] Implement tool: ingest docs	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/61		Todo		
+[M5] Implement audit logging (tool name + args hash + outcome)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/62		Todo		
+[M5] Create permission tests	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/63		Todo		
+[M5] Create injection guard tests	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/64		Todo		
+[M5] Create tool correctness tests	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/65		Todo		
+[M5] Document tool contracts	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/66		Todo		
+[M6] Define /tts contract (input: text, voice, format, streaming)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/67		Todo		
+[M6] Define output contract (audio stream or job id)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/68		Todo		
+[M6] Implement adapter interface	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/69		Todo		
+[M6] Implement stub with 'not enabled' behavior	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/70		Todo		
+[M6] If feasible: implement provider adapter	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/71		Todo		
+[M6] Create contract tests	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/72		Todo		
+[M6] Create stub behavior tests	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/73		Todo		
+[M7] Finalize logging schema with required fields	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/74		Todo		
+[M7] Define correlation IDs and tracing strategy	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/75		Todo		
+[M7] Implement metrics helpers	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/76		Todo		
+[M7] Implement required metrics	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/77		Todo		
+[M7] Add cost monitoring metrics (token usage)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/78		Todo		
+[M7] Create dashboards/alerts suggestions document	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/79		Todo		
+[M7] Create load test scripts	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/80		Todo		
+[M7] Create retrieval quality 'smoke score' regression suite	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/81		Todo		
+[M7] Create streaming stability tests	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/82		Todo		
+[M7] Set up CI gates (lint, typecheck, unit, integration)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/83		Todo		
+[M7] Document failure mode template	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/84		Todo		
+[M7] Document external dependency failure strategies	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/85		Todo		
+[M8] Create deployment script: deploy one tenant	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/86		Todo		
+[M8] Create deployment script: deploy all tenants	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/87		Todo		
+[M8] Add environment selection (dev/stage/prod)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/88		Todo		
+[M8] Implement config validation (fail fast)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/89		Todo		
+[M8] Implement drift detection (expected vs deployed)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/90		Todo		
+[M8] Define multi-account credential strategy	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/91		Todo		
+[M8] Create deploy rollback runbook	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/92		Todo		
+[M8] Create incident response runbook	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/93		Todo		
+[NX-1] Create Nx plugin package skeleton (packages/nx-cloudflare)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/94		Todo		
+[NX-1] Implement init generator	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/95		Todo		
+[NX-1] Add shared utilities: parse tenant config	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/96		Todo		
+[NX-1] Add shared utilities: update JSONC (use jsonc-parser)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/97		Todo		
+[NX-1] Add shared utilities: validate config	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/98		Todo		
+[NX-1] Set up plugin testing infrastructure	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/99		Todo		
+[NX-2] Scaffold worker-api template with tenant middleware	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/100		Todo		
+[NX-2] Add /health endpoint to template	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/101		Todo		
+[NX-2] Add project.json targets for dev/test/deploy	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/102		Todo		
+[NX-2] Define executor-to-wrangler mapping	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/103		Todo		
+[NX-2] Create worker generator tests	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/104		Todo		
+[NX-3] Scaffold tenant folder structure	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/105		Todo		
+[NX-3] Generate tenant.config.json template	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/106		Todo		
+[NX-3] Generate wrangler.jsonc template	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/107		Todo		
+[NX-3] Add tenant registry file for discoverability	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/108		Todo		
+[NX-3] Create tenant generator tests	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/109		Todo		
+[NX-4] Implement binding generator (KV/DO/Vectorize/AI)	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/110		Todo		
+[NX-4] Update Env typing from single canonical file	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/111		Todo		
+[NX-4] Add DO class skeleton generation	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/112		Todo		
+[NX-4] Implement deployAll executor	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/113		Todo		
+[NX-4] Add concurrency policy to deployAll	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/114		Todo		
+[NX-4] Add dry-run mode to deployAll	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/115		Todo		
+[NX-4] Add continue-on-error flag to deployAll	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/116		Todo		
+[NX-4] Create binding generator/executor tests	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/117		Todo		
+[Review] Add explicit milestone dependency mapping	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/118		Todo		
+[Review] Quantify exit criteria with specific metrics	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/119		Todo		
+[Review] Define E2E testing layer	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/120		Todo		
+[Review] Add security testing activities	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/121		Todo		
+[Review] Establish performance baselines	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/122		Todo		
+[Review] Define AuthN/AuthZ strategy	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/123		Todo		
+[Review] Pick logging/metrics sink	https://github.com/rainbowkillah/cloudflare-mono-repo/issues/124		Todo		
