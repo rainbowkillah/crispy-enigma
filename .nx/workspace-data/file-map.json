@@ -20,20 +20,6 @@
   "nxJsonPlugins": [],
   "fileMap": {
     "projectFileMap": {
-      "observability": [
-        {
-          "file": "packages/observability/project.json",
-          "hash": "1632021096686162711"
-        },
-        {
-          "file": "packages/observability/src/index.ts",
-          "hash": "8864206489639079382"
-        },
-        {
-          "file": "packages/observability/src/logger.ts",
-          "hash": "14216585224841379369"
-        }
-      ],
       "worker-api": [
         {
           "file": "apps/worker-api/project.json",
@@ -52,26 +38,18 @@
           "hash": "15106447200388021791"
         }
       ],
-      "storage": [
+      "observability": [
         {
-          "file": "packages/storage/project.json",
-          "hash": "18417496484336993390"
+          "file": "packages/observability/project.json",
+          "hash": "1632021096686162711"
         },
         {
-          "file": "packages/storage/src/do.ts",
-          "hash": "15124964690760613976"
+          "file": "packages/observability/src/index.ts",
+          "hash": "8864206489639079382"
         },
         {
-          "file": "packages/storage/src/index.ts",
-          "hash": "4260946828283953203"
-        },
-        {
-          "file": "packages/storage/src/kv.ts",
-          "hash": "1755166976520487066"
-        },
-        {
-          "file": "packages/storage/src/vectorize.ts",
-          "hash": "17847552451332353089"
+          "file": "packages/observability/src/logger.ts",
+          "hash": "14216585224841379369"
         }
       ],
       "ai": [
@@ -132,6 +110,28 @@
         {
           "file": "packages/core/src/tenant/types.ts",
           "hash": "10852238908151055834"
+        }
+      ],
+      "storage": [
+        {
+          "file": "packages/storage/project.json",
+          "hash": "18417496484336993390"
+        },
+        {
+          "file": "packages/storage/src/do.ts",
+          "hash": "15124964690760613976"
+        },
+        {
+          "file": "packages/storage/src/index.ts",
+          "hash": "4260946828283953203"
+        },
+        {
+          "file": "packages/storage/src/kv.ts",
+          "hash": "1755166976520487066"
+        },
+        {
+          "file": "packages/storage/src/vectorize.ts",
+          "hash": "17847552451332353089"
         }
       ],
       "rag": [
@@ -196,7 +196,7 @@
       },
       {
         "file": "CHANGELOG.md",
-        "hash": "4236798015024718753"
+        "hash": "2848824513629301736"
       },
       {
         "file": "CLAUDE.md",
@@ -212,7 +212,7 @@
       },
       {
         "file": "README.md",
-        "hash": "10670412807483662662"
+        "hash": "17530319531451003465"
       },
       {
         "file": "WIKI-SETUP.md",
@@ -224,7 +224,7 @@
       },
       {
         "file": "docs/ALIGNMENT-SUMMARY.md",
-        "hash": "2783198485593840616"
+        "hash": "4940397636626863075"
       },
       {
         "file": "docs/M0-COMPLETE.md",
@@ -243,28 +243,12 @@
         "hash": "16406284072233240984"
       },
       {
-        "file": "docs/M4-CODEX-PLAN.md",
-        "hash": "4624577681751315012"
-      },
-      {
-        "file": "docs/M4-CODEX-PROMPTS.md",
-        "hash": "7542213301945201770"
-      },
-      {
-        "file": "docs/M4-ISSUES-QUICK-REF.md",
-        "hash": "17943357013567935828"
-      },
-      {
-        "file": "docs/M4-PREP.md",
-        "hash": "1355976090899746199"
-      },
-      {
         "file": "docs/PR.md",
         "hash": "16722071428211536516"
       },
       {
         "file": "docs/PROJECT-STATUS.md",
-        "hash": "12694970084632731400"
+        "hash": "11745733870069408348"
       },
       {
         "file": "docs/adrs/ADR-001-sse-streaming.md",
@@ -296,7 +280,7 @@
       },
       {
         "file": "docs/architecture.md",
-        "hash": "11383158868649630910"
+        "hash": "1983624914332516534"
       },
       {
         "file": "docs/bindings.md",
@@ -331,10 +315,6 @@
         "hash": "6821766102219709392"
       },
       {
-        "file": "docs/handoff-M3.md",
-        "hash": "14628487875505547009"
-      },
-      {
         "file": "docs/handoff-PR.md",
         "hash": "13624183059217584126"
       },
@@ -344,7 +324,7 @@
       },
       {
         "file": "docs/milestones.md",
-        "hash": "5036775618480185116"
+        "hash": "15392071484073912194"
       },
       {
         "file": "docs/milestones/M0.md",
@@ -360,7 +340,7 @@
       },
       {
         "file": "docs/plan.md",
-        "hash": "18227178769066851129"
+        "hash": "14112207489671107185"
       },
       {
         "file": "docs/quick-reference.md",
@@ -408,7 +388,7 @@
       },
       {
         "file": "package-lock.json",
-        "hash": "11830938031816815033"
+        "hash": "16609361416980864904"
       },
       {
         "file": "package.json",
@@ -592,7 +572,7 @@
       },
       {
         "file": "wiki-content/Milestones.md",
-        "hash": "8936417959466024781"
+        "hash": "14883124914730557094"
       },
       {
         "file": "wiki-content/Multi-Tenancy.md",
