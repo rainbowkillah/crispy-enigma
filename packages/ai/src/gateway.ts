@@ -11,6 +11,7 @@ export type RunGatewayChatOptions = {
   stream?: boolean;
   fallbackModelId?: string;
   metadata?: GatewayMetadata;
+  onUsage?: (metrics: GatewayUsageMetrics) => void | Promise<void>;
 };
 
 export type GatewayTextResult = {
@@ -27,6 +28,20 @@ export type GatewayStreamResult = {
 };
 
 export type GatewayChatResult = GatewayTextResult | GatewayStreamResult;
+
+export type GatewayUsageMetrics = {
+  tenantId: string;
+  gatewayId: string;
+  modelId: string;
+  latencyMs: number;
+  tokensIn?: number;
+  tokensOut?: number;
+  totalTokens?: number;
+  stream: boolean;
+  status: 'success' | 'error';
+  traceId?: string;
+  route?: string;
+};
 
 function isReadableStream(value: unknown): value is ReadableStream<unknown> {
   return (
@@ -113,6 +128,19 @@ function chunkToText(chunk: StreamChunk, decoder: TextDecoder): string {
     return chunk;
   }
   return decoder.decode(chunk, { stream: true });
+}
+
+export function estimateTokensFromText(text: string): number {
+  if (!text) {
+    return 0;
+  }
+  return Math.max(1, Math.ceil(text.length / 4));
+}
+
+export function estimateTokensFromMessages(messages: ChatModelMessage[]): number {
+  return messages.reduce((total, message) => {
+    return total + estimateTokensFromText(message.content);
+  }, 0);
 }
 
 function pickTokenFromJson(value: unknown): string | null {
@@ -220,6 +248,87 @@ function aiStreamToTokenStream(stream: ReadableStream<unknown>): ReadableStream<
   });
 }
 
+function extractUsageTokens(result: unknown): {
+  tokensIn?: number;
+  tokensOut?: number;
+  totalTokens?: number;
+} {
+  if (typeof result !== 'object' || result === null) {
+    return {};
+  }
+  const record = result as Record<string, unknown>;
+  const usage = record.usage as Record<string, unknown> | undefined;
+  if (usage) {
+    const input =
+      (usage.input_tokens as number | undefined) ??
+      (usage.prompt_tokens as number | undefined);
+    const output =
+      (usage.output_tokens as number | undefined) ??
+      (usage.completion_tokens as number | undefined);
+    const total = usage.total_tokens as number | undefined;
+    return {
+      tokensIn: typeof input === 'number' ? input : undefined,
+      tokensOut: typeof output === 'number' ? output : undefined,
+      totalTokens: typeof total === 'number' ? total : undefined
+    };
+  }
+  return {};
+}
+
+function buildUsageMetrics(
+  tenantId: string,
+  gatewayId: string,
+  modelId: string,
+  latencyMs: number,
+  stream: boolean,
+  status: 'success' | 'error',
+  options: RunGatewayChatOptions,
+  tokensIn?: number,
+  tokensOut?: number,
+  totalTokens?: number
+): GatewayUsageMetrics {
+  return {
+    tenantId,
+    gatewayId,
+    modelId,
+    latencyMs,
+    tokensIn,
+    tokensOut,
+    totalTokens,
+    stream,
+    status,
+    traceId: options.metadata?.traceId,
+    route: options.metadata?.route
+  };
+}
+
+function wrapStreamWithUsage(
+  stream: ReadableStream<string>,
+  onDone: (tokensOut: number) => Promise<void> | void
+): ReadableStream<string> {
+  const reader = stream.getReader();
+  let outputLength = 0;
+
+  return new ReadableStream<string>({
+    async pull(controller) {
+      const { done, value } = await reader.read();
+      if (done) {
+        await onDone(estimateTokensFromText(' '.repeat(outputLength)));
+        controller.close();
+        return;
+      }
+      if (value) {
+        outputLength += value.length;
+        controller.enqueue(value);
+      }
+    },
+    async cancel(reason) {
+      await reader.cancel(reason);
+      await onDone(estimateTokensFromText(' '.repeat(outputLength)));
+    }
+  });
+}
+
 export async function runGatewayChat(
   tenantId: string,
   gatewayId: string,
@@ -228,6 +337,7 @@ export async function runGatewayChat(
   env: Env,
   options: RunGatewayChatOptions = {}
 ): Promise<GatewayChatResult> {
+  const estimatedTokensIn = estimateTokensFromMessages(messages);
   const runOptions = {
     ...buildGatewayOptions(tenantId, gatewayId, options.metadata),
     stream: options.stream === true
@@ -244,32 +354,102 @@ export async function runGatewayChat(
   ];
 
   for (const candidate of modelCandidates) {
+    const startedAt = Date.now();
     try {
       const result = await (
         env.AI as unknown as {
           run: (model: string, input: unknown, options: unknown) => Promise<unknown>;
         }
       ).run(candidate, input, runOptions);
+      const latencyMs = Date.now() - startedAt;
+      const usage = extractUsageTokens(result);
+      const resolvedTokensIn = usage.tokensIn ?? estimatedTokensIn;
 
       if (options.stream) {
         if (isReadableStream(result)) {
+          const wrapped = wrapStreamWithUsage(aiStreamToTokenStream(result), async (tokensOut) => {
+            if (options.onUsage) {
+              await options.onUsage(
+                buildUsageMetrics(
+                  tenantId,
+                  gatewayId,
+                  candidate,
+                  latencyMs,
+                  true,
+                  'success',
+                  options,
+                  resolvedTokensIn,
+                  tokensOut,
+                  usage.totalTokens ?? resolvedTokensIn + tokensOut
+                )
+              );
+            }
+          });
           return {
             kind: 'stream',
             modelId: candidate,
-            stream: aiStreamToTokenStream(result)
+            stream: wrapped
           };
         }
         const content = extractTextResponse(result);
+        const tokensOut = usage.tokensOut ?? estimateTokensFromText(content);
+        if (options.onUsage) {
+          await options.onUsage(
+            buildUsageMetrics(
+              tenantId,
+              gatewayId,
+              candidate,
+              latencyMs,
+              true,
+              'success',
+              options,
+              resolvedTokensIn,
+              tokensOut,
+              usage.totalTokens ?? resolvedTokensIn + tokensOut
+            )
+          );
+        }
         return { kind: 'stream', modelId: candidate, stream: createSingleChunkStream(content) };
       }
 
       const content = extractTextResponse(result);
+      const tokensOut = usage.tokensOut ?? estimateTokensFromText(content);
+      if (options.onUsage) {
+        await options.onUsage(
+          buildUsageMetrics(
+            tenantId,
+            gatewayId,
+            candidate,
+            latencyMs,
+            false,
+            'success',
+            options,
+            resolvedTokensIn,
+            tokensOut,
+            usage.totalTokens ?? resolvedTokensIn + tokensOut
+          )
+        );
+      }
       return { kind: 'text', modelId: candidate, content, raw: result };
     } catch (error) {
+      if (options.onUsage) {
+        const latencyMs = Date.now() - startedAt;
+        await options.onUsage(
+          buildUsageMetrics(
+            tenantId,
+            gatewayId,
+            candidate,
+            latencyMs,
+            options.stream === true,
+            'error',
+            options,
+            estimatedTokensIn
+          )
+        );
+      }
       lastError = error;
     }
   }
 
   throw lastError;
 }
-
