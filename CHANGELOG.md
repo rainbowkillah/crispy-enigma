@@ -59,6 +59,7 @@ All notable changes for this project are documented here.
 - Deterministic retrieval fixtures (`tests/rag-fixture-retrieval.test.ts`).
 - Metadata integrity tests (`tests/rag-vectorize-upsert.test.ts`).
 - Vectorize local emulation doc (`docs/vectorize-dev.md`).
+- Wired `/ingest` and `/search` endpoints to RAG ingestion + retrieval pipeline.
 
 ---
 
