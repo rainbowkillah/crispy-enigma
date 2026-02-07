@@ -35,7 +35,7 @@ Text generation and embedding inference. All calls are routed through AI Gateway
 
 Current models:
 - Chat: `@cf/meta/llama-3.1-8b-instruct` (or `-fast` variant)
-- Embeddings: `@cf/baai/bge-base-en-v1.5` (768 dimensions)
+- Embeddings: `@cf/baai/bge-m3` (1024 dimensions)
 
 ### AI Gateway
 
@@ -213,7 +213,7 @@ Each tenant has two files under `tenants/<name>/`:
   "tenantId": "example",
   "accountId": "example-account",
   "aiGatewayId": "example-gateway",
-  "aiModels": { "chat": "@cf/meta/llama-3.1-8b-instruct", "embeddings": "@cf/baai/bge-base-en-v1.5" },
+  "aiModels": { "chat": "@cf/meta/llama-3.1-8b-instruct", "embeddings": "@cf/baai/bge-m3" },
   "vectorizeNamespace": "example",
   "rateLimit": { "perMinute": 60, "burst": 20 },
   "featureFlags": {},

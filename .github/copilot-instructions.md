@@ -164,7 +164,7 @@ export interface Env {
   "aiGatewayId": "acme-gateway",
   "aiModels": {
     "chat": "@cf/meta/llama-2-7b-chat-int8",
-    "embeddings": "@cf/baai/bge-base-en-v1.5"
+    "embeddings": "@cf/baai/bge-m3"
   },
   "vectorizeNamespace": "acme-embeddings",
   "rateLimit": { "perMinute": 100, "burst": 20 }

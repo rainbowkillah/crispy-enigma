@@ -19,7 +19,7 @@ type TenantContext = {
   aiGatewayId: string;            // AI Gateway ID for this tenant
   aiModels: {
     chat: string;                 // e.g. "@cf/meta/llama-3.1-8b-instruct"
-    embeddings: string;           // e.g. "@cf/baai/bge-base-en-v1.5"
+    embeddings: string;           // e.g. "@cf/baai/bge-m3"
   };
   vectorizeNamespace: string;     // Vectorize namespace for isolation
   rateLimit: {
@@ -220,7 +220,7 @@ Runtime configuration consumed by the Worker. Validated at startup via Zod.
   "aiGatewayId": "alpha-gateway",
   "aiModels": {
     "chat": "@cf/meta/llama-3.1-8b-instruct",
-    "embeddings": "@cf/baai/bge-base-en-v1.5"
+    "embeddings": "@cf/baai/bge-m3"
   },
   "vectorizeNamespace": "alpha",
   "rateLimit": { "perMinute": 60, "burst": 20 },

@@ -470,7 +470,7 @@ mkdir -p tenants/new-tenant
   "aiGatewayId": "new-tenant-gateway",
   "aiModels": {
     "chat": "@cf/meta/llama-3.1-8b-instruct",
-    "embeddings": "@cf/baai/bge-base-en-v1.5"
+    "embeddings": "@cf/baai/bge-m3"
   },
   "vectorizeNamespace": "new-tenant-embeddings",
   "rateLimit": { "perMinute": 100, "burst": 20 }

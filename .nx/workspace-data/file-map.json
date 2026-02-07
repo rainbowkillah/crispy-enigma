@@ -20,20 +20,6 @@
   "nxJsonPlugins": [],
   "fileMap": {
     "projectFileMap": {
-      "ai": [
-        {
-          "file": "packages/ai/project.json",
-          "hash": "2447358976378343147"
-        },
-        {
-          "file": "packages/ai/src/gateway.ts",
-          "hash": "8159515835548601124"
-        },
-        {
-          "file": "packages/ai/src/index.ts",
-          "hash": "14569501487334179972"
-        }
-      ],
       "rag": [
         {
           "file": "packages/rag/project.json",
@@ -62,6 +48,46 @@
         {
           "file": "packages/rag/src/vectorize.ts",
           "hash": "4795782062888840375"
+        }
+      ],
+      "worker-api": [
+        {
+          "file": "apps/worker-api/project.json",
+          "hash": "807840864903812667"
+        },
+        {
+          "file": "apps/worker-api/src/index.ts",
+          "hash": "18335613893979937121"
+        },
+        {
+          "file": "apps/worker-api/src/rate-limiter-do.ts",
+          "hash": "4934197882651790622"
+        },
+        {
+          "file": "apps/worker-api/src/session-do.ts",
+          "hash": "15106447200388021791"
+        }
+      ],
+      "storage": [
+        {
+          "file": "packages/storage/project.json",
+          "hash": "18417496484336993390"
+        },
+        {
+          "file": "packages/storage/src/do.ts",
+          "hash": "15124964690760613976"
+        },
+        {
+          "file": "packages/storage/src/index.ts",
+          "hash": "4260946828283953203"
+        },
+        {
+          "file": "packages/storage/src/kv.ts",
+          "hash": "1755166976520487066"
+        },
+        {
+          "file": "packages/storage/src/vectorize.ts",
+          "hash": "17847552451332353089"
         }
       ],
       "core": [
@@ -124,44 +150,18 @@
           "hash": "14216585224841379369"
         }
       ],
-      "worker-api": [
+      "ai": [
         {
-          "file": "apps/worker-api/project.json",
-          "hash": "807840864903812667"
+          "file": "packages/ai/project.json",
+          "hash": "2447358976378343147"
         },
         {
-          "file": "apps/worker-api/src/index.ts",
-          "hash": "18335613893979937121"
+          "file": "packages/ai/src/gateway.ts",
+          "hash": "8159515835548601124"
         },
         {
-          "file": "apps/worker-api/src/rate-limiter-do.ts",
-          "hash": "4934197882651790622"
-        },
-        {
-          "file": "apps/worker-api/src/session-do.ts",
-          "hash": "15106447200388021791"
-        }
-      ],
-      "storage": [
-        {
-          "file": "packages/storage/project.json",
-          "hash": "18417496484336993390"
-        },
-        {
-          "file": "packages/storage/src/do.ts",
-          "hash": "15124964690760613976"
-        },
-        {
-          "file": "packages/storage/src/index.ts",
-          "hash": "4260946828283953203"
-        },
-        {
-          "file": "packages/storage/src/kv.ts",
-          "hash": "1755166976520487066"
-        },
-        {
-          "file": "packages/storage/src/vectorize.ts",
-          "hash": "17847552451332353089"
+          "file": "packages/ai/src/index.ts",
+          "hash": "14569501487334179972"
         }
       ]
     },

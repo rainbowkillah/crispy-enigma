@@ -77,7 +77,7 @@ Update the staging tenant config:
   "aiGatewayId": "staging-gateway",
   "aiModels": {
     "chat": "@cf/meta/llama-2-7b-chat-int8",
-    "embeddings": "@cf/baai/bge-base-en-v1.5",
+    "embeddings": "@cf/baai/bge-m3",
     "rewrite": "@cf/meta/llama-2-7b-chat-int8"  // Query rewriting
   },
   "vectorizeNamespace": "staging-search",      // KV namespace for staging
@@ -605,7 +605,7 @@ After staging validation succeeds:
   "aiGatewayId": "staging-gateway",
   "aiModels": {
     "chat": "@cf/meta/llama-2-7b-chat-int8",
-    "embeddings": "@cf/baai/bge-base-en-v1.5",
+    "embeddings": "@cf/baai/bge-m3",
     "rewrite": "@cf/meta/llama-2-7b-chat-int8"
   },
   "vectorizeIndex": "vectorize-staging",
