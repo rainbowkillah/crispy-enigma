@@ -28,6 +28,11 @@
 			"binding": "VECTORIZE",
 			"index_name": "ai-worker-dev",
 			"remote": true
+		},
+		{
+			"binding": "VECTORIZE",
+			"index_name": "ai-worker-stg",
+			"remote": true
 		}
 	],
 	"kv_namespaces": [
