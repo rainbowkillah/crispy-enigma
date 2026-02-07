@@ -20,6 +20,42 @@
   "nxJsonPlugins": [],
   "fileMap": {
     "projectFileMap": {
+      "ai": [
+        {
+          "file": "packages/ai/project.json",
+          "hash": "2447358976378343147"
+        },
+        {
+          "file": "packages/ai/src/gateway.ts",
+          "hash": "8159515835548601124"
+        },
+        {
+          "file": "packages/ai/src/index.ts",
+          "hash": "14569501487334179972"
+        }
+      ],
+      "storage": [
+        {
+          "file": "packages/storage/project.json",
+          "hash": "18417496484336993390"
+        },
+        {
+          "file": "packages/storage/src/do.ts",
+          "hash": "15124964690760613976"
+        },
+        {
+          "file": "packages/storage/src/index.ts",
+          "hash": "4260946828283953203"
+        },
+        {
+          "file": "packages/storage/src/kv.ts",
+          "hash": "1755166976520487066"
+        },
+        {
+          "file": "packages/storage/src/vectorize.ts",
+          "hash": "17847552451332353089"
+        }
+      ],
       "worker-api": [
         {
           "file": "apps/worker-api/project.json",
@@ -50,42 +86,6 @@
         {
           "file": "packages/observability/src/logger.ts",
           "hash": "14216585224841379369"
-        }
-      ],
-      "storage": [
-        {
-          "file": "packages/storage/project.json",
-          "hash": "18417496484336993390"
-        },
-        {
-          "file": "packages/storage/src/do.ts",
-          "hash": "15124964690760613976"
-        },
-        {
-          "file": "packages/storage/src/index.ts",
-          "hash": "4260946828283953203"
-        },
-        {
-          "file": "packages/storage/src/kv.ts",
-          "hash": "1755166976520487066"
-        },
-        {
-          "file": "packages/storage/src/vectorize.ts",
-          "hash": "17847552451332353089"
-        }
-      ],
-      "ai": [
-        {
-          "file": "packages/ai/project.json",
-          "hash": "2447358976378343147"
-        },
-        {
-          "file": "packages/ai/src/gateway.ts",
-          "hash": "8159515835548601124"
-        },
-        {
-          "file": "packages/ai/src/index.ts",
-          "hash": "14569501487334179972"
         }
       ],
       "rag": [
@@ -388,7 +388,7 @@
       },
       {
         "file": "package-lock.json",
-        "hash": "11830938031816815033"
+        "hash": "16609361416980864904"
       },
       {
         "file": "package.json",

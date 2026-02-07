@@ -2,6 +2,14 @@
 
 All notable changes for this project are documented here.
 
+## [1.4.0] - 2026-02-07 (M4: AI Search UX Planning)
+
+### Added
+- Created the initial M4 preparation document (`docs/M4-PREP.md`) to outline goals for the AI Search UX endpoint.
+
+### Changed
+- Updated project status documents (`PROJECT-STATUS.md`, `CHANGELOG.md`) to reflect the start of M4 planning.
+
 ## [1.2.0] - 2026-02-07 (M2: AI Gateway Integration Complete)
 
 ### Status

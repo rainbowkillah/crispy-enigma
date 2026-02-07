@@ -3,9 +3,9 @@
 ## Status Summary
 
 **Date:** 2026-02-07  
-**Current Milestone:** M4 🔵 Next  
+**Current Milestone:** M4 🔵 In Progress
 **Previous Milestone:** M3 ✅ COMPLETE  
-**Next Milestone:** M4 🔵 AI Search Endpoint  
+**Next Milestone:** M5 📋 Tool/Function Execution System
 
 ---
 
@@ -209,6 +209,14 @@ M2 is complete. Staging calls were verified; AI Gateway dashboard logs confirmed
 ### Tests
 
 - Current test count: **64 tests** across **21 files**.
+
+---
+
+## M4 Prep (AI Search UX Endpoint)
+
+**Status:** 🔵 Planning In Progress
+**Issues:** #46-#53
+**Prep document:** `docs/M4-PREP.md` created to outline goals, deliverables, and risks.
 
 ### Handoffs
 
