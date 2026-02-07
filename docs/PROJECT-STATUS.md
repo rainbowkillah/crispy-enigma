@@ -286,7 +286,8 @@ Duration:   317ms
 - **M1 Preparation Guide:** [docs/M1-PREP.md](M1-PREP.md)
 - **M1 Handoff:** [docs/handoff-M1.md](handoff-M1.md)
 - **GitHub Project:** https://github.com/users/rainbowkillah/projects/13
-- **Repository:** https://github.com/rainbowkillah/crispy-enigma
+- **Repository:** https://github.com/rainbowkillah/cloudflare-mono-repo
+- **Issues:** https://github.com/rainbowkillah/cloudflare-mono-repo/issues/
 
 ---
 
