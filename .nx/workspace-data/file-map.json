@@ -20,22 +20,56 @@
   "nxJsonPlugins": [],
   "fileMap": {
     "projectFileMap": {
-      "observability": [
+      "rag": [
         {
-          "file": "packages/observability/project.json",
-          "hash": "1632021096686162711"
+          "file": "packages/rag/project.json",
+          "hash": "14824669124213728116"
         },
         {
-          "file": "packages/observability/src/index.ts",
-          "hash": "4341750429153816421"
+          "file": "packages/rag/src/chunking.ts",
+          "hash": "10037265286897906198"
         },
         {
-          "file": "packages/observability/src/logger.ts",
-          "hash": "14216585224841379369"
+          "file": "packages/rag/src/embeddings.ts",
+          "hash": "1394563273749333933"
         },
         {
-          "file": "packages/observability/src/metrics.ts",
-          "hash": "2511408882714007930"
+          "file": "packages/rag/src/index.ts",
+          "hash": "5039142732593223866"
+        },
+        {
+          "file": "packages/rag/src/query-rewriting.ts",
+          "hash": "17774815662147208706"
+        },
+        {
+          "file": "packages/rag/src/rag.ts",
+          "hash": "5772275632108161166"
+        },
+        {
+          "file": "packages/rag/src/retrieval.ts",
+          "hash": "9231222042039079253"
+        },
+        {
+          "file": "packages/rag/src/vectorize.ts",
+          "hash": "18045353671699105213"
+        }
+      ],
+      "worker-api": [
+        {
+          "file": "apps/worker-api/project.json",
+          "hash": "807840864903812667"
+        },
+        {
+          "file": "apps/worker-api/src/index.ts",
+          "hash": "12036700606141053291"
+        },
+        {
+          "file": "apps/worker-api/src/rate-limiter-do.ts",
+          "hash": "4934197882651790622"
+        },
+        {
+          "file": "apps/worker-api/src/session-do.ts",
+          "hash": "15106447200388021791"
         }
       ],
       "ai": [
@@ -98,58 +132,6 @@
           "hash": "10852238908151055834"
         }
       ],
-      "worker-api": [
-        {
-          "file": "apps/worker-api/project.json",
-          "hash": "807840864903812667"
-        },
-        {
-          "file": "apps/worker-api/src/index.ts",
-          "hash": "12036700606141053291"
-        },
-        {
-          "file": "apps/worker-api/src/rate-limiter-do.ts",
-          "hash": "4934197882651790622"
-        },
-        {
-          "file": "apps/worker-api/src/session-do.ts",
-          "hash": "15106447200388021791"
-        }
-      ],
-      "rag": [
-        {
-          "file": "packages/rag/project.json",
-          "hash": "14824669124213728116"
-        },
-        {
-          "file": "packages/rag/src/chunking.ts",
-          "hash": "10037265286897906198"
-        },
-        {
-          "file": "packages/rag/src/embeddings.ts",
-          "hash": "1394563273749333933"
-        },
-        {
-          "file": "packages/rag/src/index.ts",
-          "hash": "5039142732593223866"
-        },
-        {
-          "file": "packages/rag/src/query-rewriting.ts",
-          "hash": "17774815662147208706"
-        },
-        {
-          "file": "packages/rag/src/rag.ts",
-          "hash": "5772275632108161166"
-        },
-        {
-          "file": "packages/rag/src/retrieval.ts",
-          "hash": "9231222042039079253"
-        },
-        {
-          "file": "packages/rag/src/vectorize.ts",
-          "hash": "18045353671699105213"
-        }
-      ],
       "storage": [
         {
           "file": "packages/storage/project.json",
@@ -174,6 +156,24 @@
         {
           "file": "packages/storage/src/vectorize.ts",
           "hash": "17847552451332353089"
+        }
+      ],
+      "observability": [
+        {
+          "file": "packages/observability/project.json",
+          "hash": "1632021096686162711"
+        },
+        {
+          "file": "packages/observability/src/index.ts",
+          "hash": "4341750429153816421"
+        },
+        {
+          "file": "packages/observability/src/logger.ts",
+          "hash": "14216585224841379369"
+        },
+        {
+          "file": "packages/observability/src/metrics.ts",
+          "hash": "2511408882714007930"
         }
       ]
     },
