@@ -245,11 +245,11 @@ export async function runGatewayChat(
 
   for (const candidate of modelCandidates) {
     try {
-      const result = await (env.AI as unknown as { run: (...args: any[]) => Promise<unknown> }).run(
-        candidate,
-        input,
-        runOptions as any
-      );
+      const result = await (
+        env.AI as unknown as {
+          run: (model: string, input: unknown, options: unknown) => Promise<unknown>;
+        }
+      ).run(candidate, input, runOptions);
 
       if (options.stream) {
         if (isReadableStream(result)) {

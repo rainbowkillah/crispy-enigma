@@ -20,62 +20,6 @@
   "nxJsonPlugins": [],
   "fileMap": {
     "projectFileMap": {
-      "storage": [
-        {
-          "file": "packages/storage/project.json",
-          "hash": "18417496484336993390"
-        },
-        {
-          "file": "packages/storage/src/do.ts",
-          "hash": "15124964690760613976"
-        },
-        {
-          "file": "packages/storage/src/index.ts",
-          "hash": "4260946828283953203"
-        },
-        {
-          "file": "packages/storage/src/kv.ts",
-          "hash": "1755166976520487066"
-        },
-        {
-          "file": "packages/storage/src/vectorize.ts",
-          "hash": "17847552451332353089"
-        }
-      ],
-      "rag": [
-        {
-          "file": "packages/rag/project.json",
-          "hash": "14824669124213728116"
-        },
-        {
-          "file": "packages/rag/src/index.ts",
-          "hash": "4595979742548113990"
-        }
-      ],
-      "observability": [
-        {
-          "file": "packages/observability/project.json",
-          "hash": "1632021096686162711"
-        },
-        {
-          "file": "packages/observability/src/index.ts",
-          "hash": "8864206489639079382"
-        },
-        {
-          "file": "packages/observability/src/logger.ts",
-          "hash": "9029379237823054669"
-        }
-      ],
-      "ai": [
-        {
-          "file": "packages/ai/project.json",
-          "hash": "2447358976378343147"
-        },
-        {
-          "file": "packages/ai/src/index.ts",
-          "hash": "4595979742548113990"
-        }
-      ],
       "worker-api": [
         {
           "file": "apps/worker-api/project.json",
@@ -83,7 +27,7 @@
         },
         {
           "file": "apps/worker-api/src/index.ts",
-          "hash": "8088311886795812018"
+          "hash": "11296465531469563152"
         },
         {
           "file": "apps/worker-api/src/rate-limiter-do.ts",
@@ -135,6 +79,66 @@
           "file": "packages/core/src/tenant/types.ts",
           "hash": "4758177748744290180"
         }
+      ],
+      "storage": [
+        {
+          "file": "packages/storage/project.json",
+          "hash": "18417496484336993390"
+        },
+        {
+          "file": "packages/storage/src/do.ts",
+          "hash": "15124964690760613976"
+        },
+        {
+          "file": "packages/storage/src/index.ts",
+          "hash": "4260946828283953203"
+        },
+        {
+          "file": "packages/storage/src/kv.ts",
+          "hash": "1755166976520487066"
+        },
+        {
+          "file": "packages/storage/src/vectorize.ts",
+          "hash": "17847552451332353089"
+        }
+      ],
+      "rag": [
+        {
+          "file": "packages/rag/project.json",
+          "hash": "14824669124213728116"
+        },
+        {
+          "file": "packages/rag/src/index.ts",
+          "hash": "4595979742548113990"
+        }
+      ],
+      "ai": [
+        {
+          "file": "packages/ai/project.json",
+          "hash": "2447358976378343147"
+        },
+        {
+          "file": "packages/ai/src/gateway.ts",
+          "hash": "12342611005306732556"
+        },
+        {
+          "file": "packages/ai/src/index.ts",
+          "hash": "14569501487334179972"
+        }
+      ],
+      "observability": [
+        {
+          "file": "packages/observability/project.json",
+          "hash": "1632021096686162711"
+        },
+        {
+          "file": "packages/observability/src/index.ts",
+          "hash": "8864206489639079382"
+        },
+        {
+          "file": "packages/observability/src/logger.ts",
+          "hash": "9029379237823054669"
+        }
       ]
     },
     "nonProjectFiles": [
@@ -144,7 +148,7 @@
       },
       {
         "file": ".gitignore",
-        "hash": "13119912102255678890"
+        "hash": "4533466891473271856"
       },
       {
         "file": ".prettierrc.json",
@@ -167,6 +171,10 @@
         "hash": "102038376681309440"
       },
       {
+        "file": "docs/AI Multi-Tenant Monorepo - View 6.tsv",
+        "hash": "3383910766421592062"
+      },
+      {
         "file": "docs/M0-COMPLETE.md",
         "hash": "4086959901625444774"
       },
@@ -180,7 +188,7 @@
       },
       {
         "file": "docs/PROJECT-STATUS.md",
-        "hash": "15502483918013815392"
+        "hash": "11489155212287555174"
       },
       {
         "file": "docs/adrs/ADR-001-sse-streaming.md",
@@ -252,7 +260,7 @@
       },
       {
         "file": "docs/plan.md",
-        "hash": "9704580401423192444"
+        "hash": "3681896788755460099"
       },
       {
         "file": "docs/quick-reference.md",
@@ -363,8 +371,12 @@
         "hash": "7179880567029928998"
       },
       {
+        "file": "tests/ai-gateway.test.ts",
+        "hash": "15968300999765078498"
+      },
+      {
         "file": "tests/chat.test.ts",
-        "hash": "9212633999546775138"
+        "hash": "10114831610177109212"
       },
       {
         "file": "tests/do-name.test.ts",
@@ -396,7 +408,7 @@
       },
       {
         "file": "tests/session-isolation.test.ts",
-        "hash": "17021479199257557399"
+        "hash": "15777330624256654072"
       },
       {
         "file": "tests/session-retention.test.ts",
@@ -404,7 +416,7 @@
       },
       {
         "file": "tests/streaming.test.ts",
-        "hash": "13882814761300226949"
+        "hash": "10611425312055309183"
       },
       {
         "file": "tsconfig.base.json",

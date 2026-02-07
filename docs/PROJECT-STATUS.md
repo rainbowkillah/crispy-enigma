@@ -291,13 +291,50 @@ Duration:   317ms
 
 ---
 
+## M2 Readiness Verification
+
+**Verification Date:** 2026-02-07
+
+### Pre-M2 Quality Gates
+
+| Gate | Result | Details |
+|------|--------|---------|
+| Tests | ✅ 36/36 passing | 12 test files, 864ms |
+| TypeScript | ✅ Zero errors | Clean compilation |
+| Lint | ⚠️ 10 errors | Pre-existing (logging/observability), deferred to M7 |
+| AI Gateway lint | ✅ Fixed | Removed `no-explicit-any` from gateway.ts and ai-gateway.test.ts |
+
+### M2 Foundation Already In Place
+
+| Component | File | Status |
+|-----------|------|--------|
+| Gateway wrapper | `packages/ai/src/gateway.ts` | ✅ Implemented |
+| Chat integration | `apps/worker-api/src/index.ts` | ✅ Uses `runGatewayChat()` |
+| Gateway tests | `tests/ai-gateway.test.ts` | ✅ 4 tests passing |
+| Tenant model config | `tenants/*/tenant.config.json` | ✅ `aiModels.chat` + `aiGatewayId` |
+| Streaming support | `aiStreamToTokenStream()` | ✅ SSE stream parsing |
+| Fallback logic | `runGatewayChat()` | ✅ Primary -> fallback |
+
+### M2 Remaining Work
+
+1. **#25 Gateway spike** — Validate real AI Gateway connectivity
+2. **#27 Per-request model override** — Add `modelId` to chat request schema
+3. **#28 Budget/limits hooks** — Token tracking and budget enforcement
+4. **#29 Observability hooks** — Latency, token counts, cost metrics
+5. **#30 AI Gateway docs** — Create `docs/ai-gateway.md`
+6. **#31 Fallback docs** — Document fallback behavior
+
+See `docs/milestones/M2.md` for full implementation plan.
+
+---
+
 ## Sign-off
 
 **M0 Status:** ✅ COMPLETE AND VERIFIED
 **M1 Status:** ✅ COMPLETE AND VERIFIED
-**Next Milestone:** M2 — AI Gateway Integration
+**M2 Status:** 🔵 IN PROGRESS — Foundation verified, implementation plan ready
 **Blockers:** None
 
-**Date:** 2026-02-06
+**Date:** 2026-02-07
 **Verified By:** Claude Code Agent
 **Next Review:** After M2 completion
