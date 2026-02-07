@@ -46,6 +46,18 @@ Account: `9acbaee838d01aa096e63ad4551fda77` — Worker: `bluey-ai-worker` — Co
 | API_KEY | Bearer token for auth |
 | CF_AIG_TOKEN | Optional AI Gateway auth token for external clients |
 
+**Observability**
+```json
+{
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true
+    }
+  }
+}
+```
+
 ## rainbowsmokeofficial
 Account: `7fde695caf9cc41efca391316eb71003` — Worker: `azure-ai-worker` — Config: `rainbowsmokeofficial/wrangler.jsonc`
 
@@ -89,6 +101,18 @@ Account: `7fde695caf9cc41efca391316eb71003` — Worker: `azure-ai-worker` — Co
 |--------|---------|
 | API_KEY | Bearer token for auth |
 | CF_AIG_TOKEN | Optional AI Gateway auth token for external clients |
+
+**Observability**
+```json
+{
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true
+    }
+  }
+}
+```
 
 ## Usage Notes
 - Secrets never live in KV/D1/R2; use `wrangler secret put` only.

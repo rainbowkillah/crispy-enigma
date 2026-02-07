@@ -17,6 +17,12 @@
     "binding": "AI",
     "remote": true
   },
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true
+    }
+  },
   "vectorize": [
     {
       "binding": "VECTORIZE",
