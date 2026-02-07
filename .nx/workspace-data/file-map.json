@@ -20,68 +20,6 @@
   "nxJsonPlugins": [],
   "fileMap": {
     "projectFileMap": {
-      "rag": [
-        {
-          "file": "packages/rag/project.json",
-          "hash": "14824669124213728116"
-        },
-        {
-          "file": "packages/rag/src/index.ts",
-          "hash": "4595979742548113990"
-        }
-      ],
-      "core": [
-        {
-          "file": "packages/core/project.json",
-          "hash": "10062890613510312690"
-        },
-        {
-          "file": "packages/core/src/env.ts",
-          "hash": "17977398643699933314"
-        },
-        {
-          "file": "packages/core/src/http/logging.ts",
-          "hash": "5591574687778880026"
-        },
-        {
-          "file": "packages/core/src/http/response.ts",
-          "hash": "8556291513789522508"
-        },
-        {
-          "file": "packages/core/src/index.ts",
-          "hash": "14485405669269328199"
-        },
-        {
-          "file": "packages/core/src/tenant/loader.ts",
-          "hash": "16290322184780458341"
-        },
-        {
-          "file": "packages/core/src/tenant/resolveTenant.ts",
-          "hash": "1659372200797821516"
-        },
-        {
-          "file": "packages/core/src/tenant/schema.ts",
-          "hash": "17908368736879901591"
-        },
-        {
-          "file": "packages/core/src/tenant/types.ts",
-          "hash": "6189555554380899843"
-        }
-      ],
-      "observability": [
-        {
-          "file": "packages/observability/project.json",
-          "hash": "1632021096686162711"
-        },
-        {
-          "file": "packages/observability/src/index.ts",
-          "hash": "4595979742548113990"
-        },
-        {
-          "file": "packages/observability/src/logger.ts",
-          "hash": "9029379237823054669"
-        }
-      ],
       "storage": [
         {
           "file": "packages/storage/project.json",
@@ -97,11 +35,35 @@
         },
         {
           "file": "packages/storage/src/kv.ts",
-          "hash": "13884600019567354285"
+          "hash": "1755166976520487066"
         },
         {
           "file": "packages/storage/src/vectorize.ts",
           "hash": "17847552451332353089"
+        }
+      ],
+      "rag": [
+        {
+          "file": "packages/rag/project.json",
+          "hash": "14824669124213728116"
+        },
+        {
+          "file": "packages/rag/src/index.ts",
+          "hash": "4595979742548113990"
+        }
+      ],
+      "observability": [
+        {
+          "file": "packages/observability/project.json",
+          "hash": "1632021096686162711"
+        },
+        {
+          "file": "packages/observability/src/index.ts",
+          "hash": "8864206489639079382"
+        },
+        {
+          "file": "packages/observability/src/logger.ts",
+          "hash": "9029379237823054669"
         }
       ],
       "ai": [
@@ -121,14 +83,64 @@
         },
         {
           "file": "apps/worker-api/src/index.ts",
-          "hash": "2576037746577402451"
+          "hash": "8088311886795812018"
+        },
+        {
+          "file": "apps/worker-api/src/rate-limiter-do.ts",
+          "hash": "4934197882651790622"
+        },
+        {
+          "file": "apps/worker-api/src/session-do.ts",
+          "hash": "15106447200388021791"
+        }
+      ],
+      "core": [
+        {
+          "file": "packages/core/project.json",
+          "hash": "10062890613510312690"
+        },
+        {
+          "file": "packages/core/src/chat/schema.ts",
+          "hash": "12090502509791833841"
+        },
+        {
+          "file": "packages/core/src/env.ts",
+          "hash": "17977398643699933314"
+        },
+        {
+          "file": "packages/core/src/http/logging.ts",
+          "hash": "403704859844717469"
+        },
+        {
+          "file": "packages/core/src/http/response.ts",
+          "hash": "8556291513789522508"
+        },
+        {
+          "file": "packages/core/src/index.ts",
+          "hash": "17965645885427153602"
+        },
+        {
+          "file": "packages/core/src/tenant/loader.ts",
+          "hash": "16290322184780458341"
+        },
+        {
+          "file": "packages/core/src/tenant/resolveTenant.ts",
+          "hash": "1659372200797821516"
+        },
+        {
+          "file": "packages/core/src/tenant/schema.ts",
+          "hash": "4075089260647527397"
+        },
+        {
+          "file": "packages/core/src/tenant/types.ts",
+          "hash": "4758177748744290180"
         }
       ]
     },
     "nonProjectFiles": [
       {
         "file": ".github/copilot-instructions.md",
-        "hash": "250890688948449306"
+        "hash": "16211135910764443416"
       },
       {
         "file": ".gitignore",
@@ -147,8 +159,40 @@
         "hash": "15598910314814648805"
       },
       {
+        "file": "PR-SUMMARY.md",
+        "hash": "2307039521334272567"
+      },
+      {
         "file": "README.md",
-        "hash": "17701710254276949094"
+        "hash": "102038376681309440"
+      },
+      {
+        "file": "docs/M0-COMPLETE.md",
+        "hash": "4086959901625444774"
+      },
+      {
+        "file": "docs/M1-PREP.md",
+        "hash": "7140128571145311579"
+      },
+      {
+        "file": "docs/M2-PREP.md",
+        "hash": "4743987393108621864"
+      },
+      {
+        "file": "docs/PROJECT-STATUS.md",
+        "hash": "15502483918013815392"
+      },
+      {
+        "file": "docs/adrs/ADR-001-sse-streaming.md",
+        "hash": "939457802897259483"
+      },
+      {
+        "file": "docs/adrs/ADR-002-separate-do-namespaces.md",
+        "hash": "615080681535117200"
+      },
+      {
+        "file": "docs/adrs/ADR-003-sliding-window-rate-limiting.md",
+        "hash": "6010992730720217310"
       },
       {
         "file": "docs/agents.prompt.yaml",
@@ -156,15 +200,23 @@
       },
       {
         "file": "docs/architecture.md",
-        "hash": "14776189922035030340"
+        "hash": "7779271352940925029"
       },
       {
         "file": "docs/bindings.md",
         "hash": "13174207171901025867"
       },
       {
+        "file": "docs/examples/chat.md",
+        "hash": "3307501124346454621"
+      },
+      {
         "file": "docs/examples/tenant-aware-handler.ts",
         "hash": "5343954183226896786"
+      },
+      {
+        "file": "docs/failure-modes.md",
+        "hash": "3260310113066096096"
       },
       {
         "file": "docs/footguns.md",
@@ -172,7 +224,15 @@
       },
       {
         "file": "docs/handoff-M0.md",
-        "hash": "1520731670412638577"
+        "hash": "11783207374928876773"
+      },
+      {
+        "file": "docs/handoff-M1.md",
+        "hash": "2073246353183266357"
+      },
+      {
+        "file": "docs/handoff-PR.md",
+        "hash": "13624183059217584126"
       },
       {
         "file": "docs/metrics.md",
@@ -180,27 +240,47 @@
       },
       {
         "file": "docs/milestones.md",
-        "hash": "6450438022016294461"
+        "hash": "18221021997301466308"
       },
       {
         "file": "docs/milestones/M0.md",
         "hash": "13158821252408344083"
       },
       {
+        "file": "docs/milestones/M1.md",
+        "hash": "14030707844834964924"
+      },
+      {
         "file": "docs/plan.md",
-        "hash": "13149271726212320794"
+        "hash": "9704580401423192444"
       },
       {
         "file": "docs/quick-reference.md",
-        "hash": "2472756836790159555"
+        "hash": "11262492401899171120"
+      },
+      {
+        "file": "docs/rate-limiting.md",
+        "hash": "2069368690065881879"
+      },
+      {
+        "file": "docs/security.md",
+        "hash": "16421212565370329253"
+      },
+      {
+        "file": "docs/sessions.md",
+        "hash": "14022486062453833684"
+      },
+      {
+        "file": "docs/streaming.md",
+        "hash": "15616181720136663828"
       },
       {
         "file": "docs/tenancy.md",
-        "hash": "12930074950336002590"
+        "hash": "5361556891377928661"
       },
       {
         "file": "docs/testing.md",
-        "hash": "16226811805966695719"
+        "hash": "14324405085362365629"
       },
       {
         "file": "docs/wrangler.md",
@@ -216,11 +296,15 @@
       },
       {
         "file": "package-lock.json",
-        "hash": "11830938031816815033"
+        "hash": "16609361416980864904"
       },
       {
         "file": "package.json",
-        "hash": "812129359131554308"
+        "hash": "3845589171169041147"
+      },
+      {
+        "file": "scripts/chat-dev.mjs",
+        "hash": "3080598346699810369"
       },
       {
         "file": "scripts/dev.mjs",
@@ -240,7 +324,7 @@
       },
       {
         "file": "tenants/alpha/wrangler.jsonc",
-        "hash": "13224337030971702384"
+        "hash": "10179192593413705857"
       },
       {
         "file": "tenants/example/tenant.config.json",
@@ -248,7 +332,7 @@
       },
       {
         "file": "tenants/example/wrangler.jsonc",
-        "hash": "12845313884183724833"
+        "hash": "18146424123696302982"
       },
       {
         "file": "tenants/index.ts",
@@ -264,7 +348,7 @@
       },
       {
         "file": "tenants/mrrainbowsmoke/wrangler.jsonc",
-        "hash": "4446610309455875921"
+        "hash": "4400923573133934971"
       },
       {
         "file": "tenants/rainbowsmokeofficial/.gitignore",
@@ -276,7 +360,11 @@
       },
       {
         "file": "tenants/rainbowsmokeofficial/wrangler.jsonc",
-        "hash": "15816495985358885105"
+        "hash": "7179880567029928998"
+      },
+      {
+        "file": "tests/chat.test.ts",
+        "hash": "9212633999546775138"
       },
       {
         "file": "tests/do-name.test.ts",
@@ -288,15 +376,35 @@
       },
       {
         "file": "tests/kv-prefix.test.ts",
-        "hash": "10267923485038882479"
+        "hash": "12313496701176176705"
+      },
+      {
+        "file": "tests/rate-limit.test.ts",
+        "hash": "10576412250872160608"
+      },
+      {
+        "file": "tests/rate-limiter.test.ts",
+        "hash": "17533863189280301737"
       },
       {
         "file": "tests/request-size.test.ts",
-        "hash": "13709594373628858924"
+        "hash": "12298981412251880952"
       },
       {
         "file": "tests/resolveTenant.test.ts",
         "hash": "6690891934882864550"
+      },
+      {
+        "file": "tests/session-isolation.test.ts",
+        "hash": "17021479199257557399"
+      },
+      {
+        "file": "tests/session-retention.test.ts",
+        "hash": "6882133221895340947"
+      },
+      {
+        "file": "tests/streaming.test.ts",
+        "hash": "13882814761300226949"
       },
       {
         "file": "tsconfig.base.json",

@@ -44,7 +44,9 @@ const rateLimiterNamespace = new FakeNamespace(async (request) => {
 });
 
 const baseEnv: Env = {
-  AI: {} as Ai,
+  AI: {
+    run: async () => ({ response: 'test-response' })
+  } as unknown as Ai,
   VECTORIZE: {} as Vectorize,
   CONFIG: {} as KVNamespace,
   CACHE: {} as KVNamespace,

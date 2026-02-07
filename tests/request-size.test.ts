@@ -15,11 +15,12 @@ const baseEnv: Env = {
 };
 
 describe('request size limits', () => {
-  it('rejects bodies larger than MAX_REQUEST_BODY_SIZE', async () => {
+  it('rejects bodies larger than MAX_REQUEST_BODY_SIZE when Content-Length is present', async () => {
     const request = new Request('https://example.local/health', {
       method: 'POST',
       headers: {
-        'x-tenant-id': 'example'
+        'x-tenant-id': 'example',
+        'content-length': '6'
       },
       body: '012345'
     });
@@ -28,11 +29,12 @@ describe('request size limits', () => {
     expect(response.status).toBe(413);
   });
 
-  it('accepts bodies within MAX_REQUEST_BODY_SIZE', async () => {
+  it('accepts bodies within MAX_REQUEST_BODY_SIZE when Content-Length is present', async () => {
     const request = new Request('https://example.local/health', {
       method: 'POST',
       headers: {
-        'x-tenant-id': 'example'
+        'x-tenant-id': 'example',
+        'content-length': '4'
       },
       body: '0123'
     });

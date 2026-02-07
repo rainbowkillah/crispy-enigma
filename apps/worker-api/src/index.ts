@@ -10,6 +10,7 @@ import {
   type TenantConfig
 } from '../../../packages/core/src';
 import { resolveTenant } from '../../../packages/core/src/tenant/resolveTenant';
+import { runGatewayChat, type ChatModelMessage } from '../../../packages/ai/src/gateway';
 import { getTenantDurableObject } from '../../../packages/storage/src/do';
 
 const textEncoder = new TextEncoder();
@@ -79,6 +80,11 @@ async function handleChatRequest(
   }
 
   const { sessionId, message, stream, userId } = parsed.data;
+  const maxMessageLength = env.MAX_MESSAGE_LENGTH;
+  if (maxMessageLength && message.length > maxMessageLength) {
+    return fail('invalid_request', 'Message too long', 400, traceId);
+  }
+
   const sessionStub = getTenantDurableObject(
     env.CHAT_SESSION,
     tenant.tenantId,
@@ -115,6 +121,29 @@ async function handleChatRequest(
     return response;
   }
 
+  const historyLimit = Math.min(
+    tenant.maxMessagesPerSession,
+    env.MAX_MESSAGE_COUNT ?? tenant.maxMessagesPerSession
+  );
+  const historyResponse = await sessionStub.fetch('https://internal/history', {
+    method: 'POST',
+    body: JSON.stringify({
+      limit: historyLimit,
+      retentionDays: tenant.sessionRetentionDays,
+      maxMessages: tenant.maxMessagesPerSession
+    })
+  });
+
+  const history = (await historyResponse.json().catch(() => [])) as {
+    role: ChatModelMessage['role'];
+    content: string;
+    timestamp: number;
+  }[];
+  const chronological = history.slice().reverse().map((item) => ({
+    role: item.role,
+    content: item.content
+  }));
+
   await sessionStub.fetch('https://internal/append', {
     method: 'POST',
     body: JSON.stringify({
@@ -125,34 +154,99 @@ async function handleChatRequest(
     })
   });
 
-  const assistantContent = 'Mock response. Streaming contract implemented in #16.';
-
-  await sessionStub.fetch('https://internal/append', {
-    method: 'POST',
-    body: JSON.stringify({
-      role: 'assistant',
-      content: assistantContent,
-      retentionDays: tenant.sessionRetentionDays,
-      maxMessages: tenant.maxMessagesPerSession
-    })
-  });
+  const modelId = env.MODEL_ID ?? tenant.aiModels.chat;
+  const fallbackModelId = env.FALLBACK_MODEL_ID ?? tenant.aiModels.chat;
+  const messages: ChatModelMessage[] = [
+    ...chronological,
+    { role: 'user', content: message }
+  ];
 
   if (stream) {
-    const streamBody = new ReadableStream<Uint8Array>({
-      start(controller) {
-        controller.enqueue(
-          sseEvent({
-            sessionId,
+    const { readable, writable } = new TransformStream<Uint8Array, Uint8Array>();
+    const writer = writable.getWriter();
+
+    void (async () => {
+      let assistantContent = '';
+      const safeWrite = async (chunk: Uint8Array) => {
+        try {
+          await writer.write(chunk);
+        } catch {
+          // Client likely disconnected; ignore.
+        }
+      };
+      const safeClose = async () => {
+        try {
+          await writer.close();
+        } catch {
+          // Ignore close errors (already closed/aborted).
+        }
+      };
+
+      try {
+        const result = await runGatewayChat(
+          tenant.tenantId,
+          tenant.aiGatewayId,
+          modelId,
+          messages,
+          env,
+          {
+            stream: true,
+            fallbackModelId,
+            metadata: {
+              traceId,
+              sessionId,
+              route: '/chat'
+            }
+          }
+        );
+
+        if (result.kind !== 'stream') {
+          throw new Error('Expected streaming result');
+        }
+
+        const reader = result.stream.getReader();
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) {
+            break;
+          }
+          assistantContent += value;
+          await safeWrite(
+            sseEvent({
+              sessionId,
+              role: 'assistant',
+              content: value,
+              tenantId: tenant.tenantId,
+              traceId
+            })
+          );
+        }
+
+        await sessionStub.fetch('https://internal/append', {
+          method: 'POST',
+          body: JSON.stringify({
             role: 'assistant',
             content: assistantContent,
-            tenantId: tenant.tenantId,
-            traceId
+            retentionDays: tenant.sessionRetentionDays,
+            maxMessages: tenant.maxMessagesPerSession
           })
+        });
+      } catch {
+        await safeWrite(
+          sseEvent(
+            {
+              code: 'ai_error',
+              message: 'AI provider unavailable',
+              traceId
+            },
+            'error'
+          )
         );
-        controller.enqueue(sseEvent({ done: true }, 'done'));
-        controller.close();
+      } finally {
+        await safeWrite(sseEvent({ done: true }, 'done'));
+        await safeClose();
       }
-    });
+    })();
 
     const headers: Record<string, string> = {
       'content-type': 'text/event-stream',
@@ -163,8 +257,44 @@ async function handleChatRequest(
     if (traceId) {
       headers['x-trace-id'] = traceId;
     }
-    return new Response(streamBody, { headers });
+    return new Response(readable, { headers });
   }
+
+  let assistantContent: string;
+  try {
+    const result = await runGatewayChat(
+      tenant.tenantId,
+      tenant.aiGatewayId,
+      modelId,
+      messages,
+      env,
+      {
+        stream: false,
+        fallbackModelId,
+        metadata: {
+          traceId,
+          sessionId,
+          route: '/chat'
+        }
+      }
+    );
+    if (result.kind !== 'text') {
+      throw new Error('Expected text result');
+    }
+    assistantContent = result.content;
+  } catch {
+    return fail('ai_error', 'AI provider unavailable', 502, traceId);
+  }
+
+  await sessionStub.fetch('https://internal/append', {
+    method: 'POST',
+    body: JSON.stringify({
+      role: 'assistant',
+      content: assistantContent,
+      retentionDays: tenant.sessionRetentionDays,
+      maxMessages: tenant.maxMessagesPerSession
+    })
+  });
 
   const response = ok(
     {
@@ -208,13 +338,6 @@ export default {
       const contentLength = request.headers.get('content-length');
       if (contentLength && Number(contentLength) > maxBodySize) {
         return fail('payload_too_large', 'Request body too large', 413, traceId);
-      }
-
-      if (!contentLength) {
-        const body = await request.clone().arrayBuffer();
-        if (body.byteLength > maxBodySize) {
-          return fail('payload_too_large', 'Request body too large', 413, traceId);
-        }
       }
     }
     if (url.pathname === '/health') {
