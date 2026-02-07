@@ -2,7 +2,13 @@
 
 **Multi-tenant Cloudflare Workers AI monorepo** with streaming chat, RAG search, tool execution, and per-tenant deployments.
 
-**Current status:** M1 complete (streaming chat, sessions, rate limiting, KV cache, tests).
+**Current status:** M1 ✅ COMPLETE | M2 🔵 IN PROGRESS (AI Gateway Integration)
+
+- **M0 (Foundation):** ✅ Complete
+- **M1 (Chat + Sessions):** ✅ Complete
+- **M2 (AI Gateway Integration):** 🔵 In Progress (6/7 issues complete, staging validation remaining)
+- **Tests:** 40 passing across 13 test files
+- **See:** [docs/PROJECT-STATUS.md](docs/PROJECT-STATUS.md) for detailed status
 
 ## Quick Start
 
@@ -111,9 +117,11 @@ tenants/
 
 ## Milestones
 
-- **M0**: Foundation + tenant resolution
-- **M1**: Streaming chat + sessions (DO) ✅
-- **M2**: AI Gateway integration
+- **M0**: Foundation + tenant resolution ✅ COMPLETE
+- **M1**: Streaming chat + sessions (DO) ✅ COMPLETE
+- **M2**: AI Gateway integration 🔵 IN PROGRESS
+  - Model routing, token budgets, usage metrics ✅
+  - Staging validation with real AI Gateway remaining
 - **M3**: Embeddings + Vectorize + RAG
 - **M4**: AI Search endpoint
 - **M5**: Tool/function execution
@@ -121,7 +129,7 @@ tenants/
 - **M7**: Observability + metrics
 - **M8**: Deployment automation
 
-See [docs/plan.md](docs/plan.md) for detailed breakdown.
+See [docs/plan.md](docs/plan.md) for detailed breakdown and [docs/PROJECT-STATUS.md](docs/PROJECT-STATUS.md) for current status.
 
 ## Security Defaults
 

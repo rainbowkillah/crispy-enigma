@@ -133,21 +133,22 @@ Created preparation documents:
 
 ## M2 Progress (AI Gateway Integration)
 
-**Status:** In progress  
+**Status:** 🔵 In progress (6/7 issues complete)  
 **Issues:** #25-#31  
-**Updated:** 2026-02-07
+**Updated:** 2026-02-07  
+**Tests:** 40 passing (up from 36)
 
 ### Deliverables Status
 
-| Issue | Title | Status |
-|-------|-------|--------|
-| #25 | Gateway integration spike | In progress |
-| #26 | Model routing (tenant config + overrides) | ✅ Complete |
-| #27 | Per-route model override options | ✅ Complete |
-| #28 | Budget/limits hooks (token limits) | ✅ Complete |
-| #29 | Observability hooks (latency, tokens in/out) | ✅ Complete |
-| #30 | AI Gateway integration documentation | ✅ Complete |
-| #31 | Fallback behavior documentation | ✅ Complete |
+| Issue | Title | Status | Notes |
+|-------|-------|--------|-------|
+| #25 | Gateway integration spike | 🔵 Partial | Dev smoke tests run, staging validation remaining |
+| #26 | Model routing (tenant config + overrides) | ✅ Complete | Precedence: request > env > tenant |
+| #27 | Per-route model override options | ✅ Complete | `modelId` in request schema |
+| #28 | Budget/limits hooks (token limits) | ✅ Complete | KV-backed daily/monthly limits |
+| #29 | Observability hooks (latency, tokens in/out) | ✅ Complete | Usage metrics + headers |
+| #30 | AI Gateway integration documentation | ✅ Complete | `docs/ai-gateway.md` |
+| #31 | Fallback behavior documentation | ✅ Complete | `docs/ai-gateway-fallbacks.md` |
 
 ### What Changed
 
@@ -156,17 +157,31 @@ Created preparation documents:
 - Added token usage tracking and KV-backed budgets (daily/monthly).
 - Added usage headers for non-streaming responses and usage payload on SSE `done` event.
 - Added documentation: `docs/ai-gateway.md`, `docs/ai-gateway-fallbacks.md`.
+- Added ADR: `docs/adrs/ADR-004-model-selection-precedence.md`.
 - Added dev preview domain format: `<worker-name>-<env>.<tenant>.workers.dev`.
+- Configured remote bindings in tenant `wrangler.jsonc` files.
 
 ### Tests Added
 
-- Model override coverage (`tests/ai-gateway.test.ts`).
-- Token budget enforcement + usage persistence (`tests/token-budget.test.ts`).
-- Current test count: **40 tests** across **13 files**.
+- Model override coverage (`tests/ai-gateway.test.ts` - 6 tests).
+- Token budget enforcement + usage persistence (`tests/token-budget.test.ts` - 2 tests).
+- Current test count: **40 tests** across **13 files** (up from 32 at M1 close).
+- All tests passing, TypeScript compiles cleanly.
 
-### Handoff
+### Remaining Work for M2
 
+- [ ] **Issue #25:** Complete staging validation with real AI Gateway
+  - Run worker in staging with actual AI binding
+  - Verify gateway logs show tenant metadata
+  - Validate streaming TTFB and token delivery
+  - Document spike results
+
+### Handoffs
+
+- **M0 Handoff:** [docs/handoff-M0.md](handoff-M0.md)
+- **M1 Handoff:** [docs/handoff-M1.md](handoff-M1.md)
 - **M2 Handoff:** [docs/handoff-M2.md](handoff-M2.md)
+- **PR Handoff:** [docs/handoff-PR.md](handoff-PR.md)
 
 ---
 

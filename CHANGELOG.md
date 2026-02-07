@@ -2,7 +2,14 @@
 
 All notable changes for this project are documented here.
 
-## 2026-02-07 (M2: AI Gateway Integration)
+## [Unreleased] M2 - AI Gateway Integration (In Progress)
+
+### Status
+- ✅ Issues #26-#31 complete (model routing, budgets, usage metrics, docs)
+- 🔵 Issue #25 partial (staging validation remaining)
+- 40 tests passing (up from 32 at M1 close)
+
+### Completed (2026-02-07)
 
 ### Added
 - `modelId` request override with precedence (request > env > tenant).
@@ -20,3 +27,50 @@ All notable changes for this project are documented here.
 - Chat handler records token counts per message.
 - Alpha tenant config includes token budget and allowed model list for validation coverage.
 - AI Gateway example doc now uses placeholder tokens and .env reference.
+- Remote bindings configured in `wrangler.jsonc` for `mrrainbowsmoke` and `rainbowsmokeofficial`.
+
+### Dev Smoke Test Results
+- `mrrainbowsmoke` (remote bindings): `/health` ✅, `/chat` returns `ai_error` (502) with usage metrics
+- `rainbowsmokeofficial` (local dev): `/health` ✅, `/chat` returns `ai_error` (AI binding not supported locally)
+
+---
+
+## [1.1.0] - 2026-02-06 (M1: Chat + Sessions Complete)
+
+### Added
+- `/chat` streaming SSE endpoint with non-stream fallback
+- `ChatSession` Durable Object with retention enforcement (30 days, 1000 messages)
+- `RateLimiter` Durable Object with tenant+user scoping
+- Session history and clear endpoints (`GET /chat/:sessionId/history`, `DELETE /chat/:sessionId`)
+- Rate limit response headers (`x-ratelimit-limit`, `x-ratelimit-remaining`, `x-ratelimit-reset`)
+- Chat request schema with Zod validation
+- KV cache adapter extensions (cache prefix, TTL support)
+- Documentation: `docs/streaming.md`, `docs/sessions.md`, `docs/rate-limiting.md`
+- Tests: streaming, session isolation, rate limiting (32 tests total)
+
+### Changed
+- Tenant config schema extended with `sessionRetentionDays`, `maxMessagesPerSession`
+- All tenant `wrangler.jsonc` files include DO bindings (`CHAT_SESSION`, `RATE_LIMITER_DO`)
+
+---
+
+## [1.0.0] - 2026-02-06 (M0: Foundation Complete)
+
+### Added
+- Monorepo structure (`apps/`, `packages/`, `tenants/`, `docs/`, `scripts/`, `tests/`)
+- Tenant resolution middleware (header → host → API key)
+- Zod-validated tenant configs
+- `/health` endpoint with tenant-aware responses
+- Tenant-scoped storage adapters (KV prefixing, DO name encoding, Vectorize namespace)
+- Response envelopes with trace ID propagation
+- ESLint, Prettier, Vitest, Nx configuration
+- Wrangler 4.63.0 pinned with ESM module format
+- Miniflare for local emulation
+- Documentation: `docs/wrangler.md`, `docs/plan.md`, `docs/architecture.md`
+- Tests: tenant resolution, health, KV prefixing, DO naming (13 tests)
+
+### Security
+- No secrets in repository
+- Strict input validation with Zod
+- Tenant isolation enforced at all storage boundaries
+- Trace IDs for request correlation
