@@ -11,9 +11,14 @@ export type TenantContext = {
     perMinute: number;
     burst: number;
   };
+  tokenBudget?: {
+    daily?: number;
+    monthly?: number;
+  };
   sessionRetentionDays: number;
   maxMessagesPerSession: number;
   featureFlags: Record<string, boolean>;
+  allowedModels: string[];
   allowedHosts: string[];
   apiKeys: string[];
 };

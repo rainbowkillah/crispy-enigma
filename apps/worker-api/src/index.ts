@@ -10,10 +10,29 @@ import {
   type TenantConfig
 } from '../../../packages/core/src';
 import { resolveTenant } from '../../../packages/core/src/tenant/resolveTenant';
-import { runGatewayChat, type ChatModelMessage } from '../../../packages/ai/src/gateway';
+import {
+  estimateTokensFromMessages,
+  estimateTokensFromText,
+  runGatewayChat,
+  type ChatModelMessage
+} from '../../../packages/ai/src/gateway';
 import { getTenantDurableObject } from '../../../packages/storage/src/do';
 
 const textEncoder = new TextEncoder();
+const tokenUsagePrefix = 'token-usage';
+type UsageMetrics = {
+  tenantId: string;
+  gatewayId: string;
+  modelId: string;
+  latencyMs: number;
+  tokensIn?: number;
+  tokensOut?: number;
+  totalTokens?: number;
+  stream: boolean;
+  status: 'success' | 'error';
+  traceId?: string;
+  route?: string;
+};
 
 const configs = tenantConfigs.map((config) => loadTenantConfig(config));
 const tenantIndex = buildTenantIndex(configs);
@@ -61,6 +80,83 @@ function assertSessionId(sessionId: string | undefined, traceId?: string): Respo
   return null;
 }
 
+type TokenBudget = {
+  daily?: number;
+  monthly?: number;
+};
+
+type TokenUsageSnapshot = {
+  dailyKey: string;
+  monthlyKey: string;
+  dailyUsed: number;
+  monthlyUsed: number;
+};
+
+function getUsageKeys(tenantId: string, now: number): { dailyKey: string; monthlyKey: string } {
+  const date = new Date(now);
+  const day = date.toISOString().slice(0, 10);
+  const month = date.toISOString().slice(0, 7);
+  return {
+    dailyKey: `${tenantId}:${tokenUsagePrefix}:daily:${day}`,
+    monthlyKey: `${tenantId}:${tokenUsagePrefix}:monthly:${month}`
+  };
+}
+
+async function readUsageValue(
+  kv: KVNamespace | undefined,
+  key: string
+): Promise<number> {
+  if (!kv?.get) {
+    return 0;
+  }
+  const raw = await kv.get(key);
+  if (!raw) {
+    return 0;
+  }
+  const parsed = Number(raw);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+async function writeUsageValue(
+  kv: KVNamespace | undefined,
+  key: string,
+  value: number
+): Promise<void> {
+  if (!kv?.put) {
+    return;
+  }
+  await kv.put(key, String(Math.max(0, Math.floor(value))));
+}
+
+async function getUsageSnapshot(
+  kv: KVNamespace | undefined,
+  tenantId: string,
+  now: number
+): Promise<TokenUsageSnapshot> {
+  const { dailyKey, monthlyKey } = getUsageKeys(tenantId, now);
+  const [dailyUsed, monthlyUsed] = await Promise.all([
+    readUsageValue(kv, dailyKey),
+    readUsageValue(kv, monthlyKey)
+  ]);
+  return { dailyKey, monthlyKey, dailyUsed, monthlyUsed };
+}
+
+async function applyUsageUpdate(
+  kv: KVNamespace | undefined,
+  snapshot: TokenUsageSnapshot,
+  tokens: number
+): Promise<void> {
+  if (!kv?.put) {
+    return;
+  }
+  const nextDaily = snapshot.dailyUsed + tokens;
+  const nextMonthly = snapshot.monthlyUsed + tokens;
+  await Promise.all([
+    writeUsageValue(kv, snapshot.dailyKey, nextDaily),
+    writeUsageValue(kv, snapshot.monthlyKey, nextMonthly)
+  ]);
+}
+
 async function handleChatRequest(
   request: Request,
   env: Env,
@@ -83,6 +179,23 @@ async function handleChatRequest(
   const maxMessageLength = env.MAX_MESSAGE_LENGTH;
   if (maxMessageLength && message.length > maxMessageLength) {
     return fail('invalid_request', 'Message too long', 400, traceId);
+  }
+
+  const requestedModelId = parsed.data.modelId;
+  const defaultModelId = env.MODEL_ID ?? tenant.aiModels.chat;
+  const modelId = requestedModelId ?? defaultModelId;
+  let fallbackModelId: string | undefined =
+    env.FALLBACK_MODEL_ID ?? tenant.aiModels.chat;
+
+  const allowListEnabled = tenant.featureFlags?.modelAllowList === true;
+  if (allowListEnabled) {
+    const allowed = new Set(tenant.allowedModels ?? []);
+    if (!allowed.has(modelId)) {
+      return fail('model_not_allowed', 'Requested model is not allowed', 403, traceId);
+    }
+    if (fallbackModelId && !allowed.has(fallbackModelId)) {
+      fallbackModelId = undefined;
+    }
   }
 
   const sessionStub = getTenantDurableObject(
@@ -149,17 +262,44 @@ async function handleChatRequest(
     body: JSON.stringify({
       role: 'user',
       content: message,
+      tokenCount: estimateTokensFromText(message),
       retentionDays: tenant.sessionRetentionDays,
       maxMessages: tenant.maxMessagesPerSession
     })
   });
 
-  const modelId = env.MODEL_ID ?? tenant.aiModels.chat;
-  const fallbackModelId = env.FALLBACK_MODEL_ID ?? tenant.aiModels.chat;
   const messages: ChatModelMessage[] = [
     ...chronological,
     { role: 'user', content: message }
   ];
+  const estimatedTokensIn = estimateTokensFromMessages(messages);
+
+  const budget = tenant.tokenBudget as TokenBudget | undefined;
+  let usageSnapshot: TokenUsageSnapshot | null = null;
+  if (budget && (budget.daily || budget.monthly)) {
+    usageSnapshot = await getUsageSnapshot(env.RATE_LIMITER, tenant.tenantId, Date.now());
+    if (budget.daily && usageSnapshot.dailyUsed + estimatedTokensIn > budget.daily) {
+      return fail('budget_exceeded', 'Daily token budget exceeded', 429, traceId);
+    }
+    if (budget.monthly && usageSnapshot.monthlyUsed + estimatedTokensIn > budget.monthly) {
+      return fail('budget_exceeded', 'Monthly token budget exceeded', 429, traceId);
+    }
+  }
+
+  let usageMetrics: UsageMetrics | null = null;
+  const recordUsage = async (metrics: UsageMetrics) => {
+    usageMetrics = metrics;
+    if (metrics.status !== 'success') {
+      return;
+    }
+    const totalTokens =
+      metrics.totalTokens ??
+      (metrics.tokensIn ?? 0) + (metrics.tokensOut ?? 0);
+    if (!usageSnapshot) {
+      usageSnapshot = await getUsageSnapshot(env.RATE_LIMITER, tenant.tenantId, Date.now());
+    }
+    await applyUsageUpdate(env.RATE_LIMITER, usageSnapshot, totalTokens);
+  };
 
   if (stream) {
     const { readable, writable } = new TransformStream<Uint8Array, Uint8Array>();
@@ -196,7 +336,8 @@ async function handleChatRequest(
               traceId,
               sessionId,
               route: '/chat'
-            }
+            },
+            onUsage: recordUsage
           }
         );
 
@@ -227,6 +368,9 @@ async function handleChatRequest(
           body: JSON.stringify({
             role: 'assistant',
             content: assistantContent,
+            tokenCount:
+              (usageMetrics as UsageMetrics | null)?.tokensOut ??
+              estimateTokensFromText(assistantContent),
             retentionDays: tenant.sessionRetentionDays,
             maxMessages: tenant.maxMessagesPerSession
           })
@@ -243,7 +387,24 @@ async function handleChatRequest(
           )
         );
       } finally {
-        await safeWrite(sseEvent({ done: true }, 'done'));
+        const usage = usageMetrics as UsageMetrics | null;
+        await safeWrite(
+          sseEvent(
+            {
+              done: true,
+              usage: usage
+                ? {
+                    modelId: usage.modelId,
+                    tokensIn: usage.tokensIn,
+                    tokensOut: usage.tokensOut,
+                    totalTokens: usage.totalTokens,
+                    latencyMs: usage.latencyMs
+                  }
+                : undefined
+            },
+            'done'
+          )
+        );
         await safeClose();
       }
     })();
@@ -257,10 +418,13 @@ async function handleChatRequest(
     if (traceId) {
       headers['x-trace-id'] = traceId;
     }
+    headers['x-model-id'] = modelId;
+    headers['x-tokens-in'] = String(estimatedTokensIn);
     return new Response(readable, { headers });
   }
 
   let assistantContent: string;
+  let resolvedModelId: string | undefined;
   try {
     const result = await runGatewayChat(
       tenant.tenantId,
@@ -275,22 +439,27 @@ async function handleChatRequest(
           traceId,
           sessionId,
           route: '/chat'
-        }
+        },
+        onUsage: recordUsage
       }
     );
     if (result.kind !== 'text') {
       throw new Error('Expected text result');
     }
     assistantContent = result.content;
+    resolvedModelId = result.modelId;
   } catch {
     return fail('ai_error', 'AI provider unavailable', 502, traceId);
   }
 
+  const usage = usageMetrics as UsageMetrics | null;
   await sessionStub.fetch('https://internal/append', {
     method: 'POST',
     body: JSON.stringify({
       role: 'assistant',
       content: assistantContent,
+      tokenCount:
+        usage?.tokensOut ?? estimateTokensFromText(assistantContent),
       retentionDays: tenant.sessionRetentionDays,
       maxMessages: tenant.maxMessagesPerSession
     })
@@ -308,6 +477,21 @@ async function handleChatRequest(
   Object.entries(rateLimitHeaders).forEach(([key, value]) => {
     response.headers.set(key, value);
   });
+  if (resolvedModelId) {
+    response.headers.set('x-model-id', resolvedModelId);
+  }
+  if (usage) {
+    if (usage.tokensIn !== undefined) {
+      response.headers.set('x-tokens-in', String(usage.tokensIn));
+    }
+    if (usage.tokensOut !== undefined) {
+      response.headers.set('x-tokens-out', String(usage.tokensOut));
+    }
+    if (usage.totalTokens !== undefined) {
+      response.headers.set('x-tokens-total', String(usage.totalTokens));
+    }
+    response.headers.set('x-ai-latency-ms', String(usage.latencyMs));
+  }
   return response;
 }
 

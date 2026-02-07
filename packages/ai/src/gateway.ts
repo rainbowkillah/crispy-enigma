@@ -137,6 +137,13 @@ export function estimateTokensFromText(text: string): number {
   return Math.max(1, Math.ceil(text.length / 4));
 }
 
+export function estimateTokensFromLength(length: number): number {
+  if (!length || length <= 0) {
+    return 0;
+  }
+  return Math.max(1, Math.ceil(length / 4));
+}
+
 export function estimateTokensFromMessages(messages: ChatModelMessage[]): number {
   return messages.reduce((total, message) => {
     return total + estimateTokensFromText(message.content);
@@ -313,7 +320,7 @@ function wrapStreamWithUsage(
     async pull(controller) {
       const { done, value } = await reader.read();
       if (done) {
-        await onDone(estimateTokensFromText(' '.repeat(outputLength)));
+        await onDone(estimateTokensFromLength(outputLength));
         controller.close();
         return;
       }
@@ -324,7 +331,7 @@ function wrapStreamWithUsage(
     },
     async cancel(reason) {
       await reader.cancel(reason);
-      await onDone(estimateTokensFromText(' '.repeat(outputLength)));
+      await onDone(estimateTokensFromLength(outputLength));
     }
   });
 }

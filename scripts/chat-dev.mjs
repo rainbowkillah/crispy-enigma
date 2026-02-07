@@ -1,4 +1,5 @@
 import process from 'node:process';
+import { TextDecoder } from 'node:util';
 
 const tenantArg = process.argv.find((arg) => arg.startsWith('--tenant='));
 const tenant = tenantArg?.split('=')[1];

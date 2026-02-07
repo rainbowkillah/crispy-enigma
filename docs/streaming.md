@@ -10,6 +10,7 @@ This project uses Server-Sent Events (SSE) for `/chat` streaming responses.
 {
   "sessionId": "uuid",
   "message": "string",
+  "modelId": "optional-model-id",
   "stream": true
 }
 ```
@@ -26,7 +27,7 @@ Example:
 data: {"sessionId":"...","role":"assistant","content":"Hello","tenantId":"example","traceId":"..."}
 
 event: done
-data: {"done":true}
+data: {"done":true,"usage":{"modelId":"...","tokensIn":123,"tokensOut":456,"totalTokens":579,"latencyMs":250}}
 
 ```
 

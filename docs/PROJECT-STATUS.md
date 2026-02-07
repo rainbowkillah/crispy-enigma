@@ -1,10 +1,10 @@
-# GitHub Project Update: M0 Complete, M1 Ready
+# GitHub Project Update: M0 + M1 Complete, M2 In Progress
 
 ## Status Summary
 
-**Date:** 2026-02-06  
-**Current Milestone:** M1 ✅ COMPLETE  
-**Next Milestone:** M2 🔵 Ready to Start  
+**Date:** 2026-02-07  
+**Current Milestone:** M2 🔵 In Progress  
+**Previous Milestone:** M1 ✅ COMPLETE  
 
 ---
 
@@ -128,6 +128,40 @@ Created preparation documents:
 - ✅ `docs/streaming.md` - Streaming response contract
 - ✅ `docs/rate-limiting.md` - Rate limit keying + headers
 - ✅ `docs/sessions.md` - Session lifecycle
+
+---
+
+## M2 Progress (AI Gateway Integration)
+
+**Status:** In progress  
+**Issues:** #25-#31  
+**Updated:** 2026-02-07
+
+### Deliverables Status
+
+| Issue | Title | Status |
+|-------|-------|--------|
+| #25 | Gateway integration spike | In progress |
+| #26 | Model routing (tenant config + overrides) | ✅ Complete |
+| #27 | Per-route model override options | ✅ Complete |
+| #28 | Budget/limits hooks (token limits) | ✅ Complete |
+| #29 | Observability hooks (latency, tokens in/out) | ✅ Complete |
+| #30 | AI Gateway integration documentation | ✅ Complete |
+| #31 | Fallback behavior documentation | ✅ Complete |
+
+### What Changed
+
+- Added model override support via `modelId` in chat requests (request > env > tenant).
+- Added optional model allow-list enforcement via `featureFlags.modelAllowList`.
+- Added token usage tracking and KV-backed budgets (daily/monthly).
+- Added usage headers for non-streaming responses and usage payload on SSE `done` event.
+- Added documentation: `docs/ai-gateway.md`, `docs/ai-gateway-fallbacks.md`.
+
+### Tests Added
+
+- Model override coverage (`tests/ai-gateway.test.ts`).
+- Token budget enforcement + usage persistence (`tests/token-budget.test.ts`).
+- Current test count: **40 tests** across **13 files**.
 
 ---
 

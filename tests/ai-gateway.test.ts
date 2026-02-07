@@ -165,6 +165,55 @@ describe('AI Gateway integration', () => {
     expect(text).toContain('event: done');
   });
 
+  it('uses request model override when provided', async () => {
+    const calls: AiRunCall[] = [];
+    const env = makeEnv(calls);
+
+    await worker.fetch(
+      new Request('https://example.local/chat', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-tenant-id': 'example'
+        },
+        body: JSON.stringify({
+          sessionId: '11111111-1111-1111-1111-111111111111',
+          message: 'hello',
+          modelId: '@cf/meta/custom-model',
+          stream: false
+        })
+      }),
+      env
+    );
+
+    expect(calls).toHaveLength(1);
+    expect(calls[0]?.modelId).toBe('@cf/meta/custom-model');
+  });
+
+  it('rejects model override when allowlist is enforced', async () => {
+    const calls: AiRunCall[] = [];
+    const env = makeEnv(calls);
+
+    const response = await worker.fetch(
+      new Request('https://alpha.local/chat', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          sessionId: '11111111-1111-1111-1111-111111111111',
+          message: 'hello',
+          modelId: '@cf/meta/not-allowed',
+          stream: false
+        })
+      }),
+      env
+    );
+
+    expect(response.status).toBe(403);
+    expect(calls).toHaveLength(0);
+  });
+
   it('falls back to fallback model when primary fails', async () => {
     const calls: AiRunCall[] = [];
     const fakeAi = {

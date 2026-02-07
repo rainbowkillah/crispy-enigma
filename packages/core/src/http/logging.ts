@@ -59,7 +59,7 @@ export async function loggingMiddleware(request: CfRequest, next: Next): Promise
 	} catch (err) {
 		const latencyMs = Date.now() - startTime;
 		const error = err instanceof Error ? err : new Error(String(err) || 'Unknown error');
-		const status = (err as any).status || 500;
+		const status = (err as { status?: number } | null | undefined)?.status ?? 500;
 
 		logger.error('Request failed', {
 			latencyMs,

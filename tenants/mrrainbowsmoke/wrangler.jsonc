@@ -14,12 +14,16 @@
     "DEBUG_LOGGING": false
   },
   "ai": {
-    "binding": "AI"
+    "binding": "AI",
+    "remote": true
   },
-  "vectorize": {
-    "binding": "VECTORIZE",
-    "index_name": "ai-worker-dev"
-  },
+  "vectorize": [
+    {
+      "binding": "VECTORIZE",
+      "index_name": "ai-worker-dev",
+      "remote": true
+    }
+  ],
   "kv_namespaces": [
     {
       "binding": "RATE_LIMITER",
@@ -73,6 +77,57 @@
         "MAX_MESSAGE_COUNT": 50,
         "MAX_MESSAGE_LENGTH": 2000,
         "DEBUG_LOGGING": true
+      },
+      "ai": {
+        "binding": "AI",
+        "remote": true
+      },
+      "vectorize": [
+        {
+          "binding": "VECTORIZE",
+          "index_name": "ai-worker-dev",
+          "remote": true
+        }
+      ],
+      "kv_namespaces": [
+        {
+          "binding": "RATE_LIMITER",
+          "id": "3d92856849a143d1b066ba67c3c19140",
+          "preview_id": "c1b8fabe9cd04217ae9e0e7c2337e496",
+          "remote": true
+        },
+        {
+          "binding": "CONFIG",
+          "id": "fe5f8c7dc4044d98b331354e1d5d411f",
+          "preview_id": "7d19664717324aadbfe8a9b6a4234228",
+          "remote": true
+        },
+        {
+          "binding": "CACHE",
+          "id": "6bc11f864eb9454ebb2bc7cde047b517",
+          "preview_id": "51cc3bceff0a45ceb7dcc8485abed458",
+          "remote": true
+        }
+      ],
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "mrrainbowsmoke-db",
+          "database_id": "ad1db3cf-5ed8-4128-adfb-be819b3e7385",
+          "remote": true
+        }
+      ],
+      "durable_objects": {
+        "bindings": [
+          {
+            "name": "RATE_LIMITER_DO",
+            "class_name": "RateLimiter"
+          },
+          {
+            "name": "CHAT_SESSION",
+            "class_name": "ChatSession"
+          }
+        ]
       }
     },
     "staging": {

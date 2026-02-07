@@ -13,11 +13,11 @@ export interface LogEntry {
 	latencyMs?: number;
 	status?: number;
 	source?: string;
-	cf?: Record<string, any>;
+	cf?: Record<string, unknown>;
 	durableObjectClass?: string;
 	durableObjectId?: string;
 	// Allow for arbitrary extra data
-	[key: string]: any;
+	[key: string]: unknown;
 }
 
 /**
@@ -28,7 +28,7 @@ export interface LoggerContext {
 	requestId?: string;
 	route?: string;
 	source?: string;
-	cf?: Record<string, any>;
+	cf?: Record<string, unknown>;
 	durableObjectClass?: string;
 	durableObjectId?: string;
 }
@@ -46,7 +46,11 @@ export class Logger {
 		this.context = context;
 	}
 
-	private log(level: 'info' | 'warn' | 'error', message: string, extra: Record<string, any> = {}) {
+	private log(
+		level: 'info' | 'warn' | 'error',
+		message: string,
+		extra: Record<string, unknown> = {}
+	) {
 		const entry: LogEntry = {
 			...this.context,
 			...extra,
@@ -60,11 +64,11 @@ export class Logger {
 		console.log(JSON.stringify(entry));
 	}
 
-	info(message: string, extra?: Record<string, any>) {
+	info(message: string, extra?: Record<string, unknown>) {
 		this.log('info', message, extra);
 	}
 
-	warn(message: string, extra?: Record<string, any>) {
+	warn(message: string, extra?: Record<string, unknown>) {
 		this.log('warn', message, extra);
 	}
 
@@ -72,9 +76,9 @@ export class Logger {
 	 * Logs an error-level message. If an Error object is provided in the `extra`
 	 * properties, it will be serialized into a structured format.
 	 */
-	error(message: string, extra: Record<string, any> & { error?: Error } = {}) {
+	error(message: string, extra: Record<string, unknown> & { error?: Error } = {}) {
 		const { error, ...rest } = extra;
-		const errorInfo: Record<string, any> = {};
+		const errorInfo: Record<string, unknown> = {};
 		if (error) {
 			errorInfo.error = {
 				name: error.name,
@@ -103,7 +107,9 @@ export function createLogger(request: CfRequest, context: Partial<LoggerContext>
 	const ray = request.headers.get('cf-ray');
 	const requestId = request.headers.get('x-request-id') || ray || crypto.randomUUID();
 
-	const baseContext: LoggerContext = { requestId, cf: request.cf ? JSON.parse(JSON.stringify(request.cf)) : undefined, ...context };
+	const cf =
+		request.cf ? (JSON.parse(JSON.stringify(request.cf)) as Record<string, unknown>) : undefined;
+	const baseContext: LoggerContext = { requestId, cf, ...context };
 
 	return new Logger(baseContext);
 }

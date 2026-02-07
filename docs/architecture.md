@@ -49,6 +49,8 @@ env.AI.run(model, inputs, {
 
 Gateway metadata is limited to 5 entries with string/number/boolean values. The `tenantId` metadata field provides per-tenant attribution in gateway analytics.
 
+Budget tracking is enforced in the Worker using per-tenant token budgets. Usage counters are stored in KV (daily/monthly), and requests can be rejected when limits are exceeded. Usage metrics (latency, tokens in/out) are captured from AI Gateway responses when available, with lightweight estimates when not.
+
 ### Vectorize
 
 Vector database for RAG retrieval. A single shared index is used across all tenants, with isolation provided by the `namespace` parameter (applied before vector search, up to 50K namespaces on paid plan). The binding type is `Vectorize` (V2 API).

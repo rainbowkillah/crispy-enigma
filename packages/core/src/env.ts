@@ -15,4 +15,5 @@ export interface Env {
   MAX_MESSAGE_COUNT?: number;
   MAX_MESSAGE_LENGTH?: number;
   DEBUG_LOGGING?: boolean;
+  CF_AIG_TOKEN?: string;
 }
