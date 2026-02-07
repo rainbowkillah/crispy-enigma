@@ -125,7 +125,6 @@ All M2 deliverables are complete:
 - ✅ Dev smoke tests validating integration patterns
 
 ## Optional Follow-up
-## Optional Follow-up
 
 Optional staging validation with production AI Gateway (deferred to operational deployment):
 - Run worker in staging with actual AI binding.
