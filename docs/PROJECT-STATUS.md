@@ -163,6 +163,10 @@ Created preparation documents:
 - Token budget enforcement + usage persistence (`tests/token-budget.test.ts`).
 - Current test count: **40 tests** across **13 files**.
 
+### Handoff
+
+- **M2 Handoff:** [docs/handoff-M2.md](handoff-M2.md)
+
 ---
 
 ## Next Steps
