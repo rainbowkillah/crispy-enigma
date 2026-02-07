@@ -47,16 +47,22 @@ const rateLimiterNamespace = new FakeNamespace(async (request) => {
   return new Response('Not found', { status: 404 });
 });
 
+type GatewayOptions = {
+  gateway?: { id?: string; metadata?: Record<string, string> };
+  stream?: boolean;
+  [key: string]: unknown;
+};
+
 type AiRunCall = {
   modelId: string;
   input: unknown;
-  options: any;
+  options: GatewayOptions;
 };
 
 function makeEnv(calls: AiRunCall[], overrides: Partial<Env> = {}): Env {
   const fakeAi = {
     run: async (modelId: string, input: unknown, options: unknown) => {
-      calls.push({ modelId, input, options: options as any });
+      calls.push({ modelId, input, options: options as GatewayOptions });
       return { response: 'ok' };
     }
   };
@@ -163,7 +169,7 @@ describe('AI Gateway integration', () => {
     const calls: AiRunCall[] = [];
     const fakeAi = {
       run: async (modelId: string, input: unknown, options: unknown) => {
-        calls.push({ modelId, input, options: options as any });
+        calls.push({ modelId, input, options: options as GatewayOptions });
         if (modelId === '@cf/meta/primary') {
           throw new Error('primary failed');
         }
