@@ -25,10 +25,86 @@ M2 is in progress. Issues #26–#31 are complete. Issue #25 (Gateway integration
 - `POST /chat` `stream:false` → `ai_error` (502)
 - `POST /chat` `stream:true` → SSE `event: error` then `event: done` with usage payload
 
+Preview domain format (dev):
+`<worker-name>-<env>.<tenant>.workers.dev`  
+Example: `bluey-ai-worker-dev.mrrainbowsmoke.workers.dev`
+
 ### rainbowsmokeofficial
 - Remote proxy failed (`/workers/subdomain/edge-preview` API error).
 - Local dev (`--local`) started; `GET /health` ✅ OK
 - `/chat` `stream:false` and `stream:true` → `ai_error` (AI binding not supported locally)
+
+## Exact Commands + Outputs
+
+### mrrainbowsmoke (remote bindings, dev)
+
+Start:
+```bash
+npx wrangler dev --config tenants/mrrainbowsmoke/wrangler.jsonc --env dev --port 8787 --ip 127.0.0.1
+```
+
+Health:
+```bash
+curl -s http://127.0.0.1:8787/health -H 'x-tenant-id: mrrainbowsmoke'
+```
+```json
+{"ok":true,"data":{"status":"ok","tenantId":"mrrainbowsmoke","environment":"dev","modelId":"@cf/meta/llama-3.1-8b-instruct-fast","fallbackModelId":"@cf/meta/llama-3.1-8b-instruct"}}
+```
+
+Chat (non-stream):
+```bash
+curl -s http://127.0.0.1:8787/chat -H 'content-type: application/json' -H 'x-tenant-id: mrrainbowsmoke' -d '{"sessionId":"11111111-1111-1111-1111-111111111111","message":"hello","stream":false}'
+```
+```json
+{"ok":false,"error":{"code":"ai_error","message":"AI provider unavailable"}}
+```
+
+Chat (stream):
+```bash
+timeout 5 curl -sN http://127.0.0.1:8787/chat -H 'content-type: application/json' -H 'x-tenant-id: mrrainbowsmoke' -d '{"sessionId":"11111111-1111-1111-1111-111111111111","message":"hello","stream":true}'
+```
+```
+event: error
+data: {"code":"ai_error","message":"AI provider unavailable"}
+
+event: done
+data: {"done":true,"usage":{"modelId":"@cf/meta/llama-3.1-8b-instruct","tokensIn":4,"latencyMs":174}}
+```
+
+### rainbowsmokeofficial (local dev)
+
+Start:
+```bash
+npx wrangler dev --config tenants/rainbowsmokeofficial/wrangler.jsonc --env dev --local --port 8788 --ip 127.0.0.1
+```
+
+Health:
+```bash
+curl -s http://127.0.0.1:8788/health -H 'x-tenant-id: rainbowsmokeofficial'
+```
+```json
+{"ok":true,"data":{"status":"ok","tenantId":"rainbowsmokeofficial","environment":"dev","modelId":"@cf/meta/llama-3.1-8b-instruct-fast","fallbackModelId":"@cf/meta/llama-3.1-8b-instruct"}}
+```
+
+Chat (non-stream):
+```bash
+curl -s http://127.0.0.1:8788/chat -H 'content-type: application/json' -H 'x-tenant-id: rainbowsmokeofficial' -d '{"sessionId":"11111111-1111-1111-1111-111111111111","message":"hello","stream":false}'
+```
+```json
+{"ok":false,"error":{"code":"ai_error","message":"AI provider unavailable"}}
+```
+
+Chat (stream):
+```bash
+timeout 5 curl -sN http://127.0.0.1:8788/chat -H 'content-type: application/json' -H 'x-tenant-id: rainbowsmokeofficial' -d '{"sessionId":"11111111-1111-1111-1111-111111111111","message":"hello","stream":true}'
+```
+```
+event: error
+data: {"code":"ai_error","message":"AI provider unavailable"}
+
+event: done
+data: {"done":true,"usage":{"modelId":"@cf/meta/llama-3.1-8b-instruct","tokensIn":4,"latencyMs":0}}
+```
 
 ## Commands Run
 - `npm run lint` ✅

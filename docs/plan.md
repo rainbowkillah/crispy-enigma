@@ -318,6 +318,11 @@ export type TenantContext = {
 - [#92](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/92) Create deploy rollback runbook
 - [#93](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/93) Create incident response runbook
 
+**Environment tag aliases**
+- Development: `dev`, `develop`, `development`
+- Staging: `stg`, `staging`, `preview`
+- Production: `prd`, `prod`, `production`
+
 **Acceptance criteria**
 - `deploy <tenant>` works without manual config edits.
 - `deploy-all` fails safely per tenant and reports status.

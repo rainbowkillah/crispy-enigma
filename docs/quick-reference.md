@@ -54,6 +54,11 @@
 ## Wrangler
 - Version pinned: `wrangler@4.63.0` (see `docs/wrangler.md`)
 
+## Environment Tags
+- Development: `dev`, `develop`, `development`
+- Staging: `stg`, `staging`, `preview`
+- Production: `prd`, `prod`, `production`
+
 ## Test
 - `npm run tenants:generate`
 - `npm test`

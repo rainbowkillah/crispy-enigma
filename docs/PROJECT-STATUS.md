@@ -156,6 +156,7 @@ Created preparation documents:
 - Added token usage tracking and KV-backed budgets (daily/monthly).
 - Added usage headers for non-streaming responses and usage payload on SSE `done` event.
 - Added documentation: `docs/ai-gateway.md`, `docs/ai-gateway-fallbacks.md`.
+- Added dev preview domain format: `<worker-name>-<env>.<tenant>.workers.dev`.
 
 ### Tests Added
 

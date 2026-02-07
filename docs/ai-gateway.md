@@ -93,6 +93,11 @@ Authenticated AI Gateway is used for external clients calling Gateway directly. 
 
 For production, use `wrangler secret put CF_AIG_TOKEN`.
 
+## Preview Domain Format (Dev)
+
+`<worker-name>-<env>.<tenant>.workers.dev`  
+Example: `bluey-ai-worker-dev.mrrainbowsmoke.workers.dev`
+
 ## References
 
 - `packages/ai/src/gateway.ts`

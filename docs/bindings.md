@@ -96,3 +96,8 @@ Account: `7fde695caf9cc41efca391316eb71003` — Worker: `azure-ai-worker` — Co
 - KV `CONFIG` for flags (`VECTORIZE_ENABLED`, `STREAMING_ENABLED`) and allowlists; `CACHE` keyed by hashed input with TTL per env.
 - `RATE_LIMITER_DO` for precise sliding windows; `CHAT_SESSION` for sessionized chat state.
 - Keep env variables in lockstep with `wrangler.jsonc` per tenant and environment.
+
+## Environment Tag Aliases
+- Development: `dev`, `develop`, `development`
+- Staging: `stg`, `staging`, `preview`
+- Production: `prd`, `prod`, `production`

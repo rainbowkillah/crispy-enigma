@@ -130,6 +130,132 @@
         ]
       }
     },
+    "develop": {
+      "vars": {
+        "ENVIRONMENT": "dev",
+        "MODEL_ID": "@cf/meta/llama-3.1-8b-instruct-fast",
+        "FALLBACK_MODEL_ID": "@cf/meta/llama-3.1-8b-instruct",
+        "RATE_LIMIT_KEYS_PER_MINUTE": 100,
+        "MAX_REQUEST_BODY_SIZE": 10240,
+        "MAX_MESSAGE_COUNT": 50,
+        "MAX_MESSAGE_LENGTH": 2000,
+        "DEBUG_LOGGING": true
+      },
+      "ai": {
+        "binding": "AI",
+        "remote": true
+      },
+      "vectorize": [
+        {
+          "binding": "VECTORIZE",
+          "index_name": "ai-worker-dev",
+          "remote": true
+        }
+      ],
+      "kv_namespaces": [
+        {
+          "binding": "RATE_LIMITER",
+          "id": "9955aa497adf42cdb06ab5e5b07912f4",
+          "preview_id": "c3539b08cca2489e9aed7cca192b3578",
+          "remote": true
+        },
+        {
+          "binding": "CONFIG",
+          "id": "a2ce1cc8f7e541b9be6d94fa17535f44",
+          "preview_id": "ca85772bada44f959c554439cfd02b06",
+          "remote": true
+        },
+        {
+          "binding": "CACHE",
+          "id": "b97e12695fba4187b01ff9e476d949cd",
+          "preview_id": "c0b51e78ae3245169aa24b5043e5732a",
+          "remote": true
+        }
+      ],
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "rainbowsmokeofficial-db",
+          "database_id": "3ccf0590-1bbd-488f-b1c4-492131b4317e",
+          "remote": true
+        }
+      ],
+      "durable_objects": {
+        "bindings": [
+          {
+            "name": "RATE_LIMITER_DO",
+            "class_name": "RateLimiter"
+          },
+          {
+            "name": "CHAT_SESSION",
+            "class_name": "ChatSession"
+          }
+        ]
+      }
+    },
+    "development": {
+      "vars": {
+        "ENVIRONMENT": "dev",
+        "MODEL_ID": "@cf/meta/llama-3.1-8b-instruct-fast",
+        "FALLBACK_MODEL_ID": "@cf/meta/llama-3.1-8b-instruct",
+        "RATE_LIMIT_KEYS_PER_MINUTE": 100,
+        "MAX_REQUEST_BODY_SIZE": 10240,
+        "MAX_MESSAGE_COUNT": 50,
+        "MAX_MESSAGE_LENGTH": 2000,
+        "DEBUG_LOGGING": true
+      },
+      "ai": {
+        "binding": "AI",
+        "remote": true
+      },
+      "vectorize": [
+        {
+          "binding": "VECTORIZE",
+          "index_name": "ai-worker-dev",
+          "remote": true
+        }
+      ],
+      "kv_namespaces": [
+        {
+          "binding": "RATE_LIMITER",
+          "id": "9955aa497adf42cdb06ab5e5b07912f4",
+          "preview_id": "c3539b08cca2489e9aed7cca192b3578",
+          "remote": true
+        },
+        {
+          "binding": "CONFIG",
+          "id": "a2ce1cc8f7e541b9be6d94fa17535f44",
+          "preview_id": "ca85772bada44f959c554439cfd02b06",
+          "remote": true
+        },
+        {
+          "binding": "CACHE",
+          "id": "b97e12695fba4187b01ff9e476d949cd",
+          "preview_id": "c0b51e78ae3245169aa24b5043e5732a",
+          "remote": true
+        }
+      ],
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "rainbowsmokeofficial-db",
+          "database_id": "3ccf0590-1bbd-488f-b1c4-492131b4317e",
+          "remote": true
+        }
+      ],
+      "durable_objects": {
+        "bindings": [
+          {
+            "name": "RATE_LIMITER_DO",
+            "class_name": "RateLimiter"
+          },
+          {
+            "name": "CHAT_SESSION",
+            "class_name": "ChatSession"
+          }
+        ]
+      }
+    },
     "staging": {
       "vars": {
         "ENVIRONMENT": "staging",
@@ -140,6 +266,372 @@
         "MAX_MESSAGE_COUNT": 50,
         "MAX_MESSAGE_LENGTH": 2000,
         "DEBUG_LOGGING": false
+      },
+      "ai": {
+        "binding": "AI",
+        "remote": true
+      },
+      "vectorize": [
+        {
+          "binding": "VECTORIZE",
+          "index_name": "ai-worker-dev",
+          "remote": true
+        }
+      ],
+      "kv_namespaces": [
+        {
+          "binding": "RATE_LIMITER",
+          "id": "9955aa497adf42cdb06ab5e5b07912f4",
+          "preview_id": "c3539b08cca2489e9aed7cca192b3578",
+          "remote": true
+        },
+        {
+          "binding": "CONFIG",
+          "id": "a2ce1cc8f7e541b9be6d94fa17535f44",
+          "preview_id": "ca85772bada44f959c554439cfd02b06",
+          "remote": true
+        },
+        {
+          "binding": "CACHE",
+          "id": "b97e12695fba4187b01ff9e476d949cd",
+          "preview_id": "c0b51e78ae3245169aa24b5043e5732a",
+          "remote": true
+        }
+      ],
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "rainbowsmokeofficial-db",
+          "database_id": "3ccf0590-1bbd-488f-b1c4-492131b4317e",
+          "remote": true
+        }
+      ],
+      "durable_objects": {
+        "bindings": [
+          {
+            "name": "RATE_LIMITER_DO",
+            "class_name": "RateLimiter"
+          },
+          {
+            "name": "CHAT_SESSION",
+            "class_name": "ChatSession"
+          }
+        ]
+      }
+    },
+    "stg": {
+      "vars": {
+        "ENVIRONMENT": "staging",
+        "MODEL_ID": "@cf/meta/llama-3.1-8b-instruct-fast",
+        "FALLBACK_MODEL_ID": "@cf/meta/llama-3.1-8b-instruct",
+        "RATE_LIMIT_KEYS_PER_MINUTE": 60,
+        "MAX_REQUEST_BODY_SIZE": 10240,
+        "MAX_MESSAGE_COUNT": 50,
+        "MAX_MESSAGE_LENGTH": 2000,
+        "DEBUG_LOGGING": false
+      },
+      "ai": {
+        "binding": "AI",
+        "remote": true
+      },
+      "vectorize": [
+        {
+          "binding": "VECTORIZE",
+          "index_name": "ai-worker-dev",
+          "remote": true
+        }
+      ],
+      "kv_namespaces": [
+        {
+          "binding": "RATE_LIMITER",
+          "id": "9955aa497adf42cdb06ab5e5b07912f4",
+          "preview_id": "c3539b08cca2489e9aed7cca192b3578",
+          "remote": true
+        },
+        {
+          "binding": "CONFIG",
+          "id": "a2ce1cc8f7e541b9be6d94fa17535f44",
+          "preview_id": "ca85772bada44f959c554439cfd02b06",
+          "remote": true
+        },
+        {
+          "binding": "CACHE",
+          "id": "b97e12695fba4187b01ff9e476d949cd",
+          "preview_id": "c0b51e78ae3245169aa24b5043e5732a",
+          "remote": true
+        }
+      ],
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "rainbowsmokeofficial-db",
+          "database_id": "3ccf0590-1bbd-488f-b1c4-492131b4317e",
+          "remote": true
+        }
+      ],
+      "durable_objects": {
+        "bindings": [
+          {
+            "name": "RATE_LIMITER_DO",
+            "class_name": "RateLimiter"
+          },
+          {
+            "name": "CHAT_SESSION",
+            "class_name": "ChatSession"
+          }
+        ]
+      }
+    },
+    "preview": {
+      "vars": {
+        "ENVIRONMENT": "staging",
+        "MODEL_ID": "@cf/meta/llama-3.1-8b-instruct-fast",
+        "FALLBACK_MODEL_ID": "@cf/meta/llama-3.1-8b-instruct",
+        "RATE_LIMIT_KEYS_PER_MINUTE": 60,
+        "MAX_REQUEST_BODY_SIZE": 10240,
+        "MAX_MESSAGE_COUNT": 50,
+        "MAX_MESSAGE_LENGTH": 2000,
+        "DEBUG_LOGGING": false
+      },
+      "ai": {
+        "binding": "AI",
+        "remote": true
+      },
+      "vectorize": [
+        {
+          "binding": "VECTORIZE",
+          "index_name": "ai-worker-dev",
+          "remote": true
+        }
+      ],
+      "kv_namespaces": [
+        {
+          "binding": "RATE_LIMITER",
+          "id": "9955aa497adf42cdb06ab5e5b07912f4",
+          "preview_id": "c3539b08cca2489e9aed7cca192b3578",
+          "remote": true
+        },
+        {
+          "binding": "CONFIG",
+          "id": "a2ce1cc8f7e541b9be6d94fa17535f44",
+          "preview_id": "ca85772bada44f959c554439cfd02b06",
+          "remote": true
+        },
+        {
+          "binding": "CACHE",
+          "id": "b97e12695fba4187b01ff9e476d949cd",
+          "preview_id": "c0b51e78ae3245169aa24b5043e5732a",
+          "remote": true
+        }
+      ],
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "rainbowsmokeofficial-db",
+          "database_id": "3ccf0590-1bbd-488f-b1c4-492131b4317e",
+          "remote": true
+        }
+      ],
+      "durable_objects": {
+        "bindings": [
+          {
+            "name": "RATE_LIMITER_DO",
+            "class_name": "RateLimiter"
+          },
+          {
+            "name": "CHAT_SESSION",
+            "class_name": "ChatSession"
+          }
+        ]
+      }
+    },
+    "prod": {
+      "vars": {
+        "ENVIRONMENT": "production",
+        "MODEL_ID": "@cf/meta/llama-3.1-8b-instruct-fast",
+        "FALLBACK_MODEL_ID": "@cf/meta/llama-3.1-8b-instruct",
+        "RATE_LIMIT_KEYS_PER_MINUTE": 60,
+        "MAX_REQUEST_BODY_SIZE": 10240,
+        "MAX_MESSAGE_COUNT": 50,
+        "MAX_MESSAGE_LENGTH": 2000,
+        "DEBUG_LOGGING": false
+      },
+      "ai": {
+        "binding": "AI",
+        "remote": true
+      },
+      "vectorize": [
+        {
+          "binding": "VECTORIZE",
+          "index_name": "ai-worker-dev",
+          "remote": true
+        }
+      ],
+      "kv_namespaces": [
+        {
+          "binding": "RATE_LIMITER",
+          "id": "9955aa497adf42cdb06ab5e5b07912f4",
+          "preview_id": "c3539b08cca2489e9aed7cca192b3578",
+          "remote": true
+        },
+        {
+          "binding": "CONFIG",
+          "id": "a2ce1cc8f7e541b9be6d94fa17535f44",
+          "preview_id": "ca85772bada44f959c554439cfd02b06",
+          "remote": true
+        },
+        {
+          "binding": "CACHE",
+          "id": "b97e12695fba4187b01ff9e476d949cd",
+          "preview_id": "c0b51e78ae3245169aa24b5043e5732a",
+          "remote": true
+        }
+      ],
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "rainbowsmokeofficial-db",
+          "database_id": "3ccf0590-1bbd-488f-b1c4-492131b4317e",
+          "remote": true
+        }
+      ],
+      "durable_objects": {
+        "bindings": [
+          {
+            "name": "RATE_LIMITER_DO",
+            "class_name": "RateLimiter"
+          },
+          {
+            "name": "CHAT_SESSION",
+            "class_name": "ChatSession"
+          }
+        ]
+      }
+    },
+    "prd": {
+      "vars": {
+        "ENVIRONMENT": "production",
+        "MODEL_ID": "@cf/meta/llama-3.1-8b-instruct-fast",
+        "FALLBACK_MODEL_ID": "@cf/meta/llama-3.1-8b-instruct",
+        "RATE_LIMIT_KEYS_PER_MINUTE": 60,
+        "MAX_REQUEST_BODY_SIZE": 10240,
+        "MAX_MESSAGE_COUNT": 50,
+        "MAX_MESSAGE_LENGTH": 2000,
+        "DEBUG_LOGGING": false
+      },
+      "ai": {
+        "binding": "AI",
+        "remote": true
+      },
+      "vectorize": [
+        {
+          "binding": "VECTORIZE",
+          "index_name": "ai-worker-dev",
+          "remote": true
+        }
+      ],
+      "kv_namespaces": [
+        {
+          "binding": "RATE_LIMITER",
+          "id": "9955aa497adf42cdb06ab5e5b07912f4",
+          "preview_id": "c3539b08cca2489e9aed7cca192b3578",
+          "remote": true
+        },
+        {
+          "binding": "CONFIG",
+          "id": "a2ce1cc8f7e541b9be6d94fa17535f44",
+          "preview_id": "ca85772bada44f959c554439cfd02b06",
+          "remote": true
+        },
+        {
+          "binding": "CACHE",
+          "id": "b97e12695fba4187b01ff9e476d949cd",
+          "preview_id": "c0b51e78ae3245169aa24b5043e5732a",
+          "remote": true
+        }
+      ],
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "rainbowsmokeofficial-db",
+          "database_id": "3ccf0590-1bbd-488f-b1c4-492131b4317e",
+          "remote": true
+        }
+      ],
+      "durable_objects": {
+        "bindings": [
+          {
+            "name": "RATE_LIMITER_DO",
+            "class_name": "RateLimiter"
+          },
+          {
+            "name": "CHAT_SESSION",
+            "class_name": "ChatSession"
+          }
+        ]
+      }
+    },
+    "production": {
+      "vars": {
+        "ENVIRONMENT": "production",
+        "MODEL_ID": "@cf/meta/llama-3.1-8b-instruct-fast",
+        "FALLBACK_MODEL_ID": "@cf/meta/llama-3.1-8b-instruct",
+        "RATE_LIMIT_KEYS_PER_MINUTE": 60,
+        "MAX_REQUEST_BODY_SIZE": 10240,
+        "MAX_MESSAGE_COUNT": 50,
+        "MAX_MESSAGE_LENGTH": 2000,
+        "DEBUG_LOGGING": false
+      },
+      "ai": {
+        "binding": "AI",
+        "remote": true
+      },
+      "vectorize": [
+        {
+          "binding": "VECTORIZE",
+          "index_name": "ai-worker-dev",
+          "remote": true
+        }
+      ],
+      "kv_namespaces": [
+        {
+          "binding": "RATE_LIMITER",
+          "id": "9955aa497adf42cdb06ab5e5b07912f4",
+          "preview_id": "c3539b08cca2489e9aed7cca192b3578",
+          "remote": true
+        },
+        {
+          "binding": "CONFIG",
+          "id": "a2ce1cc8f7e541b9be6d94fa17535f44",
+          "preview_id": "ca85772bada44f959c554439cfd02b06",
+          "remote": true
+        },
+        {
+          "binding": "CACHE",
+          "id": "b97e12695fba4187b01ff9e476d949cd",
+          "preview_id": "c0b51e78ae3245169aa24b5043e5732a",
+          "remote": true
+        }
+      ],
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "rainbowsmokeofficial-db",
+          "database_id": "3ccf0590-1bbd-488f-b1c4-492131b4317e",
+          "remote": true
+        }
+      ],
+      "durable_objects": {
+        "bindings": [
+          {
+            "name": "RATE_LIMITER_DO",
+            "class_name": "RateLimiter"
+          },
+          {
+            "name": "CHAT_SESSION",
+            "class_name": "ChatSession"
+          }
+        ]
       }
     }
   }
