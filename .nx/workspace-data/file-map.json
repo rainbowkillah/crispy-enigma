@@ -34,6 +34,60 @@
           "hash": "14216585224841379369"
         }
       ],
+      "worker-api": [
+        {
+          "file": "apps/worker-api/project.json",
+          "hash": "807840864903812667"
+        },
+        {
+          "file": "apps/worker-api/src/index.ts",
+          "hash": "18335613893979937121"
+        },
+        {
+          "file": "apps/worker-api/src/rate-limiter-do.ts",
+          "hash": "4934197882651790622"
+        },
+        {
+          "file": "apps/worker-api/src/session-do.ts",
+          "hash": "15106447200388021791"
+        }
+      ],
+      "storage": [
+        {
+          "file": "packages/storage/project.json",
+          "hash": "18417496484336993390"
+        },
+        {
+          "file": "packages/storage/src/do.ts",
+          "hash": "15124964690760613976"
+        },
+        {
+          "file": "packages/storage/src/index.ts",
+          "hash": "4260946828283953203"
+        },
+        {
+          "file": "packages/storage/src/kv.ts",
+          "hash": "1755166976520487066"
+        },
+        {
+          "file": "packages/storage/src/vectorize.ts",
+          "hash": "17847552451332353089"
+        }
+      ],
+      "ai": [
+        {
+          "file": "packages/ai/project.json",
+          "hash": "2447358976378343147"
+        },
+        {
+          "file": "packages/ai/src/gateway.ts",
+          "hash": "8159515835548601124"
+        },
+        {
+          "file": "packages/ai/src/index.ts",
+          "hash": "14569501487334179972"
+        }
+      ],
       "core": [
         {
           "file": "packages/core/project.json",
@@ -80,38 +134,6 @@
           "hash": "10852238908151055834"
         }
       ],
-      "ai": [
-        {
-          "file": "packages/ai/project.json",
-          "hash": "2447358976378343147"
-        },
-        {
-          "file": "packages/ai/src/gateway.ts",
-          "hash": "8159515835548601124"
-        },
-        {
-          "file": "packages/ai/src/index.ts",
-          "hash": "14569501487334179972"
-        }
-      ],
-      "worker-api": [
-        {
-          "file": "apps/worker-api/project.json",
-          "hash": "807840864903812667"
-        },
-        {
-          "file": "apps/worker-api/src/index.ts",
-          "hash": "18335613893979937121"
-        },
-        {
-          "file": "apps/worker-api/src/rate-limiter-do.ts",
-          "hash": "4934197882651790622"
-        },
-        {
-          "file": "apps/worker-api/src/session-do.ts",
-          "hash": "15106447200388021791"
-        }
-      ],
       "rag": [
         {
           "file": "packages/rag/project.json",
@@ -140,28 +162,6 @@
         {
           "file": "packages/rag/src/vectorize.ts",
           "hash": "4795782062888840375"
-        }
-      ],
-      "storage": [
-        {
-          "file": "packages/storage/project.json",
-          "hash": "18417496484336993390"
-        },
-        {
-          "file": "packages/storage/src/do.ts",
-          "hash": "15124964690760613976"
-        },
-        {
-          "file": "packages/storage/src/index.ts",
-          "hash": "4260946828283953203"
-        },
-        {
-          "file": "packages/storage/src/kv.ts",
-          "hash": "1755166976520487066"
-        },
-        {
-          "file": "packages/storage/src/vectorize.ts",
-          "hash": "17847552451332353089"
         }
       ]
     },
@@ -196,7 +196,7 @@
       },
       {
         "file": "CHANGELOG.md",
-        "hash": "2848824513629301736"
+        "hash": "4236798015024718753"
       },
       {
         "file": "CLAUDE.md",
@@ -212,7 +212,7 @@
       },
       {
         "file": "README.md",
-        "hash": "17530319531451003465"
+        "hash": "10670412807483662662"
       },
       {
         "file": "WIKI-SETUP.md",
@@ -224,7 +224,7 @@
       },
       {
         "file": "docs/ALIGNMENT-SUMMARY.md",
-        "hash": "4940397636626863075"
+        "hash": "2783198485593840616"
       },
       {
         "file": "docs/M0-COMPLETE.md",
@@ -243,12 +243,28 @@
         "hash": "16406284072233240984"
       },
       {
+        "file": "docs/M4-CODEX-PLAN.md",
+        "hash": "4624577681751315012"
+      },
+      {
+        "file": "docs/M4-CODEX-PROMPTS.md",
+        "hash": "7542213301945201770"
+      },
+      {
+        "file": "docs/M4-ISSUES-QUICK-REF.md",
+        "hash": "17943357013567935828"
+      },
+      {
+        "file": "docs/M4-PREP.md",
+        "hash": "1355976090899746199"
+      },
+      {
         "file": "docs/PR.md",
         "hash": "16722071428211536516"
       },
       {
         "file": "docs/PROJECT-STATUS.md",
-        "hash": "11745733870069408348"
+        "hash": "12694970084632731400"
       },
       {
         "file": "docs/adrs/ADR-001-sse-streaming.md",
@@ -280,7 +296,7 @@
       },
       {
         "file": "docs/architecture.md",
-        "hash": "1983624914332516534"
+        "hash": "11383158868649630910"
       },
       {
         "file": "docs/bindings.md",
@@ -315,6 +331,10 @@
         "hash": "6821766102219709392"
       },
       {
+        "file": "docs/handoff-M3.md",
+        "hash": "14628487875505547009"
+      },
+      {
         "file": "docs/handoff-PR.md",
         "hash": "13624183059217584126"
       },
@@ -324,7 +344,7 @@
       },
       {
         "file": "docs/milestones.md",
-        "hash": "15392071484073912194"
+        "hash": "5036775618480185116"
       },
       {
         "file": "docs/milestones/M0.md",
@@ -340,7 +360,7 @@
       },
       {
         "file": "docs/plan.md",
-        "hash": "14112207489671107185"
+        "hash": "18227178769066851129"
       },
       {
         "file": "docs/quick-reference.md",
@@ -388,7 +408,7 @@
       },
       {
         "file": "package-lock.json",
-        "hash": "16609361416980864904"
+        "hash": "11830938031816815033"
       },
       {
         "file": "package.json",
@@ -572,7 +592,7 @@
       },
       {
         "file": "wiki-content/Milestones.md",
-        "hash": "14883124914730557094"
+        "hash": "8936417959466024781"
       },
       {
         "file": "wiki-content/Multi-Tenancy.md",
