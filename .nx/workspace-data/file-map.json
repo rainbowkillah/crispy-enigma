@@ -20,6 +20,36 @@
   "nxJsonPlugins": [],
   "fileMap": {
     "projectFileMap": {
+      "rag": [
+        {
+          "file": "packages/rag/project.json",
+          "hash": "14824669124213728116"
+        },
+        {
+          "file": "packages/rag/src/chunking.ts",
+          "hash": "10037265286897906198"
+        },
+        {
+          "file": "packages/rag/src/embeddings.ts",
+          "hash": "1394563273749333933"
+        },
+        {
+          "file": "packages/rag/src/index.ts",
+          "hash": "3000073072662878847"
+        },
+        {
+          "file": "packages/rag/src/rag.ts",
+          "hash": "5772275632108161166"
+        },
+        {
+          "file": "packages/rag/src/retrieval.ts",
+          "hash": "2567597320573347763"
+        },
+        {
+          "file": "packages/rag/src/vectorize.ts",
+          "hash": "4795782062888840375"
+        }
+      ],
       "worker-api": [
         {
           "file": "apps/worker-api/project.json",
@@ -27,7 +57,7 @@
         },
         {
           "file": "apps/worker-api/src/index.ts",
-          "hash": "17908681428632980410"
+          "hash": "18335613893979937121"
         },
         {
           "file": "apps/worker-api/src/rate-limiter-do.ts",
@@ -36,6 +66,20 @@
         {
           "file": "apps/worker-api/src/session-do.ts",
           "hash": "15106447200388021791"
+        }
+      ],
+      "ai": [
+        {
+          "file": "packages/ai/project.json",
+          "hash": "2447358976378343147"
+        },
+        {
+          "file": "packages/ai/src/gateway.ts",
+          "hash": "8159515835548601124"
+        },
+        {
+          "file": "packages/ai/src/index.ts",
+          "hash": "14569501487334179972"
         }
       ],
       "core": [
@@ -61,7 +105,11 @@
         },
         {
           "file": "packages/core/src/index.ts",
-          "hash": "17965645885427153602"
+          "hash": "1644299499005181009"
+        },
+        {
+          "file": "packages/core/src/rag/schema.ts",
+          "hash": "5542337266818395721"
         },
         {
           "file": "packages/core/src/tenant/loader.ts",
@@ -78,44 +126,6 @@
         {
           "file": "packages/core/src/tenant/types.ts",
           "hash": "10852238908151055834"
-        }
-      ],
-      "rag": [
-        {
-          "file": "packages/rag/project.json",
-          "hash": "14824669124213728116"
-        },
-        {
-          "file": "packages/rag/src/index.ts",
-          "hash": "4595979742548113990"
-        }
-      ],
-      "observability": [
-        {
-          "file": "packages/observability/project.json",
-          "hash": "1632021096686162711"
-        },
-        {
-          "file": "packages/observability/src/index.ts",
-          "hash": "8864206489639079382"
-        },
-        {
-          "file": "packages/observability/src/logger.ts",
-          "hash": "14216585224841379369"
-        }
-      ],
-      "ai": [
-        {
-          "file": "packages/ai/project.json",
-          "hash": "2447358976378343147"
-        },
-        {
-          "file": "packages/ai/src/gateway.ts",
-          "hash": "8159515835548601124"
-        },
-        {
-          "file": "packages/ai/src/index.ts",
-          "hash": "14569501487334179972"
         }
       ],
       "storage": [
@@ -139,9 +149,27 @@
           "file": "packages/storage/src/vectorize.ts",
           "hash": "17847552451332353089"
         }
+      ],
+      "observability": [
+        {
+          "file": "packages/observability/project.json",
+          "hash": "1632021096686162711"
+        },
+        {
+          "file": "packages/observability/src/index.ts",
+          "hash": "8864206489639079382"
+        },
+        {
+          "file": "packages/observability/src/logger.ts",
+          "hash": "14216585224841379369"
+        }
       ]
     },
     "nonProjectFiles": [
+      {
+        "file": ".gemini/settings.json",
+        "hash": "9558612923782807948"
+      },
       {
         "file": ".github/copilot-instructions.md",
         "hash": "280870983513376752"
@@ -149,6 +177,10 @@
       {
         "file": ".gitignore",
         "hash": "3501635454039698188"
+      },
+      {
+        "file": ".mcp.json",
+        "hash": "363150899393853157"
       },
       {
         "file": ".prettierrc.json",
@@ -159,8 +191,16 @@
         "hash": "15113672247534006936"
       },
       {
+        "file": "AGENTS.md",
+        "hash": "9692141264778725580"
+      },
+      {
         "file": "CHANGELOG.md",
-        "hash": "16870860635665319983"
+        "hash": "2848824513629301736"
+      },
+      {
+        "file": "CLAUDE.md",
+        "hash": "9692141264778725580"
       },
       {
         "file": "LICENSE",
@@ -184,7 +224,7 @@
       },
       {
         "file": "docs/ALIGNMENT-SUMMARY.md",
-        "hash": "12212590577103971042"
+        "hash": "4940397636626863075"
       },
       {
         "file": "docs/M0-COMPLETE.md",
@@ -199,12 +239,16 @@
         "hash": "4743987393108621864"
       },
       {
+        "file": "docs/M3-PREP.md",
+        "hash": "16406284072233240984"
+      },
+      {
         "file": "docs/PR.md",
         "hash": "16722071428211536516"
       },
       {
         "file": "docs/PROJECT-STATUS.md",
-        "hash": "9920827023077562400"
+        "hash": "11745733870069408348"
       },
       {
         "file": "docs/adrs/ADR-001-sse-streaming.md",
@@ -268,7 +312,7 @@
       },
       {
         "file": "docs/handoff-M2.md",
-        "hash": "7346017170464346170"
+        "hash": "6821766102219709392"
       },
       {
         "file": "docs/handoff-PR.md",
@@ -280,7 +324,7 @@
       },
       {
         "file": "docs/milestones.md",
-        "hash": "18221021997301466308"
+        "hash": "15392071484073912194"
       },
       {
         "file": "docs/milestones/M0.md",
@@ -292,7 +336,7 @@
       },
       {
         "file": "docs/milestones/M2.md",
-        "hash": "11510624698714978691"
+        "hash": "17601042849284818897"
       },
       {
         "file": "docs/plan.md",
@@ -325,6 +369,10 @@
       {
         "file": "docs/testing.md",
         "hash": "14324405085362365629"
+      },
+      {
+        "file": "docs/vectorize-dev.md",
+        "hash": "435907008191246055"
       },
       {
         "file": "docs/wrangler.md",
@@ -392,7 +440,7 @@
       },
       {
         "file": "tenants/mrrainbowsmoke/wrangler.jsonc",
-        "hash": "6228765765401606434"
+        "hash": "7433163846453776513"
       },
       {
         "file": "tenants/rainbowsmokeofficial/.gitignore",
@@ -404,7 +452,7 @@
       },
       {
         "file": "tenants/rainbowsmokeofficial/wrangler.jsonc",
-        "hash": "1454678857993068911"
+        "hash": "6306428219027080859"
       },
       {
         "file": "tests/ai-gateway.test.ts",
@@ -423,8 +471,36 @@
         "hash": "6109578366516346793"
       },
       {
+        "file": "tests/ingest-search.test.ts",
+        "hash": "14644091999124984710"
+      },
+      {
         "file": "tests/kv-prefix.test.ts",
         "hash": "12313496701176176705"
+      },
+      {
+        "file": "tests/rag-assembly.test.ts",
+        "hash": "15328812194762006037"
+      },
+      {
+        "file": "tests/rag-chunking.test.ts",
+        "hash": "17102656694419651892"
+      },
+      {
+        "file": "tests/rag-embeddings.test.ts",
+        "hash": "6998568726329581107"
+      },
+      {
+        "file": "tests/rag-fixture-retrieval.test.ts",
+        "hash": "8585146066975126231"
+      },
+      {
+        "file": "tests/rag-retrieval.test.ts",
+        "hash": "10989548970577196224"
+      },
+      {
+        "file": "tests/rag-vectorize-upsert.test.ts",
+        "hash": "13246326791955668681"
       },
       {
         "file": "tests/rate-limit.test.ts",
@@ -457,6 +533,10 @@
       {
         "file": "tests/token-budget.test.ts",
         "hash": "18177083087687495662"
+      },
+      {
+        "file": "tests/vectorize-tenant-scope.test.ts",
+        "hash": "13776830779683846896"
       },
       {
         "file": "tsconfig.base.json",
