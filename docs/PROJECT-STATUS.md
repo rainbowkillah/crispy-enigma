@@ -28,7 +28,7 @@ According to [docs/plan.md](plan.md), the following M0 issues (ref: #3-#14) are 
 | #11 | Local dev with wrangler | ✅ Complete | scripts/dev.mjs, `npm run dev -- --tenant=<name>` works |
 | #12 | Hello/health endpoint + smoke tests | ✅ Complete | /health endpoint in worker-api, tests/health.test.ts passing |
 | #13 | Env typings source of truth | ✅ Complete | packages/core/src/env.ts, uses Vectorize V2 |
-| #14 | Document wrangler version + ESM | ✅ Complete | docs/wrangler.md created, wrangler@4.63.0 pinned |
+| #14 | Document wrangler version + ESM | ✅ Complete | docs/guides/wrangler.md created, wrangler@4.63.0 pinned |
 
 ### M0 Acceptance Criteria ✅
 
@@ -126,9 +126,9 @@ Created preparation documents:
 - ✅ `docs/M0-COMPLETE.md` - Full M0 completion report
 - ✅ `docs/M1-PREP.md` - Detailed M1 requirements and checklist
 - ✅ `docs/PROJECT-STATUS.md` - This file (GitHub Project summary)
-- ✅ `docs/streaming.md` - Streaming response contract
-- ✅ `docs/rate-limiting.md` - Rate limit keying + headers
-- ✅ `docs/sessions.md` - Session lifecycle
+- ✅ `docs/guides/streaming.md` - Streaming response contract
+- ✅ `docs/guides/rate-limiting.md` - Rate limit keying + headers
+- ✅ `docs/guides/sessions.md` - Session lifecycle
 
 ---
 
@@ -277,12 +277,12 @@ M2 is complete. Staging calls were verified; AI Gateway dashboard logs confirmed
 | Plan Issue | Deliverable | File(s) | Status |
 |-----------|-------------|---------|--------|
 | #15 | /chat endpoint + schema | `apps/worker-api/src/index.ts`, `packages/core/src/chat/schema.ts` | ✅ Verified |
-| #16 | Streaming contract (SSE) | `apps/worker-api/src/index.ts` (SSE + fallback), `docs/streaming.md` | ✅ Verified |
+| #16 | Streaming contract (SSE) | `apps/worker-api/src/index.ts` (SSE + fallback), `docs/guides/streaming.md` | ✅ Verified |
 | #17 | ChatSession DO | `apps/worker-api/src/session-do.ts` | ✅ Verified |
 | #18 | History + retention | `session-do.ts` (pruneMessages, retentionDays, maxMessages) | ✅ Verified |
 | #19 | KV cache layer | `packages/storage/src/kv.ts` (getCache/putCache with TTL) | ✅ Verified |
 | #20 | RateLimiter DO | `apps/worker-api/src/rate-limiter-do.ts` | ✅ Verified |
-| #21 | Rate limit keying | `docs/rate-limiting.md`, `rate-limiter-do.ts` | ✅ Verified |
+| #21 | Rate limit keying | `docs/guides/rate-limiting.md`, `rate-limiter-do.ts` | ✅ Verified |
 | #22 | Streaming tests | `tests/streaming.test.ts` (2 tests) | ✅ Verified |
 | #23 | Session isolation tests | `tests/session-isolation.test.ts` (2 tests) | ✅ Verified |
 | #24 | Rate limit tests | `tests/rate-limit.test.ts` (1), `tests/rate-limiter.test.ts` (2) | ✅ Verified |
