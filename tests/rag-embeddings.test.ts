@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { runGatewayEmbeddings } from '../packages/rag/src';
 import type { Env } from '../packages/core/src';
 
-function makeEnv(result: unknown, capture: { options?: unknown }): Env {
+export function makeEnv(result: unknown, capture: { options?: unknown }): Env {
   const fakeAi = {
     run: async (_modelId: string, _input: unknown, options: unknown) => {
       capture.options = options;

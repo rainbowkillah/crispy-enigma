@@ -44,6 +44,21 @@ All notable changes for this project are documented here.
 - Chunking tests (`tests/rag-chunking.test.ts`).
 - Gateway embeddings helper for M3 (`packages/rag/src/embeddings.ts`).
 - Embedding tests (`tests/rag-embeddings.test.ts`).
+- Vectorize upsert helper with metadata (`packages/rag/src/vectorize.ts`).
+- Vectorize upsert test (`tests/rag-vectorize-upsert.test.ts`).
+- Retrieval pipeline helper (`packages/rag/src/retrieval.ts`).
+- Retrieval tests (`tests/rag-retrieval.test.ts`).
+- Vectorize search helper (`packages/rag/src/vectorize.ts`).
+- Vectorize search test (`tests/rag-vectorize-upsert.test.ts`).
+- Optional rerank hook interface (`packages/rag/src/retrieval.ts`).
+- RAG prompt assembly helper (`packages/rag/src/rag.ts`).
+- RAG assembly test (`tests/rag-assembly.test.ts`).
+- RAG citations output (`packages/rag/src/rag.ts`).
+- Basic RAG safety filter (`packages/rag/src/rag.ts`).
+- Vectorize tenant scoping tests (`tests/vectorize-tenant-scope.test.ts`).
+- Deterministic retrieval fixtures (`tests/rag-fixture-retrieval.test.ts`).
+- Metadata integrity tests (`tests/rag-vectorize-upsert.test.ts`).
+- Vectorize local emulation doc (`docs/vectorize-dev.md`).
 
 ---
 

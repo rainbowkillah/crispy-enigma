@@ -17,8 +17,8 @@ This document summarizes the repository-wide documentation alignment performed o
 - **M3 (Embeddings + Vectorize + RAG):** 🔵 In Progress (Issue #32 started)
 
 ### Test Coverage
-- **Total Tests:** 46 passing across 15 test files
-- **Duration:** ~600ms
+- **Total Tests:** 62 passing across 20 test files
+- **Duration:** ~650ms
 - **TypeScript:** ✅ Clean compilation (0 errors)
 - **Lint:** ✅ Clean
 
@@ -26,7 +26,7 @@ This document summarizes the repository-wide documentation alignment performed o
 | Metric | Value | Change from M1 |
 |--------|-------|----------------|
 | Test Files | 13 | +2 |
-| Tests Passing | 46 | +14 |
+| Tests Passing | 62 | +30 |
 | Test Coverage | Comprehensive | Extended |
 | TypeScript Errors | 0 | No change |
 

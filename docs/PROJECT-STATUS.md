@@ -191,10 +191,22 @@ M2 is complete. Staging calls were verified; AI Gateway dashboard logs confirmed
 
 - #32 Ingestion pipeline (chunking strategy) — chunking utility + tests added.
 - #33 Embedding generation — gateway embedding helper + tests added.
+- #34 Vectorize upsert with metadata — upsert helper + tests added.
+- #35 Retrieval pipeline (query embedding) — retrieval helper + tests added.
+- #36 Vectorize search — search helper + tests added.
+- #37 Optional rerank hook — hook interface + test added.
+- #38 RAG response assembly — prompt assembly helper + test added.
+- #39 Citations in RAG responses — citations output + test added.
+- #40 Basic safety filters — blocklist filter + test added.
+- #41 Vectorize tenant scoping — namespace tests added.
+- #43 Vectorize tenant isolation tests — namespace tests added.
+- #42 Deterministic retrieval fixtures — fixture tests added.
+- #44 Metadata integrity tests — metadata shape tests added.
+- #45 Vectorize local emulation doc — `docs/vectorize-dev.md` added.
 
 ### Tests
 
-- Current test count: **46 tests** across **15 files**.
+- Current test count: **62 tests** across **20 files**.
 
 ### Handoffs
 
@@ -373,7 +385,7 @@ Duration:   317ms
 
 | Gate | Result | Details |
 |------|--------|---------|
-| Tests | ✅ 46/46 passing | 15 test files |
+| Tests | ✅ 62/62 passing | 20 test files |
 | TypeScript | ✅ Zero errors | Clean compilation |
 | Lint | ✅ Clean | No errors |
 | AI Gateway lint | ✅ Fixed | `no-explicit-any` resolved |

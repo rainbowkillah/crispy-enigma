@@ -41,18 +41,18 @@ Prepare the scope, risks, and validation plan for M3: ingestion + embeddings, Ve
 ### M3 Issues (from Project Board)
 - [~] #32 Implement ingestion pipeline (chunking strategy) — in progress (chunking utility + tests)
 - [~] #33 Implement embedding generation — in progress (gateway embeddings helper + tests)
-- [ ] #34 Implement Vectorize upsert with metadata
-- [ ] #35 Implement retrieval pipeline (query embedding)
-- [ ] #36 Implement Vectorize search
-- [ ] #37 Add optional rerank hook interface
-- [ ] #38 Implement RAG response assembly with prompt template
-- [ ] #39 Add citations to RAG responses
-- [ ] #40 Implement basic safety filters
-- [ ] #41 Ensure Vectorize indexes are tenant-scoped
-- [ ] #42 Create deterministic fixture retrieval tests
-- [ ] #43 Create tenant isolation tests for Vectorize
-- [ ] #44 Create metadata integrity tests
-- [ ] #45 Document Vectorize local emulation limitations + staging strategy
+- [~] #34 Implement Vectorize upsert with metadata — in progress (upsert helper + tests)
+- [~] #35 Implement retrieval pipeline (query embedding) — in progress (retrieval helper + tests)
+- [~] #36 Implement Vectorize search — in progress (search helper + tests)
+- [~] #37 Add optional rerank hook interface — in progress (rerank hook + test)
+- [~] #38 Implement RAG response assembly with prompt template — in progress (prompt assembly + tests)
+- [~] #39 Add citations to RAG responses — in progress (citations output + tests)
+- [~] #40 Implement basic safety filters — in progress (basic term block + test)
+- [~] #41 Ensure Vectorize indexes are tenant-scoped — in progress (tenant namespace tests)
+- [~] #42 Create deterministic fixture retrieval tests — in progress (fixture retrieval tests)
+- [~] #43 Create tenant isolation tests for Vectorize — in progress (namespace tests)
+- [~] #44 Create metadata integrity tests — in progress (metadata shape tests)
+- [~] #45 Document Vectorize local emulation limitations + staging strategy — in progress (`docs/vectorize-dev.md`)
 
 ---
 
