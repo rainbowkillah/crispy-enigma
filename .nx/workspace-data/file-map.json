@@ -38,6 +38,66 @@
           "hash": "15106447200388021791"
         }
       ],
+      "ai": [
+        {
+          "file": "packages/ai/project.json",
+          "hash": "2447358976378343147"
+        },
+        {
+          "file": "packages/ai/src/gateway.ts",
+          "hash": "7558719959834364430"
+        },
+        {
+          "file": "packages/ai/src/index.ts",
+          "hash": "14569501487334179972"
+        }
+      ],
+      "rag": [
+        {
+          "file": "packages/rag/project.json",
+          "hash": "14824669124213728116"
+        },
+        {
+          "file": "packages/rag/src/index.ts",
+          "hash": "4595979742548113990"
+        }
+      ],
+      "observability": [
+        {
+          "file": "packages/observability/project.json",
+          "hash": "1632021096686162711"
+        },
+        {
+          "file": "packages/observability/src/index.ts",
+          "hash": "8864206489639079382"
+        },
+        {
+          "file": "packages/observability/src/logger.ts",
+          "hash": "9029379237823054669"
+        }
+      ],
+      "storage": [
+        {
+          "file": "packages/storage/project.json",
+          "hash": "18417496484336993390"
+        },
+        {
+          "file": "packages/storage/src/do.ts",
+          "hash": "15124964690760613976"
+        },
+        {
+          "file": "packages/storage/src/index.ts",
+          "hash": "4260946828283953203"
+        },
+        {
+          "file": "packages/storage/src/kv.ts",
+          "hash": "1755166976520487066"
+        },
+        {
+          "file": "packages/storage/src/vectorize.ts",
+          "hash": "17847552451332353089"
+        }
+      ],
       "core": [
         {
           "file": "packages/core/project.json",
@@ -79,66 +139,6 @@
           "file": "packages/core/src/tenant/types.ts",
           "hash": "4758177748744290180"
         }
-      ],
-      "storage": [
-        {
-          "file": "packages/storage/project.json",
-          "hash": "18417496484336993390"
-        },
-        {
-          "file": "packages/storage/src/do.ts",
-          "hash": "15124964690760613976"
-        },
-        {
-          "file": "packages/storage/src/index.ts",
-          "hash": "4260946828283953203"
-        },
-        {
-          "file": "packages/storage/src/kv.ts",
-          "hash": "1755166976520487066"
-        },
-        {
-          "file": "packages/storage/src/vectorize.ts",
-          "hash": "17847552451332353089"
-        }
-      ],
-      "rag": [
-        {
-          "file": "packages/rag/project.json",
-          "hash": "14824669124213728116"
-        },
-        {
-          "file": "packages/rag/src/index.ts",
-          "hash": "4595979742548113990"
-        }
-      ],
-      "ai": [
-        {
-          "file": "packages/ai/project.json",
-          "hash": "2447358976378343147"
-        },
-        {
-          "file": "packages/ai/src/gateway.ts",
-          "hash": "12342611005306732556"
-        },
-        {
-          "file": "packages/ai/src/index.ts",
-          "hash": "14569501487334179972"
-        }
-      ],
-      "observability": [
-        {
-          "file": "packages/observability/project.json",
-          "hash": "1632021096686162711"
-        },
-        {
-          "file": "packages/observability/src/index.ts",
-          "hash": "8864206489639079382"
-        },
-        {
-          "file": "packages/observability/src/logger.ts",
-          "hash": "9029379237823054669"
-        }
       ]
     },
     "nonProjectFiles": [
@@ -171,6 +171,10 @@
         "hash": "102038376681309440"
       },
       {
+        "file": "WIKI-SETUP.md",
+        "hash": "5922937495874651390"
+      },
+      {
         "file": "docs/AI Multi-Tenant Monorepo - View 6.tsv",
         "hash": "3383910766421592062"
       },
@@ -188,7 +192,7 @@
       },
       {
         "file": "docs/PROJECT-STATUS.md",
-        "hash": "11489155212287555174"
+        "hash": "990160652164465212"
       },
       {
         "file": "docs/adrs/ADR-001-sse-streaming.md",
@@ -259,6 +263,10 @@
         "hash": "14030707844834964924"
       },
       {
+        "file": "docs/milestones/M2.md",
+        "hash": "5045820196891313283"
+      },
+      {
         "file": "docs/plan.md",
         "hash": "3681896788755460099"
       },
@@ -304,7 +312,7 @@
       },
       {
         "file": "package-lock.json",
-        "hash": "16609361416980864904"
+        "hash": "11830938031816815033"
       },
       {
         "file": "package.json",
@@ -372,7 +380,7 @@
       },
       {
         "file": "tests/ai-gateway.test.ts",
-        "hash": "15968300999765078498"
+        "hash": "12158614429368647814"
       },
       {
         "file": "tests/chat.test.ts",
@@ -429,6 +437,54 @@
       {
         "file": "vitest.config.ts",
         "hash": "4261060993313167734"
+      },
+      {
+        "file": "wiki-content/API-Reference.md",
+        "hash": "4694340257163830611"
+      },
+      {
+        "file": "wiki-content/Architecture.md",
+        "hash": "3143889264380417761"
+      },
+      {
+        "file": "wiki-content/Development-Guide.md",
+        "hash": "14913009778131382287"
+      },
+      {
+        "file": "wiki-content/Getting-Started.md",
+        "hash": "9898220144862479219"
+      },
+      {
+        "file": "wiki-content/Home.md",
+        "hash": "3323430142682316863"
+      },
+      {
+        "file": "wiki-content/Milestones.md",
+        "hash": "14883124914730557094"
+      },
+      {
+        "file": "wiki-content/Multi-Tenancy.md",
+        "hash": "17424410123451872721"
+      },
+      {
+        "file": "wiki-content/README.md",
+        "hash": "950478935787671159"
+      },
+      {
+        "file": "wiki-content/References.md",
+        "hash": "7875131390014988944"
+      },
+      {
+        "file": "wiki-content/Security-Best-Practices.md",
+        "hash": "13423378942589194085"
+      },
+      {
+        "file": "wiki-content/Testing-Guide.md",
+        "hash": "7930689285384926202"
+      },
+      {
+        "file": "wiki-content/Troubleshooting.md",
+        "hash": "5504853367580072500"
       }
     ]
   }
