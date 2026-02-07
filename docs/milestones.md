@@ -29,13 +29,14 @@ Integrate with Cloudflare's AI Gateway to manage model access, observability, an
 
 ## M3: Embeddings, Vectorize & RAG
 Build the Retrieval-Augmented Generation (RAG) pipeline for AI Search capabilities.
+- **Status:** ✅ Complete (2026-02-07)
 - **Deliverables:**
   - Ingestion pipeline for chunking text, generating embeddings, and upserting into Vectorize.
   - Retrieval pipeline for querying Vectorize.
   - RAG response assembly with prompt templates and source citations.
   - Tenant isolation enforced at the Vectorize level using namespaces.
- - **Prep:** `docs/M3-PREP.md` (draft)
- - **Vectorize Dev Notes:** `docs/vectorize-dev.md`
+- **Prep:** `docs/M3-PREP.md` (draft)
+- **Vectorize Dev Notes:** `docs/vectorize-dev.md`
 
 ## M4: AI Search Endpoint
 Expose the RAG pipeline through a user-facing `/search` endpoint.

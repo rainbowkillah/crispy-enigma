@@ -305,9 +305,9 @@ npm run typecheck                 # TypeScript strict check
 |-----------|-------|--------|
 | M0 | Foundation: monorepo, tenant resolution, Env types, /health, tests | Complete |
 | M1 | Chat + Sessions: /chat streaming, DO sessions, KV cache, rate limiter | Complete |
-| M2 | AI Gateway: gateway integration, model routing, budget/limits, observability hooks | Planned |
-| M3 | Embeddings + Vectorize + RAG: ingestion, retrieval, citations | Planned |
-| M4 | AI Search UX: /search endpoint, query rewriting, caching | Planned |
+| M2 | AI Gateway: gateway integration, model routing, budget/limits, observability hooks | Complete |
+| M3 | Embeddings + Vectorize + RAG: ingestion, retrieval, citations | Complete |
+| M4 | AI Search UX: /search endpoint, query rewriting, caching | Next |
 | M5 | Tool Execution: tool registry, dispatcher, permission gating | Planned |
 | M6 | TTS Adapter: contract + stub + optional provider | Planned |
 | M7 | Observability: logging schema, metrics, CI gates, load tests | Planned |

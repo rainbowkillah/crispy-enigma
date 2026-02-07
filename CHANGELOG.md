@@ -39,6 +39,10 @@ All notable changes for this project are documented here.
 
 ## [1.3.0] - 2026-02-07 (M3: Ingestion Pipeline Kickoff)
 
+### Status
+- ✅ All issues complete (#32-#45)
+- 64 tests passing across 21 files
+
 ### Added
 - Initial chunking utility for ingestion pipeline (`packages/rag/src/chunking.ts`).
 - Chunking tests (`tests/rag-chunking.test.ts`).

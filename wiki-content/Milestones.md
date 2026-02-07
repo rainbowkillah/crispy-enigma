@@ -158,36 +158,36 @@ Duration:   317ms
 
 ---
 
-## M3: Embeddings + Vectorize + RAG Assembly 📋 Planned
+## M3: Embeddings + Vectorize + RAG Assembly ✅ Complete
 
-**Status:** 📋 Planned  
-**Expected Start:** After M2 complete  
+**Status:** ✅ Complete  
+**Completed:** 2026-02-07  
 **GitHub Issues:** [#32-#45](https://github.com/rainbowkillah/crispy-enigma/issues?q=is%3Aissue+label%3AM3)
 
 ### Deliverables
 
-- [ ] Ingestion pipeline (chunking strategy)
-- [ ] Embedding generation
-- [ ] Vectorize upsert with metadata
-- [ ] Retrieval pipeline (query embedding)
-- [ ] Vectorize search
-- [ ] Optional rerank hook interface
-- [ ] RAG response assembly with prompt template
-- [ ] Citations to RAG responses
-- [ ] Basic safety filters
-- [ ] Ensure Vectorize indexes are tenant-scoped **CRITICAL**
-- [ ] Create deterministic fixture retrieval tests
-- [ ] Create tenant isolation tests for Vectorize
-- [ ] Create metadata integrity tests
-- [ ] Document Vectorize local emulation limitations
+- [x] Ingestion pipeline (chunking strategy)
+- [x] Embedding generation
+- [x] Vectorize upsert with metadata
+- [x] Retrieval pipeline (query embedding)
+- [x] Vectorize search
+- [x] Optional rerank hook interface
+- [x] RAG response assembly with prompt template
+- [x] Citations to RAG responses
+- [x] Basic safety filters
+- [x] Ensure Vectorize indexes are tenant-scoped **CRITICAL**
+- [x] Create deterministic fixture retrieval tests
+- [x] Create tenant isolation tests for Vectorize
+- [x] Create metadata integrity tests
+- [x] Document Vectorize local emulation limitations
 
 ### Acceptance Criteria
 
-- [ ] Ingested docs are retrievable for correct tenant only
-- [ ] Retrieval returns deterministic results with fixture docs
-- [ ] Vectorize queries fail closed without tenant context
-- [ ] Vectorize namespace-per-tenant isolation demonstrated
-- [ ] Top-K limit of 20 (with metadata) accounted for in retrieval pipeline
+- [x] Ingested docs are retrievable for correct tenant only
+- [x] Retrieval returns deterministic results with fixture docs
+- [x] Vectorize queries fail closed without tenant context
+- [x] Vectorize namespace-per-tenant isolation demonstrated
+- [x] Top-K limit of 20 (with metadata) accounted for in retrieval pipeline
 
 ---
 

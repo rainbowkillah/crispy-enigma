@@ -199,28 +199,29 @@ export type TenantContext = {
 ---
 
 ### M3 — Embeddings + Vectorize + RAG Assembly ([Issues #32-#45](https://github.com/rainbowkillah/cloudflare-mono-repo/issues?q=is%3Aissue+label%3AM3))
+**Status:** ✅ COMPLETE (2026-02-07)
 **Deliverables**
-- [#32](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/32) Implement ingestion pipeline (chunking strategy)
-- [#33](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/33) Implement embedding generation
-- [#34](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/34) Implement Vectorize upsert with metadata
-- [#35](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/35) Implement retrieval pipeline (query embedding)
-- [#36](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/36) Implement Vectorize search
-- [#37](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/37) Add optional rerank hook interface
-- [#38](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/38) Implement RAG response assembly with prompt template
-- [#39](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/39) Add citations to RAG responses
-- [#40](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/40) Implement basic safety filters
-- [#41](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/41) Ensure Vectorize indexes are tenant-scoped **CRITICAL**
-- [#42](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/42) Create deterministic fixture retrieval tests
-- [#43](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/43) Create tenant isolation tests for Vectorize
-- [#44](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/44) Create metadata integrity tests
-- [#45](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/45) Document Vectorize local emulation limitations + staging strategy
+- ✅ [#32](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/32) Implement ingestion pipeline (chunking strategy)
+- ✅ [#33](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/33) Implement embedding generation
+- ✅ [#34](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/34) Implement Vectorize upsert with metadata
+- ✅ [#35](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/35) Implement retrieval pipeline (query embedding)
+- ✅ [#36](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/36) Implement Vectorize search
+- ✅ [#37](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/37) Add optional rerank hook interface
+- ✅ [#38](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/38) Implement RAG response assembly with prompt template
+- ✅ [#39](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/39) Add citations to RAG responses
+- ✅ [#40](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/40) Implement basic safety filters
+- ✅ [#41](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/41) Ensure Vectorize indexes are tenant-scoped **CRITICAL**
+- ✅ [#42](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/42) Create deterministic fixture retrieval tests
+- ✅ [#43](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/43) Create tenant isolation tests for Vectorize
+- ✅ [#44](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/44) Create metadata integrity tests
+- ✅ [#45](https://github.com/rainbowkillah/cloudflare-mono-repo/issues/45) Document Vectorize local emulation limitations + staging strategy
 
 **Acceptance criteria**
-- Ingested docs are retrievable for correct tenant only.
-- Retrieval returns deterministic results with fixture docs.
-- Vectorize queries fail closed without tenant context.
-- Vectorize namespace-per-tenant isolation demonstrated (using `namespace` param).
-- Top-K limit of 20 (with metadata) accounted for in retrieval pipeline.
+- ✅ Ingested docs are retrievable for correct tenant only.
+- ✅ Retrieval returns deterministic results with fixture docs.
+- ✅ Vectorize queries fail closed without tenant context.
+- ✅ Vectorize namespace-per-tenant isolation demonstrated (using `namespace` param).
+- ✅ Top-K limit of 20 (with metadata) accounted for in retrieval pipeline.
 
 ---
 

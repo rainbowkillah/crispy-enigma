@@ -1,10 +1,10 @@
-# GitHub Project Update: M0 + M1 Complete, M2 Complete
+# GitHub Project Update: M0 + M1 + M2 + M3 Complete
 
 ## Status Summary
 
 **Date:** 2026-02-07  
-**Current Milestone:** M3 🔵 In Progress  
-**Previous Milestone:** M2 ✅ COMPLETE  
+**Current Milestone:** M4 🔵 Next  
+**Previous Milestone:** M3 ✅ COMPLETE  
 **Next Milestone:** M4 🔵 AI Search Endpoint  
 
 ---
@@ -168,7 +168,7 @@ Created preparation documents:
 
 - Model override coverage (`tests/ai-gateway.test.ts` - 6 tests).
 - Token budget enforcement + usage persistence (`tests/token-budget.test.ts` - 2 tests).
-- Current test count: **40 tests** across **13 files** (up from 32 at M1 close).
+- M2 test count: **40 tests** across **13 files** (up from 32 at M1 close).
 - All tests passing, TypeScript compiles cleanly.
 
 ### M2 Completion Status
@@ -181,13 +181,13 @@ M2 is complete. Staging calls were verified; AI Gateway dashboard logs confirmed
 
 - Draft prep started: `docs/M3-PREP.md`.
 
-## M3 Progress (Embeddings + Vectorize + RAG)
+## M3 Completion (Embeddings + Vectorize + RAG)
 
-**Status:** 🔵 IN PROGRESS  
+**Status:** ✅ COMPLETE  
 **Issues:** #32-#45  
 **Updated:** 2026-02-07  
 
-### Started
+### Completed
 
 - #32 Ingestion pipeline (chunking strategy) — chunking utility + tests added.
 - #33 Embedding generation — gateway embedding helper + tests added.
@@ -208,13 +208,14 @@ M2 is complete. Staging calls were verified; AI Gateway dashboard logs confirmed
 
 ### Tests
 
-- Current test count: **62 tests** across **20 files**.
+- Current test count: **64 tests** across **21 files**.
 
 ### Handoffs
 
 - **M0 Handoff:** [docs/handoff-M0.md](handoff-M0.md)
 - **M1 Handoff:** [docs/handoff-M1.md](handoff-M1.md)
 - **M2 Handoff:** [docs/handoff-M2.md](handoff-M2.md)
+- **M3 Handoff:** [docs/handoff-M3.md](handoff-M3.md)
 - **PR Handoff:** [docs/handoff-PR.md](handoff-PR.md)
 
 ---
@@ -223,41 +224,26 @@ M2 is complete. Staging calls were verified; AI Gateway dashboard logs confirmed
 
 ### For GitHub Project Owners
 
-1. **Review M0 Completion:**
-   - Review [docs/M0-COMPLETE.md](M0-COMPLETE.md)
-   - Close M0 issues (#3-#14) in GitHub Project
-   - Mark M0 milestone as complete
+1. **Mark M3 Complete:**
+   - Close issues #32-#45 in the GitHub Project
+   - Update milestone status to complete
 
-2. **Prepare M1 Issues:**
-   - Create GitHub issues for #15-#24 if not already created
-   - Add M1 label to all issues
-   - Assign issues to team members
-   - Link issues to M1 milestone
-
-3. **Update Project Board:**
-   - Move M0 issues to "Done" column
-   - Move M1 issues to "Ready" or "To Do" column
-   - Update project README with M0 completion status
+2. **Prepare M4 Issues:**
+   - Verify issues #46-#53 are scoped and labeled for M4
+   - Assign owners and prioritize `/search` UX outputs
 
 ### For Developers
 
-1. **Review M1 Requirements:**
-   - Read [docs/M1-PREP.md](M1-PREP.md)
-   - Review [docs/plan.md](plan.md) sections 3.1 (M1)
-   - Understand Durable Objects architecture
+1. **Review M4 Requirements:**
+   - Read [docs/plan.md](plan.md) section for M4
+   - Review [docs/milestones.md](milestones.md) for M4 scope
 
-2. **Set Up Development Environment:**
+2. **Baseline Checks:**
    ```bash
    npm install
-   npm run tenants:generate
    npm test
    npm run typecheck
    ```
-
-3. **Start M1 Implementation:**
-   - Begin with #17 (Durable Objects) - foundational
-   - Then #20 (Rate Limiter DO)
-   - Then #15 (Chat endpoint)
    - Then #16 (Streaming)
    - Finally #19 (KV cache)
 
