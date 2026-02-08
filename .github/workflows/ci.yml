@@ -45,5 +45,26 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Start worker
+        run: |
+          npm run dev -- --tenant=mrrainbowsmoke --env=dev --local &
+          echo $! > /tmp/worker.pid
+          for i in {1..20}; do
+            if curl -s -H "x-tenant-id: mrrainbowsmoke" http://127.0.0.1:8787/health >/dev/null; then
+              echo "Worker ready"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Worker failed to start"
+          exit 1
+
       - name: Run Smoke Tests
-        run: npm run smoke:dev -- --tenant=example
+        run: npm run smoke:dev -- --tenant=mrrainbowsmoke
+
+      - name: Stop worker
+        if: always()
+        run: |
+          if [ -f /tmp/worker.pid ]; then
+            kill $(cat /tmp/worker.pid) || true
+          fi

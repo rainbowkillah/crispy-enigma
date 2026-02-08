@@ -10,7 +10,7 @@
 
 | Issue | Title | Status | Assignee | Notes |
 |-------|-------|--------|----------|-------|
-| #52 | Set up CI gates | 🔴 BLOCKED | - | M7 issue, BLOCKER for M8 |
+| #52 | Set up CI gates | 🟡 IN PROGRESS | - | Lint/typecheck/tests verified via Nx affected; integration smoke blocked by Wrangler uv_interface_addresses error (log path fixed via WRANGLER_LOG_PATH; WRANGLER_NO_LOCALHOST_PROXY + --ip 127.0.0.1 attempted) |
 | #46 | Config validation | ⏸️ READY | - | Blocked by #52 |
 | #47 | Environment selection | ⏸️ READY | - | Blocked by #52 |
 | #49 | Deploy single tenant | ⏸️ READY | - | Blocked by #46, #47 |
@@ -33,11 +33,11 @@
 ### Critical Blocker: Issue #52 (CI Gates)
 - **From:** M7: Observability milestone
 - **Impact:** Cannot safely deploy without automated quality checks
-- **Status:** Not started
+- **Status:** In progress (workflow updated, needs validation)
 - **Owner:** TBD
-- **ETA:** Unknown
+- **ETA:** TBD
 
-**Recommendation:** Prioritize #52 above all M8 work. Deploying without CI is unsafe.
+**Recommendation:** Verify #52 before starting deployment automation. Deploying without CI is unsafe.
 
 ---
 
@@ -56,6 +56,7 @@
 - M8 planning brief created (PLANNING-BRIEF.md)
 - README and STATUS files initialized
 - M6-M7 handoff document updated with actual progress
-- Current state: 198 tests passing, TypeScript clean
+- CI gate verification: lint/typecheck/tests OK via Nx affected
+- Integration smoke blocked by Wrangler uv_interface_addresses error (log path fixed via WRANGLER_LOG_PATH; WRANGLER_NO_LOCALHOST_PROXY + --ip 127.0.0.1 attempted)
 - Identified #52 as critical blocker
 - Ready for Codex planning session
