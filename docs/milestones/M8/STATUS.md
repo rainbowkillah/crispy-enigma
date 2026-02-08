@@ -46,7 +46,7 @@
 1. **Unblock:** Assign and complete issue #52 (CI gates)
 2. **Start:** Multi-account auth doc (#44)
 3. **Docs:** Rollback + incident runbooks (#43/#42)
-4. **Test:** Run post-deploy smoke checks for staging
+4. **Test:** Post-deploy smoke checks passed for both staging tenants
 
 ---
 
