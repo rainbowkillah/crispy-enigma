@@ -1,0 +1,19 @@
+{
+  "name": "tenant-example",
+  "root": "tenants/example",
+  "projectType": "application",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run dev -- --tenant=example"
+      }
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node scripts/generate-tenant-index.mjs && npx wrangler deploy --config tenants/example/wrangler.jsonc"
+      }
+    }
+  }
+}

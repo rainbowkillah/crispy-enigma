@@ -1,0 +1,19 @@
+{
+  "name": "tenant-mrrainbowsmoke",
+  "root": "tenants/mrrainbowsmoke",
+  "projectType": "application",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run dev -- --tenant=mrrainbowsmoke"
+      }
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node scripts/generate-tenant-index.mjs && npx wrangler deploy --config tenants/mrrainbowsmoke/wrangler.jsonc"
+      }
+    }
+  }
+}

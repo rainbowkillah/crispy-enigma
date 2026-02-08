@@ -10,6 +10,12 @@
         "command": "npm run dev -- --tenant=example"
       }
     },
+    "dev-tenant": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run dev --"
+      }
+    },
     "test": {
       "executor": "nx:run-commands",
       "options": {
@@ -20,6 +26,12 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "npm run typecheck"
+      }
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node scripts/generate-tenant-index.mjs && npx wrangler deploy"
       }
     },
     "postman-perf": {
