@@ -2,6 +2,7 @@ import { spawn, spawnSync } from 'node:child_process';
 import process from 'node:process';
 import { existsSync, mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { loadWranglerConfig, listEnvKeys, resolveEnvKey } from './lib/wrangler-config.mjs';
 
 const tenantArg = process.argv.find((arg) => arg.startsWith('--tenant='));
 const tenant = tenantArg?.split('=')[1];
@@ -28,11 +29,28 @@ if (!existsSync(configPath)) {
   console.error(`Missing wrangler config: ${configPath}`);
   process.exit(1);
 }
+
+const wranglerConfig = loadWranglerConfig(configPath);
+let resolvedEnv = env;
+if (env) {
+  const resolution = resolveEnvKey(wranglerConfig, env);
+  if (!resolution.envKey) {
+    const available = listEnvKeys(wranglerConfig);
+    console.error(
+      `Unknown env "${env}". Available: ${available.length ? available.join(', ') : 'none'}`
+    );
+    process.exit(1);
+  }
+  if (resolution.envKey !== env) {
+    console.warn(`Using env "${resolution.envKey}" (resolved from "${env}").`);
+  }
+  resolvedEnv = resolution.envKey;
+}
 mkdirSync(wranglerLogPath, { recursive: true });
 
 const args = ['dev', '--config', configPath];
-if (env) {
-  args.push('--env', env);
+if (resolvedEnv) {
+  args.push('--env', resolvedEnv);
 }
 if (useLocal) {
   args.push('--local');

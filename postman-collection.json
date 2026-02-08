@@ -234,6 +234,198 @@
               "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"period\": \"24h\",\n    \"totalCost\": 0.0234,\n    \"breakdown\": {\n      \"chat\": { \"requests\": 150, \"tokensIn\": 12340, \"tokensOut\": 8920, \"cost\": 0.0189 },\n      \"embeddings\": { \"requests\": 45, \"tokens\": 23450, \"cost\": 0.0032 },\n      \"tts\": { \"requests\": 12, \"characters\": 5600, \"cost\": 0.0013 }\n    }\n  }\n}"
             }
           ]
+        },
+        {
+          "name": "SLI Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/metrics/slis?period=24h&fresh=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "metrics",
+                "slis"
+              ],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "24h",
+                  "description": "Time period: 1h, 24h, or 7d"
+                },
+                {
+                  "key": "fresh",
+                  "value": "1",
+                  "description": "Optional: set to 1 to force refresh"
+                }
+              ]
+            },
+            "description": "Get service-level indicators (SLIs) summary"
+          }
+        },
+        {
+          "name": "Anomaly Detection",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/metrics/anomalies?period=24h",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "metrics",
+                "anomalies"
+              ],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "24h",
+                  "description": "Time period: 1h, 24h, or 7d"
+                }
+              ]
+            },
+            "description": "Get anomaly detection results"
+          }
+        },
+        {
+          "name": "Alert Evaluations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/metrics/alerts?period=24h",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "metrics",
+                "alerts"
+              ],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "24h",
+                  "description": "Optional: filter by period (1h, 24h, or 7d)"
+                }
+              ]
+            },
+            "description": "Get alert rules and evaluations"
+          }
+        },
+        {
+          "name": "Upsert Alert Rules",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              },
+              {
+                "key": "content-type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rules\": [\n    {\n      \"id\": \"latency-24h\",\n      \"name\": \"Latency threshold\",\n      \"metric\": \"latencyMs\",\n      \"comparator\": \">\",\n      \"threshold\": 2000,\n      \"period\": \"24h\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/metrics/alerts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "metrics",
+                "alerts"
+              ]
+            },
+            "description": "Create or update alert rules"
+          }
+        },
+        {
+          "name": "Delete Alert Rule",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/metrics/alerts?id=latency-24h",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "metrics",
+                "alerts"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "latency-24h",
+                  "description": "Alert rule id"
+                }
+              ]
+            },
+            "description": "Delete an alert rule by id"
+          }
+        },
+        {
+          "name": "Metrics Overview",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/metrics/overview?period=24h",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "metrics",
+                "overview"
+              ],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "24h",
+                  "description": "Time period: 1h, 24h, or 7d"
+                }
+              ]
+            },
+            "description": "Get combined overview (SLIs, anomalies, alerts)"
+          }
         }
       ],
       "description": "API metrics and analytics endpoints"

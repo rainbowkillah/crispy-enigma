@@ -1,8 +1,8 @@
 # M8 Status
 
 **Last Updated:** 2026-02-08  
-**Overall Status:** 📋 Planning Phase  
-**Progress:** 0/9 issues complete (0%)  
+**Overall Status:** 🟡 Active  
+**Progress:** 2/9 issues complete (22%)  
 
 ---
 
@@ -10,9 +10,9 @@
 
 | Issue | Title | Status | Assignee | Notes |
 |-------|-------|--------|----------|-------|
-| #52 | Set up CI gates | 🟡 IN PROGRESS | - | Lint/typecheck/tests verified via Nx affected; integration smoke blocked by Wrangler uv_interface_addresses error (log path fixed via WRANGLER_LOG_PATH; WRANGLER_NO_LOCALHOST_PROXY + --ip 127.0.0.1 attempted) |
-| #46 | Config validation | ⏸️ READY | - | Blocked by #52 |
-| #47 | Environment selection | ⏸️ READY | - | Blocked by #52 |
+| #52 | Set up CI gates | 🟡 IN PROGRESS | - | Lint/typecheck/tests verified via Nx affected; integration smoke needs re-verification after prior Wrangler uv_interface_addresses errors (mitigations: WRANGLER_LOG_PATH, WRANGLER_NO_LOCALHOST_PROXY, --ip 127.0.0.1) |
+| #46 | Config validation | ✅ COMPLETE | - | `scripts/validate-config.mjs` validates tenant + wrangler configs |
+| #47 | Environment selection | ✅ COMPLETE | - | Env validation added to dev script + validate config |
 | #49 | Deploy single tenant | ⏸️ READY | - | Blocked by #46, #47 |
 | #48 | Deploy all tenants | ⏸️ READY | - | Blocked by #49 |
 | #45 | Drift detection | ⏸️ READY | - | Blocked by #49 |
@@ -43,9 +43,9 @@
 
 ## Next Actions
 
-1. **Planning:** Codex to review PLANNING-BRIEF.md and create detailed task breakdown
-2. **Unblock:** Assign and complete issue #52 (CI gates)
-3. **Start:** Begin config validation (#46) and environment selection (#47)
+1. **Unblock:** Assign and complete issue #52 (CI gates)
+2. **Start:** Implement deploy script for single tenant (#49)
+3. **Next:** Implement deploy-all (#48) and drift detection (#45)
 4. **Test:** Validate deployment scripts in dev environment before staging
 
 ---
@@ -57,6 +57,10 @@
 - README and STATUS files initialized
 - M6-M7 handoff document updated with actual progress
 - CI gate verification: lint/typecheck/tests OK via Nx affected
-- Integration smoke blocked by Wrangler uv_interface_addresses error (log path fixed via WRANGLER_LOG_PATH; WRANGLER_NO_LOCALHOST_PROXY + --ip 127.0.0.1 attempted)
+- Integration smoke needs re-verification after Wrangler uv_interface_addresses errors (mitigations in dev script)
 - Identified #52 as critical blocker
 - Ready for Codex planning session
+
+### 2026-02-08
+- Config validation script added (`npm run validate`)
+- Environment selection validated for local dev and config checks

@@ -14,7 +14,7 @@ M7 focused on building a robust Observability & QA infrastructure. All 12 issues
 
 - **Observability Package:** Core logging, metrics, tracing, and cost tracking utilities implemented in `packages/observability/`.
 - **Metrics Endpoints:** `/metrics/search-cache`, `/metrics/cost`, `/metrics/tools/execution`, plus SLI/alerting endpoints (`/metrics/slis`, `/metrics/anomalies`, `/metrics/alerts`, `/metrics/overview`).
-- **CI/CD:** CI gates for linting, type-checking, unit tests, and integration tests have been set up in the `.github/workflows/ci.yml` file.
+- **CI/CD:** CI gates for linting, type-checking, unit tests, and integration tests have been set up in the `.github/workflows/ci.yml` file. *Note:* local integration smoke needs verification after prior Wrangler `uv_interface_addresses` errors.
 - **Testing:** The test suite has been expanded (streaming stability + retrieval quality). Observability alert/anomaly tests added.
 - **Load Testing:** A load testing script has been added in `scripts/load-test.ts` and can be run with `npm run load-test`.
 - **Documentation:** New documentation has been created for dashboards and alerts, external dependency failure strategies, and a failure mode analysis template.
@@ -30,7 +30,7 @@ M7 focused on building a robust Observability & QA infrastructure. All 12 issues
 ### Testing & QA
 - **Total Tests:** Expanded (run `npm test` for current count)
 - **New Test Files:** `tests/streaming-stability.test.ts`, `tests/retrieval-quality.test.ts`
-- **CI Gates:** The CI workflow includes linting, type-checking, unit tests, and integration tests (smoke now starts a local worker first).
+- **CI Gates:** The CI workflow includes linting, type-checking, unit tests, and integration tests (smoke now starts a local worker first). Local smoke needs re-verification after Wrangler `uv_interface_addresses` errors.
 - **Load Testing:** A new `load-test` script is available for performance testing.
 
 ### Documentation
