@@ -15,7 +15,7 @@
 | #47 | Environment selection | ✅ COMPLETE | - | Env validation added to dev script + validate config |
 | #49 | Deploy single tenant | 🟡 IN PROGRESS | - | `scripts/deploy-tenant.mjs` added; needs dry-run validation |
 | #48 | Deploy all tenants | 🟡 IN PROGRESS | - | `scripts/deploy-all.mjs` added; depends on #49 validation |
-| #45 | Drift detection | ⏸️ READY | - | Blocked by #49 |
+| #45 | Drift detection | 🟡 IN PROGRESS | - | `scripts/detect-drift.mjs` added; requires API token validation |
 | #44 | Multi-account auth | ⏸️ READY | - | Can start anytime |
 | #43 | Rollback runbook | ⏸️ READY | - | Can start anytime |
 | #42 | Incident runbook | ⏸️ READY | - | Can start anytime |
@@ -45,7 +45,7 @@
 
 1. **Unblock:** Assign and complete issue #52 (CI gates)
 2. **Verify:** Dry-run deploy single tenant (#49) in staging
-3. **Verify:** Deploy-all (#48) and then implement drift detection (#45)
+3. **Verify:** Deploy-all (#48) and validate drift detection (#45)
 4. **Test:** Validate deployment scripts in dev environment before staging
 
 ---
@@ -65,3 +65,4 @@
 - Config validation script added (`npm run validate`)
 - Environment selection validated for local dev and config checks
 - Deploy scripts added (`npm run deploy`, `npm run deploy:all`) pending validation
+- Drift detection script added (`npm run drift`) pending API token validation
