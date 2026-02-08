@@ -23,6 +23,23 @@
 
 ---
 
+## Nx Plugin Development (NX-1 through NX-4)
+
+Developer experience layer for scaffolding workers, tenants, and bindings using Nx generators/executors.
+
+| Milestone | Scope | Sub-Issues | Status | Documentation |
+|-----------|-------|------------|--------|---------------|
+| NX-1: Bootstrap | Plugin foundation & init generator | 24 | 🔵 In Progress | Milestone #10 |
+| NX-2: Worker Gen | Worker scaffolding with tenant middleware | 20 | 🔵 In Progress | Milestone #11 |
+| NX-3: Tenant Gen | Tenant config & wrangler template generation | 20 | 🔵 In Progress | Milestone #12 |
+| NX-4: Bindings | Binding generators & deployAll executor | 32 | 🔵 In Progress | Milestone #13 |
+
+**Total:** 96 sub-issues + 17 parent issues = 113 issues tracked in [GitHub Project #13](https://github.com/users/rainbowkillah/projects/13/)
+
+**Alignment Status:** ⚠️ Milestones need assignment (see `docs/NX-ALIGNMENT-QUICK-REF.md` for automation script)
+
+---
+
 ## Current Operational State
 
 ### Tenants
@@ -69,3 +86,5 @@ Per‑tenant auth is supported via:
 - **Multi‑account auth:** `docs/deployment/multi-account-auth.md`
 - **Runbooks:** `docs/runbooks/rollback-deployment.md`, `docs/runbooks/incident-response.md`
 - **Plan:** `docs/plan.md`
+- **NX Alignment:** `docs/NX-ALIGNMENT-QUICK-REF.md`, `docs/NX-ISSUES-ALIGNMENT.md`
+- **NX Automation:** `scripts/align-nx-issues.sh`
