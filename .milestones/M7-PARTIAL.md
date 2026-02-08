@@ -6,10 +6,10 @@
 ## Completed Deliverables
 
 ### Core Infrastructure (Tier 2)
-- ✅ Structured JSON logger (`packages/observability/src/logger.ts`)
-- ✅ Metrics collection system (`packages/observability/src/metrics.ts`)
-- ✅ Cost tracking (`packages/observability/src/cost.ts`)
-- ✅ Request tracing (`packages/observability/src/trace.ts`)
+- ✅ Structured JSON logger ([`packages/observability/src/logger.ts`](../packages/observability/src/logger.ts))
+- ✅ Metrics collection system ([`packages/observability/src/metrics.ts`](../packages/observability/src/metrics.ts))
+- ✅ Cost tracking ([`packages/observability/src/cost.ts`](../packages/observability/src/cost.ts))
+- ✅ Request tracing ([`packages/observability/src/trace.ts`](../packages/observability/src/trace.ts))
 
 ### Operational Endpoints
 - ✅ `/metrics/search-cache` - Cache hit rates and performance
