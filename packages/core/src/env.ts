@@ -9,6 +9,7 @@ export interface Env {
   RATE_LIMITER_DO: DurableObjectNamespace;
   ENVIRONMENT?: string;
   MODEL_ID?: string;
+  EMBEDDING_MODEL_ID?: string;
   FALLBACK_MODEL_ID?: string;
   RATE_LIMIT_KEYS_PER_MINUTE?: number;
   MAX_REQUEST_BODY_SIZE?: number;

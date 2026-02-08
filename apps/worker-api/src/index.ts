@@ -754,7 +754,7 @@ export default {
         return fail('invalid_request', 'No content to ingest', 400, traceId);
       }
 
-      const embeddingModelId = env.MODEL_ID ?? config.aiModels.embeddings;
+      const embeddingModelId = env.EMBEDDING_MODEL_ID ?? config.aiModels.embeddings;
       let embeddingsResult;
       try {
         embeddingsResult = await runGatewayEmbeddings(
@@ -880,7 +880,7 @@ export default {
         return ok(cached, traceId);
       }
 
-      const embeddingModelId = env.MODEL_ID ?? config.aiModels.embeddings;
+      const embeddingModelId = env.EMBEDDING_MODEL_ID ?? config.aiModels.embeddings;
       let embeddingResult;
       let embeddingMs: number | undefined;
       try {
