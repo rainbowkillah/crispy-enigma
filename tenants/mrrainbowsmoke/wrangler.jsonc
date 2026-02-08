@@ -26,7 +26,7 @@
 	"vectorize": [
 		{
 			"binding": "VECTORIZE",
-			"index_name": "ai-worker-stg",
+			"index_name": "ai-worker",
 			"remote": true
 		}
 	],
@@ -283,7 +283,7 @@
 			"vectorize": [
 				{
 					"binding": "VECTORIZE",
-					"index_name": "ai-worker-dev",
+					"index_name": "ai-worker-stg",
 					"remote": true
 				}
 			],
@@ -346,12 +346,7 @@
 			"vectorize": [
 				{
 					"binding": "VECTORIZE",
-					"index_name": "ai-worker-dev",
-					"remote": true
-				},
-				{
-					"binding": "VECTORIZE",
-					"index_name": "ai-worker",
+					"index_name": "ai-worker-stg",
 					"remote": true
 				}
 			],
@@ -414,7 +409,7 @@
 			"vectorize": [
 				{
 					"binding": "VECTORIZE",
-					"index_name": "ai-worker-dev",
+					"index_name": "ai-worker-stg",
 					"remote": true
 				}
 			],
@@ -477,7 +472,7 @@
 			"vectorize": [
 				{
 					"binding": "VECTORIZE",
-					"index_name": "ai-worker-dev",
+					"index_name": "ai-worker",
 					"remote": true
 				}
 			],
@@ -540,7 +535,7 @@
 			"vectorize": [
 				{
 					"binding": "VECTORIZE",
-					"index_name": "ai-worker-dev",
+					"index_name": "ai-worker",
 					"remote": true
 				}
 			],
@@ -603,7 +598,7 @@
 			"vectorize": [
 				{
 					"binding": "VECTORIZE",
-					"index_name": "ai-worker-dev",
+					"index_name": "ai-worker",
 					"remote": true
 				}
 			],
