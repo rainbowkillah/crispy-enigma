@@ -609,3 +609,16 @@ npm run lint  # ESLint
 ---
 
 **Ready to start? Pick a phase and copy-paste the codex command above!**
+
+---
+## M8 Codex Prompts
+
+**Objective:** Provide prompts for Codex to work on M8 tasks.
+
+### Prompt 1: [Name of Task 1]
+
+*Please provide a detailed prompt for the first task of M8.*
+
+### Prompt 2: [Name of Task 2]
+
+*Please provide a detailed prompt for the second task of M8.*

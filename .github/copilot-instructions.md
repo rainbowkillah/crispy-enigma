@@ -213,3 +213,31 @@ logger.info('Chat request', {
 4. **Vectorize metadata limits**: Keep metadata <1KB per vector
 5. **KV consistency**: Eventual consistency means flag changes take ~60s to propagate
 6. **Streaming broken by buffering**: Use `TransformStream` for proper backpressure
+
+---
+## M8 Copilot Instructions
+
+**Objective:** Create a pull request, perform a code review, and create a handoff document to prepare for Codex to work on M8.
+
+### Steps:
+
+1.  **Create a Pull Request:**
+    - Create a new branch for the M8 work.
+    - Implement the features and bug fixes planned for M8.
+    - Push the changes to the remote repository.
+    - Open a pull request against the main branch.
+
+2.  **Perform Code Review:**
+    - Review the pull request for code quality, correctness, and adherence to project standards.
+    - Provide feedback and suggestions for improvement.
+    - Approve the pull request once it meets the quality standards.
+
+3.  **Create Handoff Document:**
+    - Create a new handoff document for M8, similar to the M6-M7 handoff.
+    - Summarize the work completed in M8.
+    - Outline the plan for the next milestone.
+
+4.  **Prepare for Codex:**
+    - Update the  file with new prompts for the next milestone.
+    - Ensure that the prompts are clear, concise, and provide enough context for Codex to generate the required code.
+
