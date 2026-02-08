@@ -1,0 +1,5321 @@
+{
+  "collection": {
+    "_": {
+      "exporter_id": "crispy-enigma"
+    },
+    "item": [
+      {
+        "id": "2c0f4844-544a-46dd-bb9c-a189049c30ec",
+        "name": "Health",
+        "description": {
+          "content": "Health check endpoints",
+          "type": "text/plain"
+        },
+        "item": [
+          {
+            "id": "b6da892a-6d1f-4f22-a808-12d720aa015d",
+            "name": "Health Check",
+            "request": {
+              "description": {
+                "content": "Check API health status and tenant configuration",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "health"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "x-tenant-id",
+                  "value": "{{tenantId}}"
+                }
+              ],
+              "method": "GET"
+            },
+            "response": [
+              {
+                "_": {
+                  "postman_previewlanguage": "json"
+                },
+                "id": "dd19e112-4790-48e6-acc2-e6fef8984990",
+                "name": "Success",
+                "originalRequest": {
+                  "url": {
+                    "path": [
+                      "health"
+                    ],
+                    "host": [
+                      "{{baseUrl}}"
+                    ],
+                    "query": [],
+                    "variable": []
+                  },
+                  "header": [
+                    {
+                      "key": "x-tenant-id",
+                      "value": "example"
+                    }
+                  ],
+                  "method": "GET"
+                },
+                "status": "OK",
+                "code": 200,
+                "header": [
+                  {
+                    "key": "content-type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"status\": \"ok\",\n    \"tenantId\": \"example\",\n    \"environment\": \"development\",\n    \"modelId\": \"@cf/meta/llama-2-7b-chat-int8\",\n    \"fallbackModelId\": \"@cf/meta/llama-2-7b-chat-int8\"\n  }\n}",
+                "cookie": []
+              }
+            ],
+            "event": []
+          }
+        ],
+        "event": []
+      },
+      {
+        "id": "36844942-ef32-459d-9d78-5426dc2af317",
+        "name": "Metrics",
+        "description": {
+          "content": "API metrics and analytics endpoints",
+          "type": "text/plain"
+        },
+        "item": [
+          {
+            "id": "24473f34-c39b-404c-8e6d-843d682e6dd5",
+            "name": "Search Cache Metrics",
+            "request": {
+              "description": {
+                "content": "Get search cache performance metrics for a specific time period",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "metrics",
+                  "search-cache"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [
+                  {
+                    "description": {
+                      "content": "Time period: 1h, 24h, or 7d",
+                      "type": "text/plain"
+                    },
+                    "key": "period",
+                    "value": "24h"
+                  }
+                ],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "x-tenant-id",
+                  "value": "{{tenantId}}"
+                }
+              ],
+              "method": "GET"
+            },
+            "response": [
+              {
+                "_": {
+                  "postman_previewlanguage": "json"
+                },
+                "id": "b1acefe3-207b-467a-b97c-8e9e76da6fd2",
+                "name": "Success - 24h metrics",
+                "originalRequest": {
+                  "url": {
+                    "path": [
+                      "metrics",
+                      "search-cache"
+                    ],
+                    "host": [
+                      "{{baseUrl}}"
+                    ],
+                    "query": [
+                      {
+                        "key": "period",
+                        "value": "24h"
+                      }
+                    ],
+                    "variable": []
+                  },
+                  "header": [
+                    {
+                      "key": "x-tenant-id",
+                      "value": "example"
+                    }
+                  ],
+                  "method": "GET"
+                },
+                "status": "OK",
+                "code": 200,
+                "header": [
+                  {
+                    "key": "content-type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"period\": \"24h\",\n    \"hitRate\": 0.65,\n    \"totalSearches\": 150,\n    \"cacheHits\": 98,\n    \"cacheMisses\": 52,\n    \"avgCachedLatency\": 45,\n    \"avgUncachedLatency\": 320,\n    \"latencyImprovement\": 85.9,\n    \"topCachedQueries\": [\n      { \"query\": \"what are workers\", \"hits\": 23 },\n      { \"query\": \"how to deploy\", \"hits\": 15 }\n    ]\n  }\n}",
+                "cookie": []
+              }
+            ],
+            "event": []
+          }
+        ],
+        "event": []
+      },
+      {
+        "id": "3b325b5d-380d-4254-a791-ff8d078501de",
+        "name": "RAG",
+        "description": {
+          "content": "RAG (Retrieval Augmented Generation) endpoints for document ingestion and search",
+          "type": "text/plain"
+        },
+        "item": [
+          {
+            "id": "c41f6a59-4648-4a88-8d8e-8779a571fe52",
+            "name": "Ingest Document",
+            "request": {
+              "description": {
+                "content": "Ingest a document into the RAG system. The text will be chunked, embedded, and stored in the vector database.",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "ingest"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "x-tenant-id",
+                  "value": "{{tenantId}}"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"docId\": \"{{docId}}\",\n  \"text\": \"Cloudflare Workers is a serverless platform that allows developers to deploy code at the edge. Workers run on Cloudflare's global network, providing low latency and high performance. You can use Workers to build APIs, modify requests and responses, and much more.\",\n  \"source\": \"cloudflare-docs\",\n  \"title\": \"Introduction to Cloudflare Workers\",\n  \"url\": \"https://developers.cloudflare.com/workers\",\n  \"chunking\": {\n    \"maxChunkSize\": 1000,\n    \"overlap\": 100\n  }\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              }
+            },
+            "response": [
+              {
+                "_": {
+                  "postman_previewlanguage": "json"
+                },
+                "id": "7c007f97-a7e4-49ea-84fd-9ee956fa60e3",
+                "name": "Success",
+                "originalRequest": {
+                  "url": {
+                    "path": [
+                      "ingest"
+                    ],
+                    "host": [
+                      "{{baseUrl}}"
+                    ],
+                    "query": [],
+                    "variable": []
+                  },
+                  "header": [
+                    {
+                      "key": "x-tenant-id",
+                      "value": "example"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "method": "POST",
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"docId\": \"doc-001\",\n  \"text\": \"Cloudflare Workers is a serverless platform...\",\n  \"source\": \"cloudflare-docs\",\n  \"title\": \"Introduction to Cloudflare Workers\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  }
+                },
+                "status": "OK",
+                "code": 200,
+                "header": [
+                  {
+                    "key": "content-type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"status\": \"ingested\",\n    \"docId\": \"doc-001\",\n    \"chunks\": 3,\n    \"embeddingModelId\": \"@cf/baai/bge-m3\"\n  }\n}",
+                "cookie": []
+              }
+            ],
+            "event": []
+          },
+          {
+            "id": "779d6357-48a5-4a00-a90c-a9ebb6b37ffc",
+            "name": "Search Documents",
+            "request": {
+              "description": {
+                "content": "Search documents using RAG. Returns an AI-generated answer with cited sources.",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "search"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "x-tenant-id",
+                  "value": "{{tenantId}}"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"query\": \"What are Cloudflare Workers?\",\n  \"topK\": 5\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              }
+            },
+            "response": [
+              {
+                "_": {
+                  "postman_previewlanguage": "json"
+                },
+                "id": "8f77f272-37b3-477e-b309-8b1622472c88",
+                "name": "Success",
+                "originalRequest": {
+                  "url": {
+                    "path": [
+                      "search"
+                    ],
+                    "host": [
+                      "{{baseUrl}}"
+                    ],
+                    "query": [],
+                    "variable": []
+                  },
+                  "header": [
+                    {
+                      "key": "x-tenant-id",
+                      "value": "example"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "method": "POST",
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"query\": \"What are Cloudflare Workers?\",\n  \"topK\": 5\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  }
+                },
+                "status": "OK",
+                "code": 200,
+                "header": [
+                  {
+                    "key": "content-type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"status\": \"ok\",\n    \"answer\": \"Cloudflare Workers is a serverless platform that allows developers to deploy code at the edge of Cloudflare's global network. It provides low latency and high performance by running your code close to your users.\",\n    \"sources\": [\n      {\n        \"id\": \"doc-001:0\",\n        \"docId\": \"doc-001\",\n        \"chunkId\": \"0\",\n        \"title\": \"Introduction to Cloudflare Workers\",\n        \"url\": \"https://developers.cloudflare.com/workers\",\n        \"source\": \"cloudflare-docs\",\n        \"text\": \"Cloudflare Workers is a serverless platform that allows developers to deploy code at the edge.\",\n        \"score\": 0.92\n      }\n    ],\n    \"confidence\": 0.89,\n    \"followUps\": [\n      \"How do I deploy a Worker?\",\n      \"What languages can I use with Workers?\",\n      \"What are the pricing tiers?\"\n    ]\n  }\n}",
+                "cookie": []
+              }
+            ],
+            "event": []
+          }
+        ],
+        "event": []
+      },
+      {
+        "id": "0386b436-30d6-4fc1-9d99-3f0c25698954",
+        "name": "Chat",
+        "description": {
+          "content": "Chat endpoints for conversational AI interactions",
+          "type": "text/plain"
+        },
+        "item": [
+          {
+            "id": "6c6f659b-93db-496c-8e43-357e1fad472b",
+            "name": "Send Chat Message",
+            "request": {
+              "description": {
+                "content": "Send a chat message. Supports both streaming and non-streaming responses.",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "chat"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "x-tenant-id",
+                  "value": "{{tenantId}}"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"sessionId\": \"{{sessionId}}\",\n  \"message\": \"Hello! Can you explain what Cloudflare Workers are?\",\n  \"stream\": false,\n  \"userId\": \"user-123\"\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              }
+            },
+            "response": [
+              {
+                "_": {
+                  "postman_previewlanguage": "json"
+                },
+                "id": "9bc8c6ed-9851-48d7-8e21-7e3724ececa3",
+                "name": "Success - Non-streaming",
+                "originalRequest": {
+                  "url": {
+                    "path": [
+                      "chat"
+                    ],
+                    "host": [
+                      "{{baseUrl}}"
+                    ],
+                    "query": [],
+                    "variable": []
+                  },
+                  "header": [
+                    {
+                      "key": "x-tenant-id",
+                      "value": "example"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "method": "POST",
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"sessionId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"message\": \"Hello! Can you explain what Cloudflare Workers are?\",\n  \"stream\": false\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  }
+                },
+                "status": "OK",
+                "code": 200,
+                "header": [
+                  {
+                    "key": "content-type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"role\": \"assistant\",\n    \"content\": \"Cloudflare Workers is a serverless computing platform that runs on Cloudflare's edge network. It allows you to deploy JavaScript, TypeScript, Rust, C, and C++ code that runs close to users worldwide, providing low latency and high performance.\",\n    \"timestamp\": 1738886400000,\n    \"usage\": {\n      \"tokensIn\": 45,\n      \"tokensOut\": 62,\n      \"totalTokens\": 107\n    }\n  }\n}",
+                "cookie": []
+              }
+            ],
+            "event": [
+              {
+                "listen": "prerequest",
+                "script": {
+                  "id": "67470905-0591-4ea8-9136-845ecef59dc3",
+                  "type": "text/javascript",
+                  "exec": [
+                    "// Generate a session ID if not set",
+                    "if (!pm.collectionVariables.get('sessionId')) {",
+                    "    pm.collectionVariables.set('sessionId', pm.variables.replaceIn('{{$randomUUID}}'));",
+                    "}"
+                  ],
+                  "_lastExecutionId": "0ce92d52-bfe0-4a87-9b6e-d27e7342af22"
+                }
+              }
+            ]
+          },
+          {
+            "id": "68eb9f31-40fa-4c05-b0f0-0c7eaf6179c5",
+            "name": "Send Chat Message (Streaming)",
+            "request": {
+              "description": {
+                "content": "Send a chat message with streaming enabled (Server-Sent Events)",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "chat"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "x-tenant-id",
+                  "value": "{{tenantId}}"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"sessionId\": \"{{sessionId}}\",\n  \"message\": \"Tell me more about Workers features\",\n  \"stream\": true\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              }
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "prerequest",
+                "script": {
+                  "id": "40463058-bcb1-44e1-8385-30caa1252f0b",
+                  "type": "text/javascript",
+                  "exec": [
+                    "// Generate a session ID if not set",
+                    "if (!pm.collectionVariables.get('sessionId')) {",
+                    "    pm.collectionVariables.set('sessionId', pm.variables.replaceIn('{{$randomUUID}}'));",
+                    "}"
+                  ],
+                  "_lastExecutionId": "8fe48b66-667e-4955-9ca6-7b9b957f369e"
+                }
+              }
+            ]
+          },
+          {
+            "id": "31e7209a-d5ea-44b0-a89d-f29bbf5375f3",
+            "name": "Get Chat History",
+            "request": {
+              "description": {
+                "content": "Get chat history for a specific session",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "sessions",
+                  "{{sessionId}}",
+                  "history"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "x-tenant-id",
+                  "value": "{{tenantId}}"
+                }
+              ],
+              "method": "GET"
+            },
+            "response": [
+              {
+                "_": {
+                  "postman_previewlanguage": "json"
+                },
+                "id": "33302163-2eb1-49f6-8efd-16c60d3f162b",
+                "name": "Success",
+                "originalRequest": {
+                  "url": {
+                    "path": [
+                      "sessions",
+                      "550e8400-e29b-41d4-a716-446655440000",
+                      "history"
+                    ],
+                    "host": [
+                      "{{baseUrl}}"
+                    ],
+                    "query": [],
+                    "variable": []
+                  },
+                  "header": [
+                    {
+                      "key": "x-tenant-id",
+                      "value": "example"
+                    }
+                  ],
+                  "method": "GET"
+                },
+                "status": "OK",
+                "code": 200,
+                "header": [
+                  {
+                    "key": "content-type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": "[\n  {\n    \"role\": \"user\",\n    \"content\": \"Hello! Can you explain what Cloudflare Workers are?\",\n    \"timestamp\": 1738886300000\n  },\n  {\n    \"role\": \"assistant\",\n    \"content\": \"Cloudflare Workers is a serverless computing platform...\",\n    \"timestamp\": 1738886305000\n  }\n]",
+                "cookie": []
+              }
+            ],
+            "event": []
+          },
+          {
+            "id": "e280696c-a0e7-4391-97ee-6fa26e75ded5",
+            "name": "Clear Chat Session",
+            "request": {
+              "description": {
+                "content": "Clear all messages from a chat session",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "sessions",
+                  "{{sessionId}}"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "x-tenant-id",
+                  "value": "{{tenantId}}"
+                }
+              ],
+              "method": "DELETE"
+            },
+            "response": [
+              {
+                "_": {
+                  "postman_previewlanguage": "json"
+                },
+                "id": "df6af849-1174-4b56-a66d-3ace22fb2147",
+                "name": "Success",
+                "originalRequest": {
+                  "url": {
+                    "path": [
+                      "sessions",
+                      "550e8400-e29b-41d4-a716-446655440000"
+                    ],
+                    "host": [
+                      "{{baseUrl}}"
+                    ],
+                    "query": [],
+                    "variable": []
+                  },
+                  "header": [
+                    {
+                      "key": "x-tenant-id",
+                      "value": "example"
+                    }
+                  ],
+                  "method": "DELETE"
+                },
+                "status": "OK",
+                "code": 200,
+                "header": [
+                  {
+                    "key": "content-type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": "{\n  \"ok\": true\n}",
+                "cookie": []
+              }
+            ],
+            "event": []
+          }
+        ],
+        "event": []
+      }
+    ],
+    "auth": {
+      "type": "apikey",
+      "apikey": [
+        {
+          "type": "string",
+          "value": "{{tenantId}}",
+          "key": "value"
+        },
+        {
+          "type": "string",
+          "value": "x-tenant-id",
+          "key": "key"
+        }
+      ]
+    },
+    "event": [
+      {
+        "listen": "prerequest",
+        "script": {
+          "id": "237d7b3b-b229-46c2-98d6-b6b42836343d",
+          "type": "text/javascript",
+          "exec": [
+            ""
+          ],
+          "_lastExecutionId": "801acc60-b89a-43a5-9e32-52d52b426cf0"
+        }
+      },
+      {
+        "listen": "test",
+        "script": {
+          "id": "8dcc6e31-2441-4594-886e-485966003983",
+          "type": "text/javascript",
+          "exec": [
+            "// Common tests for all requests",
+            "pm.test('Response time is less than 5s', function () {",
+            "    pm.expect(pm.response.responseTime).to.be.below(5000);",
+            "});",
+            "",
+            "pm.test('Content-Type is application/json', function () {",
+            "    pm.expect(pm.response.headers.get('content-type')).to.include('application/json');",
+            "});",
+            "",
+            "// Check for successful responses",
+            "if (pm.response.code === 200) {",
+            "    pm.test('Response has ok field', function () {",
+            "        const jsonData = pm.response.json();",
+            "        pm.expect(jsonData).to.have.property('ok');",
+            "    });",
+            "}"
+          ],
+          "_lastExecutionId": "c97fca4d-2458-427a-a2ba-8ee48fbf2911"
+        }
+      }
+    ],
+    "variable": [
+      {
+        "type": "string",
+        "value": "https://example.local",
+        "key": "baseUrl"
+      },
+      {
+        "type": "string",
+        "value": "example",
+        "key": "tenantId"
+      },
+      {
+        "type": "string",
+        "value": "",
+        "key": "sessionId"
+      },
+      {
+        "type": "string",
+        "value": "doc-001",
+        "key": "docId"
+      }
+    ],
+    "info": {
+      "_postman_id": "38122394-4cf3-4450-903d-53b93f71c0ea",
+      "name": "Crispy Enigma API",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+      "description": {
+        "content": "Multi-tenant Cloudflare Workers API with RAG search and chat capabilities",
+        "type": "text/plain"
+      }
+    }
+  },
+  "environment": {
+    "_": {
+      "postman_variable_scope": "environment",
+      "postman_exported_at": "2026-02-08T00:00:00.000Z",
+      "postman_exported_using": "Newman (local)"
+    },
+    "id": "mrrainbowsmoke-stg",
+    "name": "mrrainbowsmoke.stg",
+    "values": [
+      {
+        "type": "any",
+        "value": "https://bluey-ai-worker-staging.mrrainbowsmoke.workers.dev",
+        "key": "baseUrl"
+      },
+      {
+        "type": "any",
+        "value": "mrrainbowsmoke",
+        "key": "tenantId"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "sessionId"
+      },
+      {
+        "type": "any",
+        "value": "doc-001",
+        "key": "docId"
+      }
+    ]
+  },
+  "globals": {
+    "id": "eebb373d-2593-4e68-abdb-7abdbdac2000",
+    "values": []
+  },
+  "run": {
+    "stats": {
+      "iterations": {
+        "total": 1,
+        "pending": 0,
+        "failed": 0
+      },
+      "items": {
+        "total": 8,
+        "pending": 0,
+        "failed": 0
+      },
+      "scripts": {
+        "total": 18,
+        "pending": 0,
+        "failed": 0
+      },
+      "prerequests": {
+        "total": 8,
+        "pending": 0,
+        "failed": 0
+      },
+      "requests": {
+        "total": 8,
+        "pending": 0,
+        "failed": 0
+      },
+      "tests": {
+        "total": 8,
+        "pending": 0,
+        "failed": 0
+      },
+      "assertions": {
+        "total": 20,
+        "pending": 0,
+        "failed": 1
+      },
+      "testScripts": {
+        "total": 8,
+        "pending": 0,
+        "failed": 0
+      },
+      "prerequestScripts": {
+        "total": 10,
+        "pending": 0,
+        "failed": 0
+      }
+    },
+    "timings": {
+      "responseAverage": 1308.625,
+      "responseMin": 17,
+      "responseMax": 6695,
+      "responseSd": 2323.5838664388684,
+      "dnsAverage": 0,
+      "dnsMin": 0,
+      "dnsMax": 0,
+      "dnsSd": 0,
+      "firstByteAverage": 0,
+      "firstByteMin": 0,
+      "firstByteMax": 0,
+      "firstByteSd": 0,
+      "started": 1770531840107,
+      "completed": 1770531850705
+    },
+    "executions": [
+      {
+        "cursor": {
+          "position": 0,
+          "iteration": 0,
+          "length": 8,
+          "cycles": 1,
+          "empty": false,
+          "eof": false,
+          "bof": true,
+          "cr": false,
+          "ref": "a5e06f9f-9628-4b67-9d87-071be91b47c7",
+          "httpRequestId": "e20c1a11-5753-4042-b60b-41b351b721a9"
+        },
+        "item": {
+          "id": "b6da892a-6d1f-4f22-a808-12d720aa015d",
+          "name": "Health Check",
+          "request": {
+            "description": {
+              "content": "Check API health status and tenant configuration",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "health"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "_": {
+                "postman_previewlanguage": "json"
+              },
+              "id": "dd19e112-4790-48e6-acc2-e6fef8984990",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "health"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "x-tenant-id",
+                    "value": "example"
+                  }
+                ],
+                "method": "GET"
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"status\": \"ok\",\n    \"tenantId\": \"example\",\n    \"environment\": \"development\",\n    \"modelId\": \"@cf/meta/llama-2-7b-chat-int8\",\n    \"fallbackModelId\": \"@cf/meta/llama-2-7b-chat-int8\"\n  }\n}",
+              "cookie": []
+            }
+          ],
+          "event": []
+        },
+        "request": {
+          "description": {
+            "content": "Check API health status and tenant configuration",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "https",
+            "path": [
+              "health"
+            ],
+            "host": [
+              "bluey-ai-worker-staging",
+              "mrrainbowsmoke",
+              "workers",
+              "dev"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "x-tenant-id",
+              "value": "mrrainbowsmoke",
+              "system": true
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "898ab0d5-77bd-4636-93e4-d6d1fa89461d",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "bluey-ai-worker-staging.mrrainbowsmoke.workers.dev",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET",
+          "auth": {
+            "type": "apikey",
+            "apikey": [
+              {
+                "type": "string",
+                "value": "mrrainbowsmoke",
+                "key": "value"
+              },
+              {
+                "type": "string",
+                "value": "x-tenant-id",
+                "key": "key"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "67f82f6a-2ae9-4114-aec7-ffc04f4d8c06",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Sun, 08 Feb 2026 06:24:00 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=BB2ZiYM51wgCii1HTPjfo74uf7CpkjDoULjJxe7spM5U26UyLcrfGpYGjY78YdvP74o4eccq47UmkCEmA5cT1c1V%2BmM%2FLfYclxfVcpQGKPUnqyDKveHOryqjnUqlus0SfRonEojYPb3vzmPq5bnqcw%3D%3D\"}]}"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "br"
+            },
+            {
+              "key": "Server",
+              "value": "cloudflare"
+            },
+            {
+              "key": "CF-RAY",
+              "value": "9ca90aa18e9713c3-IAD"
+            },
+            {
+              "key": "alt-svc",
+              "value": "h3=\":443\"; ma=86400"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              111,
+              107,
+              34,
+              58,
+              116,
+              114,
+              117,
+              101,
+              44,
+              34,
+              100,
+              97,
+              116,
+              97,
+              34,
+              58,
+              123,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              34,
+              111,
+              107,
+              34,
+              44,
+              34,
+              116,
+              101,
+              110,
+              97,
+              110,
+              116,
+              73,
+              100,
+              34,
+              58,
+              34,
+              109,
+              114,
+              114,
+              97,
+              105,
+              110,
+              98,
+              111,
+              119,
+              115,
+              109,
+              111,
+              107,
+              101,
+              34,
+              44,
+              34,
+              101,
+              110,
+              118,
+              105,
+              114,
+              111,
+              110,
+              109,
+              101,
+              110,
+              116,
+              34,
+              58,
+              34,
+              115,
+              116,
+              97,
+              103,
+              105,
+              110,
+              103,
+              34,
+              44,
+              34,
+              109,
+              111,
+              100,
+              101,
+              108,
+              73,
+              100,
+              34,
+              58,
+              34,
+              64,
+              99,
+              102,
+              47,
+              109,
+              101,
+              116,
+              97,
+              47,
+              108,
+              108,
+              97,
+              109,
+              97,
+              45,
+              51,
+              46,
+              49,
+              45,
+              56,
+              98,
+              45,
+              105,
+              110,
+              115,
+              116,
+              114,
+              117,
+              99,
+              116,
+              45,
+              102,
+              97,
+              115,
+              116,
+              34,
+              44,
+              34,
+              102,
+              97,
+              108,
+              108,
+              98,
+              97,
+              99,
+              107,
+              77,
+              111,
+              100,
+              101,
+              108,
+              73,
+              100,
+              34,
+              58,
+              34,
+              64,
+              99,
+              102,
+              47,
+              109,
+              101,
+              116,
+              97,
+              47,
+              108,
+              108,
+              97,
+              109,
+              97,
+              45,
+              51,
+              46,
+              49,
+              45,
+              56,
+              98,
+              45,
+              105,
+              110,
+              115,
+              116,
+              114,
+              117,
+              99,
+              116,
+              34,
+              125,
+              44,
+              34,
+              116,
+              114,
+              97,
+              99,
+              101,
+              73,
+              100,
+              34,
+              58,
+              34,
+              57,
+              99,
+              97,
+              57,
+              48,
+              97,
+              97,
+              49,
+              56,
+              101,
+              57,
+              55,
+              49,
+              51,
+              99,
+              51,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 116,
+          "responseSize": 214
+        },
+        "id": "b6da892a-6d1f-4f22-a808-12d720aa015d",
+        "assertions": [
+          {
+            "assertion": "Response time is less than 5s",
+            "skipped": false
+          },
+          {
+            "assertion": "Content-Type is application/json",
+            "skipped": false
+          },
+          {
+            "assertion": "Response has ok field",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "296d6431-8c03-4bba-904b-0a9d8b3c4c72",
+          "length": 8,
+          "cycles": 1,
+          "position": 1,
+          "iteration": 0,
+          "httpRequestId": "ef4148d9-beea-48e7-aa5a-2dd86731149f"
+        },
+        "item": {
+          "id": "24473f34-c39b-404c-8e6d-843d682e6dd5",
+          "name": "Search Cache Metrics",
+          "request": {
+            "description": {
+              "content": "Get search cache performance metrics for a specific time period",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "metrics",
+                "search-cache"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "description": {
+                    "content": "Time period: 1h, 24h, or 7d",
+                    "type": "text/plain"
+                  },
+                  "key": "period",
+                  "value": "24h"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "_": {
+                "postman_previewlanguage": "json"
+              },
+              "id": "b1acefe3-207b-467a-b97c-8e9e76da6fd2",
+              "name": "Success - 24h metrics",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "metrics",
+                    "search-cache"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "period",
+                      "value": "24h"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "x-tenant-id",
+                    "value": "example"
+                  }
+                ],
+                "method": "GET"
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"period\": \"24h\",\n    \"hitRate\": 0.65,\n    \"totalSearches\": 150,\n    \"cacheHits\": 98,\n    \"cacheMisses\": 52,\n    \"avgCachedLatency\": 45,\n    \"avgUncachedLatency\": 320,\n    \"latencyImprovement\": 85.9,\n    \"topCachedQueries\": [\n      { \"query\": \"what are workers\", \"hits\": 23 },\n      { \"query\": \"how to deploy\", \"hits\": 15 }\n    ]\n  }\n}",
+              "cookie": []
+            }
+          ],
+          "event": []
+        },
+        "request": {
+          "description": {
+            "content": "Get search cache performance metrics for a specific time period",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "https",
+            "path": [
+              "metrics",
+              "search-cache"
+            ],
+            "host": [
+              "bluey-ai-worker-staging",
+              "mrrainbowsmoke",
+              "workers",
+              "dev"
+            ],
+            "query": [
+              {
+                "key": "period",
+                "value": "24h"
+              }
+            ],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "x-tenant-id",
+              "value": "mrrainbowsmoke",
+              "system": true
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "ed03dc7b-2af2-435e-b0c2-27e54d6b9ffd",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "bluey-ai-worker-staging.mrrainbowsmoke.workers.dev",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET",
+          "auth": {
+            "type": "apikey",
+            "apikey": [
+              {
+                "type": "string",
+                "value": "mrrainbowsmoke",
+                "key": "value"
+              },
+              {
+                "type": "string",
+                "value": "x-tenant-id",
+                "key": "key"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "437ea652-ed52-48d0-bda8-f6cfb92a576b",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Sun, 08 Feb 2026 06:24:00 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=RCBh5Afujq2TkNnyjg%2BzIMHq%2F9bItPsDGcGtRnHZBFlLvrldgoaBRypnmGRmFV0xOi8t7BFLunuPt%2FTkbGtzfzDhNaIZZWAK3qXBMwBGZShRM72UsLYi8MOKJ83dZXZuQNBJvVMmTrSY48p8zRMVbg%3D%3D\"}]}"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "br"
+            },
+            {
+              "key": "Server",
+              "value": "cloudflare"
+            },
+            {
+              "key": "CF-RAY",
+              "value": "9ca90aa1eed413c3-IAD"
+            },
+            {
+              "key": "alt-svc",
+              "value": "h3=\":443\"; ma=86400"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              111,
+              107,
+              34,
+              58,
+              116,
+              114,
+              117,
+              101,
+              44,
+              34,
+              100,
+              97,
+              116,
+              97,
+              34,
+              58,
+              123,
+              34,
+              116,
+              101,
+              110,
+              97,
+              110,
+              116,
+              73,
+              100,
+              34,
+              58,
+              34,
+              109,
+              114,
+              114,
+              97,
+              105,
+              110,
+              98,
+              111,
+              119,
+              115,
+              109,
+              111,
+              107,
+              101,
+              34,
+              44,
+              34,
+              112,
+              101,
+              114,
+              105,
+              111,
+              100,
+              34,
+              58,
+              34,
+              50,
+              52,
+              104,
+              34,
+              44,
+              34,
+              115,
+              116,
+              97,
+              114,
+              116,
+              84,
+              105,
+              109,
+              101,
+              34,
+              58,
+              49,
+              55,
+              55,
+              48,
+              52,
+              52,
+              53,
+              52,
+              52,
+              48,
+              51,
+              48,
+              54,
+              44,
+              34,
+              101,
+              110,
+              100,
+              84,
+              105,
+              109,
+              101,
+              34,
+              58,
+              49,
+              55,
+              55,
+              48,
+              53,
+              51,
+              49,
+              56,
+              52,
+              48,
+              51,
+              48,
+              54,
+              44,
+              34,
+              116,
+              111,
+              116,
+              97,
+              108,
+              83,
+              101,
+              97,
+              114,
+              99,
+              104,
+              101,
+              115,
+              34,
+              58,
+              48,
+              44,
+              34,
+              99,
+              97,
+              99,
+              104,
+              101,
+              72,
+              105,
+              116,
+              115,
+              34,
+              58,
+              48,
+              44,
+              34,
+              99,
+              97,
+              99,
+              104,
+              101,
+              77,
+              105,
+              115,
+              115,
+              101,
+              115,
+              34,
+              58,
+              48,
+              44,
+              34,
+              104,
+              105,
+              116,
+              82,
+              97,
+              116,
+              101,
+              34,
+              58,
+              48,
+              44,
+              34,
+              108,
+              97,
+              116,
+              101,
+              110,
+              99,
+              121,
+              73,
+              109,
+              112,
+              114,
+              111,
+              118,
+              101,
+              109,
+              101,
+              110,
+              116,
+              34,
+              58,
+              48,
+              44,
+              34,
+              116,
+              111,
+              112,
+              67,
+              97,
+              99,
+              104,
+              101,
+              100,
+              81,
+              117,
+              101,
+              114,
+              105,
+              101,
+              115,
+              34,
+              58,
+              91,
+              93,
+              125,
+              44,
+              34,
+              116,
+              114,
+              97,
+              99,
+              101,
+              73,
+              100,
+              34,
+              58,
+              34,
+              57,
+              99,
+              97,
+              57,
+              48,
+              97,
+              97,
+              49,
+              101,
+              101,
+              100,
+              52,
+              49,
+              51,
+              99,
+              51,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 117,
+          "responseSize": 247
+        },
+        "id": "24473f34-c39b-404c-8e6d-843d682e6dd5",
+        "assertions": [
+          {
+            "assertion": "Response time is less than 5s",
+            "skipped": false
+          },
+          {
+            "assertion": "Content-Type is application/json",
+            "skipped": false
+          },
+          {
+            "assertion": "Response has ok field",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "0ae09780-485f-482a-b1c7-fc761983bef4",
+          "length": 8,
+          "cycles": 1,
+          "position": 2,
+          "iteration": 0,
+          "httpRequestId": "d6d82652-c187-442e-8b98-e9446f612762"
+        },
+        "item": {
+          "id": "c41f6a59-4648-4a88-8d8e-8779a571fe52",
+          "name": "Ingest Document",
+          "request": {
+            "description": {
+              "content": "Ingest a document into the RAG system. The text will be chunked, embedded, and stored in the vector database.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "ingest"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"docId\": \"{{docId}}\",\n  \"text\": \"Cloudflare Workers is a serverless platform that allows developers to deploy code at the edge. Workers run on Cloudflare's global network, providing low latency and high performance. You can use Workers to build APIs, modify requests and responses, and much more.\",\n  \"source\": \"cloudflare-docs\",\n  \"title\": \"Introduction to Cloudflare Workers\",\n  \"url\": \"https://developers.cloudflare.com/workers\",\n  \"chunking\": {\n    \"maxChunkSize\": 1000,\n    \"overlap\": 100\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "_": {
+                "postman_previewlanguage": "json"
+              },
+              "id": "7c007f97-a7e4-49ea-84fd-9ee956fa60e3",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ingest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "x-tenant-id",
+                    "value": "example"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"docId\": \"doc-001\",\n  \"text\": \"Cloudflare Workers is a serverless platform...\",\n  \"source\": \"cloudflare-docs\",\n  \"title\": \"Introduction to Cloudflare Workers\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"status\": \"ingested\",\n    \"docId\": \"doc-001\",\n    \"chunks\": 3,\n    \"embeddingModelId\": \"@cf/baai/bge-m3\"\n  }\n}",
+              "cookie": []
+            }
+          ],
+          "event": []
+        },
+        "request": {
+          "description": {
+            "content": "Ingest a document into the RAG system. The text will be chunked, embedded, and stored in the vector database.",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "https",
+            "path": [
+              "ingest"
+            ],
+            "host": [
+              "bluey-ai-worker-staging",
+              "mrrainbowsmoke",
+              "workers",
+              "dev"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "x-tenant-id",
+              "value": "mrrainbowsmoke",
+              "system": true
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "0b77569c-a1f1-4ced-aefd-452098bf60a7",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "bluey-ai-worker-staging.mrrainbowsmoke.workers.dev",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "501",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"docId\": \"doc-001\",\n  \"text\": \"Cloudflare Workers is a serverless platform that allows developers to deploy code at the edge. Workers run on Cloudflare's global network, providing low latency and high performance. You can use Workers to build APIs, modify requests and responses, and much more.\",\n  \"source\": \"cloudflare-docs\",\n  \"title\": \"Introduction to Cloudflare Workers\",\n  \"url\": \"https://developers.cloudflare.com/workers\",\n  \"chunking\": {\n    \"maxChunkSize\": 1000,\n    \"overlap\": 100\n  }\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          },
+          "auth": {
+            "type": "apikey",
+            "apikey": [
+              {
+                "type": "string",
+                "value": "mrrainbowsmoke",
+                "key": "value"
+              },
+              {
+                "type": "string",
+                "value": "x-tenant-id",
+                "key": "key"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "6103eda4-ca06-4b3d-9f0b-84d7621c849a",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Sun, 08 Feb 2026 06:24:07 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=uni2OSL7jkX7NLm4tJi8NW6OzyJqdLPsmXrUBNm34VAIgTrBbiZEH5FwaoenvvzcjGX%2Fzh78Wn9Yfq%2FjDPbHLdDMqmcxUx8o0nNzsTKXiWX65gHtvZKjKKGp%2BIOeOtN5JZuEYxyGGWUkFCkJgKPTSg%3D%3D\"}]}"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "br"
+            },
+            {
+              "key": "Server",
+              "value": "cloudflare"
+            },
+            {
+              "key": "CF-RAY",
+              "value": "9ca90aa2bf1d13c3-IAD"
+            },
+            {
+              "key": "alt-svc",
+              "value": "h3=\":443\"; ma=86400"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              111,
+              107,
+              34,
+              58,
+              116,
+              114,
+              117,
+              101,
+              44,
+              34,
+              100,
+              97,
+              116,
+              97,
+              34,
+              58,
+              123,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              34,
+              105,
+              110,
+              103,
+              101,
+              115,
+              116,
+              101,
+              100,
+              34,
+              44,
+              34,
+              100,
+              111,
+              99,
+              73,
+              100,
+              34,
+              58,
+              34,
+              100,
+              111,
+              99,
+              45,
+              48,
+              48,
+              49,
+              34,
+              44,
+              34,
+              99,
+              104,
+              117,
+              110,
+              107,
+              115,
+              34,
+              58,
+              49,
+              44,
+              34,
+              101,
+              109,
+              98,
+              101,
+              100,
+              100,
+              105,
+              110,
+              103,
+              77,
+              111,
+              100,
+              101,
+              108,
+              73,
+              100,
+              34,
+              58,
+              34,
+              64,
+              99,
+              102,
+              47,
+              98,
+              97,
+              97,
+              105,
+              47,
+              98,
+              103,
+              101,
+              45,
+              109,
+              51,
+              34,
+              125,
+              44,
+              34,
+              116,
+              114,
+              97,
+              99,
+              101,
+              73,
+              100,
+              34,
+              58,
+              34,
+              57,
+              99,
+              97,
+              57,
+              48,
+              97,
+              97,
+              50,
+              98,
+              102,
+              49,
+              100,
+              49,
+              51,
+              99,
+              51,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 6695,
+          "responseSize": 135
+        },
+        "id": "c41f6a59-4648-4a88-8d8e-8779a571fe52",
+        "assertions": [
+          {
+            "assertion": "Response time is less than 5s",
+            "skipped": false,
+            "error": {
+              "name": "AssertionError",
+              "index": 0,
+              "test": "Response time is less than 5s",
+              "message": "expected 6695 to be below 5000",
+              "stack": "AssertionError: expected 6695 to be below 5000\n   at Object.eval sandbox-script.js:1:3)"
+            }
+          },
+          {
+            "assertion": "Content-Type is application/json",
+            "skipped": false
+          },
+          {
+            "assertion": "Response has ok field",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "e32e55fd-2d90-4884-9abb-7f6453be086b",
+          "length": 8,
+          "cycles": 1,
+          "position": 3,
+          "iteration": 0,
+          "httpRequestId": "4c1ab027-aefb-4d46-9b73-30a881b97bb2"
+        },
+        "item": {
+          "id": "779d6357-48a5-4a00-a90c-a9ebb6b37ffc",
+          "name": "Search Documents",
+          "request": {
+            "description": {
+              "content": "Search documents using RAG. Returns an AI-generated answer with cited sources.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "search"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"What are Cloudflare Workers?\",\n  \"topK\": 5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "_": {
+                "postman_previewlanguage": "json"
+              },
+              "id": "8f77f272-37b3-477e-b309-8b1622472c88",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "x-tenant-id",
+                    "value": "example"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"What are Cloudflare Workers?\",\n  \"topK\": 5\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"status\": \"ok\",\n    \"answer\": \"Cloudflare Workers is a serverless platform that allows developers to deploy code at the edge of Cloudflare's global network. It provides low latency and high performance by running your code close to your users.\",\n    \"sources\": [\n      {\n        \"id\": \"doc-001:0\",\n        \"docId\": \"doc-001\",\n        \"chunkId\": \"0\",\n        \"title\": \"Introduction to Cloudflare Workers\",\n        \"url\": \"https://developers.cloudflare.com/workers\",\n        \"source\": \"cloudflare-docs\",\n        \"text\": \"Cloudflare Workers is a serverless platform that allows developers to deploy code at the edge.\",\n        \"score\": 0.92\n      }\n    ],\n    \"confidence\": 0.89,\n    \"followUps\": [\n      \"How do I deploy a Worker?\",\n      \"What languages can I use with Workers?\",\n      \"What are the pricing tiers?\"\n    ]\n  }\n}",
+              "cookie": []
+            }
+          ],
+          "event": []
+        },
+        "request": {
+          "description": {
+            "content": "Search documents using RAG. Returns an AI-generated answer with cited sources.",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "https",
+            "path": [
+              "search"
+            ],
+            "host": [
+              "bluey-ai-worker-staging",
+              "mrrainbowsmoke",
+              "workers",
+              "dev"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "x-tenant-id",
+              "value": "mrrainbowsmoke",
+              "system": true
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "359c11c2-95cf-49a1-8131-93f4f1ac9b0e",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "bluey-ai-worker-staging.mrrainbowsmoke.workers.dev",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "58",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"query\": \"What are Cloudflare Workers?\",\n  \"topK\": 5\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          },
+          "auth": {
+            "type": "apikey",
+            "apikey": [
+              {
+                "type": "string",
+                "value": "mrrainbowsmoke",
+                "key": "value"
+              },
+              {
+                "type": "string",
+                "value": "x-tenant-id",
+                "key": "key"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "7922aef8-6cae-4584-bcdc-27c379655b33",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Sun, 08 Feb 2026 06:24:10 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=u2kM4NQNAUcvMn4%2FVCDE6qyNk0nvzE4rP3Oxdh59u3qxIoMU451ufInNfnflYpkhU%2FnKFcKVrq65gbGEv%2FO3HbLoVWiAd16LHBmtNg08cZgDLFUptU4P9FZSFLeXlp9jJT54%2BV0AiOaVm%2B%2FNj0bITA%3D%3D\"}]}"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "br"
+            },
+            {
+              "key": "Server",
+              "value": "cloudflare"
+            },
+            {
+              "key": "CF-RAY",
+              "value": "9ca90accbf4013c3-IAD"
+            },
+            {
+              "key": "alt-svc",
+              "value": "h3=\":443\"; ma=86400"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              111,
+              107,
+              34,
+              58,
+              116,
+              114,
+              117,
+              101,
+              44,
+              34,
+              100,
+              97,
+              116,
+              97,
+              34,
+              58,
+              123,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              34,
+              111,
+              107,
+              34,
+              44,
+              34,
+              116,
+              114,
+              97,
+              99,
+              101,
+              73,
+              100,
+              34,
+              58,
+              34,
+              57,
+              99,
+              97,
+              57,
+              48,
+              97,
+              99,
+              99,
+              98,
+              102,
+              52,
+              48,
+              49,
+              51,
+              99,
+              51,
+              34,
+              44,
+              34,
+              97,
+              110,
+              115,
+              119,
+              101,
+              114,
+              34,
+              58,
+              34,
+              73,
+              32,
+              100,
+              111,
+              110,
+              39,
+              116,
+              32,
+              104,
+              97,
+              118,
+              101,
+              32,
+              97,
+              110,
+              121,
+              32,
+              99,
+              111,
+              110,
+              116,
+              101,
+              120,
+              116,
+              32,
+              102,
+              111,
+              114,
+              32,
+              116,
+              104,
+              101,
+              32,
+              115,
+              111,
+              117,
+              114,
+              99,
+              101,
+              32,
+              111,
+              114,
+              32,
+              100,
+              111,
+              99,
+              73,
+              100,
+              44,
+              32,
+              98,
+              117,
+              116,
+              32,
+              73,
+              32,
+              99,
+              97,
+              110,
+              32,
+              116,
+              114,
+              121,
+              32,
+              116,
+              111,
+              32,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              32,
+              97,
+              32,
+              103,
+              101,
+              110,
+              101,
+              114,
+              97,
+              108,
+              32,
+              97,
+              110,
+              115,
+              119,
+              101,
+              114,
+              46,
+              92,
+              110,
+              92,
+              110,
+              67,
+              108,
+              111,
+              117,
+              100,
+              102,
+              108,
+              97,
+              114,
+              101,
+              32,
+              87,
+              111,
+              114,
+              107,
+              101,
+              114,
+              115,
+              32,
+              105,
+              115,
+              32,
+              97,
+              32,
+              115,
+              101,
+              114,
+              118,
+              101,
+              114,
+              108,
+              101,
+              115,
+              115,
+              32,
+              99,
+              111,
+              109,
+              112,
+              117,
+              116,
+              105,
+              110,
+              103,
+              32,
+              112,
+              108,
+              97,
+              116,
+              102,
+              111,
+              114,
+              109,
+              32,
+              116,
+              104,
+              97,
+              116,
+              32,
+              97,
+              108,
+              108,
+              111,
+              119,
+              115,
+              32,
+              100,
+              101,
+              118,
+              101,
+              108,
+              111,
+              112,
+              101,
+              114,
+              115,
+              32,
+              116,
+              111,
+              32,
+              114,
+              117,
+              110,
+              32,
+              99,
+              117,
+              115,
+              116,
+              111,
+              109,
+              32,
+              99,
+              111,
+              100,
+              101,
+              32,
+              97,
+              116,
+              32,
+              116,
+              104,
+              101,
+              32,
+              101,
+              100,
+              103,
+              101,
+              32,
+              111,
+              102,
+              32,
+              116,
+              104,
+              101,
+              32,
+              110,
+              101,
+              116,
+              119,
+              111,
+              114,
+              107,
+              44,
+              32,
+              99,
+              108,
+              111,
+              115,
+              101,
+              114,
+              32,
+              116,
+              111,
+              32,
+              117,
+              115,
+              101,
+              114,
+              115,
+              46,
+              32,
+              73,
+              116,
+              32,
+              101,
+              110,
+              97,
+              98,
+              108,
+              101,
+              115,
+              32,
+              100,
+              101,
+              118,
+              101,
+              108,
+              111,
+              112,
+              101,
+              114,
+              115,
+              32,
+              116,
+              111,
+              32,
+              99,
+              114,
+              101,
+              97,
+              116,
+              101,
+              32,
+              99,
+              117,
+              115,
+              116,
+              111,
+              109,
+              32,
+              102,
+              117,
+              110,
+              99,
+              116,
+              105,
+              111,
+              110,
+              115,
+              32,
+              116,
+              104,
+              97,
+              116,
+              32,
+              99,
+              97,
+              110,
+              32,
+              114,
+              117,
+              110,
+              32,
+              105,
+              110,
+              32,
+              114,
+              101,
+              115,
+              112,
+              111,
+              110,
+              115,
+              101,
+              32,
+              116,
+              111,
+              32,
+              118,
+              97,
+              114,
+              105,
+              111,
+              117,
+              115,
+              32,
+              101,
+              118,
+              101,
+              110,
+              116,
+              115,
+              44,
+              32,
+              115,
+              117,
+              99,
+              104,
+              32,
+              97,
+              115,
+              32,
+              72,
+              84,
+              84,
+              80,
+              32,
+              114,
+              101,
+              113,
+              117,
+              101,
+              115,
+              116,
+              115,
+              44,
+              32,
+              87,
+              101,
+              98,
+              83,
+              111,
+              99,
+              107,
+              101,
+              116,
+              32,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              115,
+              44,
+              32,
+              111,
+              114,
+              32,
+              99,
+              104,
+              97,
+              110,
+              103,
+              101,
+              115,
+              32,
+              116,
+              111,
+              32,
+              97,
+              32,
+              100,
+              97,
+              116,
+              97,
+              98,
+              97,
+              115,
+              101,
+              46,
+              32,
+              84,
+              104,
+              101,
+              115,
+              101,
+              32,
+              102,
+              117,
+              110,
+              99,
+              116,
+              105,
+              111,
+              110,
+              115,
+              32,
+              99,
+              97,
+              110,
+              32,
+              98,
+              101,
+              32,
+              117,
+              115,
+              101,
+              100,
+              32,
+              116,
+              111,
+              32,
+              101,
+              120,
+              116,
+              101,
+              110,
+              100,
+              32,
+              116,
+              104,
+              101,
+              32,
+              102,
+              117,
+              110,
+              99,
+              116,
+              105,
+              111,
+              110,
+              97,
+              108,
+              105,
+              116,
+              121,
+              32,
+              111,
+              102,
+              32,
+              97,
+              32,
+              119,
+              101,
+              98,
+              115,
+              105,
+              116,
+              101,
+              32,
+              111,
+              114,
+              32,
+              97,
+              112,
+              112,
+              108,
+              105,
+              99,
+              97,
+              116,
+              105,
+              111,
+              110,
+              44,
+              32,
+              112,
+              101,
+              114,
+              102,
+              111,
+              114,
+              109,
+              32,
+              116,
+              97,
+              115,
+              107,
+              115,
+              32,
+              115,
+              117,
+              99,
+              104,
+              32,
+              97,
+              115,
+              32,
+              99,
+              111,
+              110,
+              116,
+              101,
+              110,
+              116,
+              32,
+              102,
+              105,
+              108,
+              116,
+              101,
+              114,
+              105,
+              110,
+              103,
+              44,
+              32,
+              99,
+              97,
+              99,
+              104,
+              105,
+              110,
+              103,
+              44,
+              32,
+              111,
+              114,
+              32,
+              97,
+              117,
+              116,
+              104,
+              101,
+              110,
+              116,
+              105,
+              99,
+              97,
+              116,
+              105,
+              111,
+              110,
+              44,
+              32,
+              97,
+              110,
+              100,
+              32,
+              105,
+              109,
+              112,
+              114,
+              111,
+              118,
+              101,
+              32,
+              112,
+              101,
+              114,
+              102,
+              111,
+              114,
+              109,
+              97,
+              110,
+              99,
+              101,
+              32,
+              97,
+              110,
+              100,
+              32,
+              115,
+              101,
+              99,
+              117,
+              114,
+              105,
+              116,
+              121,
+              46,
+              32,
+              91,
+              115,
+              111,
+              117,
+              114,
+              99,
+              101,
+              58,
+              32,
+              78,
+              47,
+              65,
+              93,
+              34,
+              44,
+              34,
+              115,
+              111,
+              117,
+              114,
+              99,
+              101,
+              115,
+              34,
+              58,
+              91,
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              34,
+              100,
+              111,
+              99,
+              45,
+              48,
+              48,
+              49,
+              58,
+              48,
+              34,
+              44,
+              34,
+              100,
+              111,
+              99,
+              73,
+              100,
+              34,
+              58,
+              34,
+              34,
+              44,
+              34,
+              99,
+              104,
+              117,
+              110,
+              107,
+              73,
+              100,
+              34,
+              58,
+              34,
+              34,
+              44,
+              34,
+              116,
+              101,
+              120,
+              116,
+              34,
+              58,
+              34,
+              34,
+              44,
+              34,
+              115,
+              99,
+              111,
+              114,
+              101,
+              34,
+              58,
+              48,
+              46,
+              55,
+              53,
+              54,
+              56,
+              56,
+              53,
+              55,
+              55,
+              125,
+              93,
+              44,
+              34,
+              99,
+              111,
+              110,
+              102,
+              105,
+              100,
+              101,
+              110,
+              99,
+              101,
+              34,
+              58,
+              48,
+              46,
+              55,
+              53,
+              54,
+              56,
+              56,
+              53,
+              55,
+              55,
+              44,
+              34,
+              102,
+              111,
+              108,
+              108,
+              111,
+              119,
+              85,
+              112,
+              115,
+              34,
+              58,
+              91,
+              34,
+              67,
+              97,
+              110,
+              32,
+              121,
+              111,
+              117,
+              32,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              32,
+              97,
+              110,
+              32,
+              101,
+              120,
+              97,
+              109,
+              112,
+              108,
+              101,
+              32,
+              111,
+              102,
+              32,
+              97,
+              32,
+              99,
+              111,
+              109,
+              109,
+              111,
+              110,
+              32,
+              117,
+              115,
+              101,
+              32,
+              99,
+              97,
+              115,
+              101,
+              32,
+              102,
+              111,
+              114,
+              32,
+              67,
+              108,
+              111,
+              117,
+              100,
+              102,
+              108,
+              97,
+              114,
+              101,
+              32,
+              87,
+              111,
+              114,
+              107,
+              101,
+              114,
+              115,
+              63,
+              34,
+              44,
+              34,
+              72,
+              111,
+              119,
+              32,
+              100,
+              111,
+              101,
+              115,
+              32,
+              67,
+              108,
+              111,
+              117,
+              100,
+              102,
+              108,
+              97,
+              114,
+              101,
+              32,
+              87,
+              111,
+              114,
+              107,
+              101,
+              114,
+              115,
+              32,
+              105,
+              110,
+              116,
+              101,
+              114,
+              97,
+              99,
+              116,
+              32,
+              119,
+              105,
+              116,
+              104,
+              32,
+              116,
+              104,
+              101,
+              32,
+              67,
+              108,
+              111,
+              117,
+              100,
+              102,
+              108,
+              97,
+              114,
+              101,
+              32,
+              110,
+              101,
+              116,
+              119,
+              111,
+              114,
+              107,
+              63,
+              34,
+              44,
+              34,
+              87,
+              104,
+              97,
+              116,
+              32,
+              97,
+              114,
+              101,
+              32,
+              116,
+              104,
+              101,
+              32,
+              98,
+              101,
+              110,
+              101,
+              102,
+              105,
+              116,
+              115,
+              32,
+              111,
+              102,
+              32,
+              117,
+              115,
+              105,
+              110,
+              103,
+              32,
+              67,
+              108,
+              111,
+              117,
+              100,
+              102,
+              108,
+              97,
+              114,
+              101,
+              32,
+              87,
+              111,
+              114,
+              107,
+              101,
+              114,
+              115,
+              32,
+              111,
+              118,
+              101,
+              114,
+              32,
+              116,
+              114,
+              97,
+              100,
+              105,
+              116,
+              105,
+              111,
+              110,
+              97,
+              108,
+              32,
+              115,
+              101,
+              114,
+              118,
+              101,
+              114,
+              45,
+              115,
+              105,
+              100,
+              101,
+              32,
+              112,
+              114,
+              111,
+              103,
+              114,
+              97,
+              109,
+              109,
+              105,
+              110,
+              103,
+              63,
+              34,
+              44,
+              34,
+              65,
+              114,
+              101,
+              32,
+              116,
+              104,
+              101,
+              114,
+              101,
+              32,
+              97,
+              110,
+              121,
+              32,
+              108,
+              105,
+              109,
+              105,
+              116,
+              97,
+              116,
+              105,
+              111,
+              110,
+              115,
+              32,
+              111,
+              114,
+              32,
+              114,
+              101,
+              115,
+              116,
+              114,
+              105,
+              99,
+              116,
+              105,
+              111,
+              110,
+              115,
+              32,
+              111,
+              110,
+              32,
+              119,
+              104,
+              97,
+              116,
+              32,
+              116,
+              121,
+              112,
+              101,
+              115,
+              32,
+              111,
+              102,
+              32,
+              99,
+              111,
+              100,
+              101,
+              32,
+              99,
+              97,
+              110,
+              32,
+              98,
+              101,
+              32,
+              114,
+              117,
+              110,
+              32,
+              105,
+              110,
+              32,
+              67,
+              108,
+              111,
+              117,
+              100,
+              102,
+              108,
+              97,
+              114,
+              101,
+              32,
+              87,
+              111,
+              114,
+              107,
+              101,
+              114,
+              115,
+              63,
+              34,
+              93,
+              125,
+              44,
+              34,
+              116,
+              114,
+              97,
+              99,
+              101,
+              73,
+              100,
+              34,
+              58,
+              34,
+              57,
+              99,
+              97,
+              57,
+              48,
+              97,
+              99,
+              99,
+              98,
+              102,
+              52,
+              48,
+              49,
+              51,
+              99,
+              51,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 3470,
+          "responseSize": 1166
+        },
+        "id": "779d6357-48a5-4a00-a90c-a9ebb6b37ffc",
+        "assertions": [
+          {
+            "assertion": "Response time is less than 5s",
+            "skipped": false
+          },
+          {
+            "assertion": "Content-Type is application/json",
+            "skipped": false
+          },
+          {
+            "assertion": "Response has ok field",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "480451d3-7361-4196-8b5a-4b73297bb977",
+          "length": 8,
+          "cycles": 1,
+          "position": 4,
+          "iteration": 0,
+          "httpRequestId": "fda57326-c6e3-456a-9654-435039500c6e"
+        },
+        "item": {
+          "id": "6c6f659b-93db-496c-8e43-357e1fad472b",
+          "name": "Send Chat Message",
+          "request": {
+            "description": {
+              "content": "Send a chat message. Supports both streaming and non-streaming responses.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "chat"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionId\": \"{{sessionId}}\",\n  \"message\": \"Hello! Can you explain what Cloudflare Workers are?\",\n  \"stream\": false,\n  \"userId\": \"user-123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "_": {
+                "postman_previewlanguage": "json"
+              },
+              "id": "9bc8c6ed-9851-48d7-8e21-7e3724ececa3",
+              "name": "Success - Non-streaming",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "chat"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "x-tenant-id",
+                    "value": "example"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sessionId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"message\": \"Hello! Can you explain what Cloudflare Workers are?\",\n  \"stream\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"role\": \"assistant\",\n    \"content\": \"Cloudflare Workers is a serverless computing platform that runs on Cloudflare's edge network. It allows you to deploy JavaScript, TypeScript, Rust, C, and C++ code that runs close to users worldwide, providing low latency and high performance.\",\n    \"timestamp\": 1738886400000,\n    \"usage\": {\n      \"tokensIn\": 45,\n      \"tokensOut\": 62,\n      \"totalTokens\": 107\n    }\n  }\n}",
+              "cookie": []
+            }
+          ],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "67470905-0591-4ea8-9136-845ecef59dc3",
+                "type": "text/javascript",
+                "exec": [
+                  "// Generate a session ID if not set",
+                  "if (!pm.collectionVariables.get('sessionId')) {",
+                  "    pm.collectionVariables.set('sessionId', pm.variables.replaceIn('{{$randomUUID}}'));",
+                  "}"
+                ],
+                "_lastExecutionId": "0ce92d52-bfe0-4a87-9b6e-d27e7342af22"
+              }
+            }
+          ]
+        },
+        "request": {
+          "description": {
+            "content": "Send a chat message. Supports both streaming and non-streaming responses.",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "https",
+            "path": [
+              "chat"
+            ],
+            "host": [
+              "bluey-ai-worker-staging",
+              "mrrainbowsmoke",
+              "workers",
+              "dev"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "x-tenant-id",
+              "value": "mrrainbowsmoke",
+              "system": true
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "e75b0722-1567-4178-9104-614d4d571cb7",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "bluey-ai-worker-staging.mrrainbowsmoke.workers.dev",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "132",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"sessionId\": \"\",\n  \"message\": \"Hello! Can you explain what Cloudflare Workers are?\",\n  \"stream\": false,\n  \"userId\": \"user-123\"\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          },
+          "auth": {
+            "type": "apikey",
+            "apikey": [
+              {
+                "type": "string",
+                "value": "mrrainbowsmoke",
+                "key": "value"
+              },
+              {
+                "type": "string",
+                "value": "x-tenant-id",
+                "key": "key"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "a5e394f6-6651-426d-ba04-62dddb4ad8db",
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Sun, 08 Feb 2026 06:24:10 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "104"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=rPRerBnHcnKeQ%2B7Zpds6IOqJMKVGbZ09G8DxZLEivy%2BJ9P%2Fo%2FisU99om3r%2FynHTiRoCQXHfXf%2FDipHLDbEe9LAqpjVVAJEa17MGc9jcUYrSACvn%2BAg3Os%2B0inRhPjHSSjW1NF%2B%2FpDqSWHquESA7nYA%3D%3D\"}]}"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+            },
+            {
+              "key": "Server",
+              "value": "cloudflare"
+            },
+            {
+              "key": "CF-RAY",
+              "value": "9ca90ae27fc713c3-IAD"
+            },
+            {
+              "key": "alt-svc",
+              "value": "h3=\":443\"; ma=86400"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              111,
+              107,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              101,
+              114,
+              114,
+              111,
+              114,
+              34,
+              58,
+              123,
+              34,
+              99,
+              111,
+              100,
+              101,
+              34,
+              58,
+              34,
+              105,
+              110,
+              118,
+              97,
+              108,
+              105,
+              100,
+              95,
+              114,
+              101,
+              113,
+              117,
+              101,
+              115,
+              116,
+              34,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              73,
+              110,
+              118,
+              97,
+              108,
+              105,
+              100,
+              32,
+              114,
+              101,
+              113,
+              117,
+              101,
+              115,
+              116,
+              34,
+              125,
+              44,
+              34,
+              116,
+              114,
+              97,
+              99,
+              101,
+              73,
+              100,
+              34,
+              58,
+              34,
+              57,
+              99,
+              97,
+              57,
+              48,
+              97,
+              101,
+              50,
+              55,
+              102,
+              99,
+              55,
+              49,
+              51,
+              99,
+              51,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 18,
+          "responseSize": 104
+        },
+        "id": "6c6f659b-93db-496c-8e43-357e1fad472b",
+        "assertions": [
+          {
+            "assertion": "Response time is less than 5s",
+            "skipped": false
+          },
+          {
+            "assertion": "Content-Type is application/json",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "f4251ce2-de6a-45c5-96dd-ba0cc2a030ce",
+          "length": 8,
+          "cycles": 1,
+          "position": 5,
+          "iteration": 0,
+          "httpRequestId": "6620912c-e61a-474e-a89d-c0875ad09535"
+        },
+        "item": {
+          "id": "68eb9f31-40fa-4c05-b0f0-0c7eaf6179c5",
+          "name": "Send Chat Message (Streaming)",
+          "request": {
+            "description": {
+              "content": "Send a chat message with streaming enabled (Server-Sent Events)",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "chat"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionId\": \"{{sessionId}}\",\n  \"message\": \"Tell me more about Workers features\",\n  \"stream\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "40463058-bcb1-44e1-8385-30caa1252f0b",
+                "type": "text/javascript",
+                "exec": [
+                  "// Generate a session ID if not set",
+                  "if (!pm.collectionVariables.get('sessionId')) {",
+                  "    pm.collectionVariables.set('sessionId', pm.variables.replaceIn('{{$randomUUID}}'));",
+                  "}"
+                ],
+                "_lastExecutionId": "8fe48b66-667e-4955-9ca6-7b9b957f369e"
+              }
+            }
+          ]
+        },
+        "request": {
+          "description": {
+            "content": "Send a chat message with streaming enabled (Server-Sent Events)",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "https",
+            "path": [
+              "chat"
+            ],
+            "host": [
+              "bluey-ai-worker-staging",
+              "mrrainbowsmoke",
+              "workers",
+              "dev"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "x-tenant-id",
+              "value": "mrrainbowsmoke",
+              "system": true
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "6881ac21-dd9e-468e-9bcc-f8b4c09a37fa",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "bluey-ai-worker-staging.mrrainbowsmoke.workers.dev",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "91",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"sessionId\": \"\",\n  \"message\": \"Tell me more about Workers features\",\n  \"stream\": true\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          },
+          "auth": {
+            "type": "apikey",
+            "apikey": [
+              {
+                "type": "string",
+                "value": "mrrainbowsmoke",
+                "key": "value"
+              },
+              {
+                "type": "string",
+                "value": "x-tenant-id",
+                "key": "key"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "ee725b3b-6c96-4e88-9db2-f5874eb6e9fa",
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Sun, 08 Feb 2026 06:24:10 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "104"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=6HYaUWfR4Iwn2f2u77DWqTpcOGwYzDLIAkFUZTWIFklfgBuKaVKMb3aYEnf1LUbKW0EVGba8ASQII%2FlquYUlhv4gTwHeNARK3L6QbrheSLQLMFqjZuMsouxi5iEp78f%2FuqKfJ2ewFAA1a8E1QsTgAg%3D%3D\"}]}"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+            },
+            {
+              "key": "Server",
+              "value": "cloudflare"
+            },
+            {
+              "key": "CF-RAY",
+              "value": "9ca90ae2afe013c3-IAD"
+            },
+            {
+              "key": "alt-svc",
+              "value": "h3=\":443\"; ma=86400"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              111,
+              107,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              101,
+              114,
+              114,
+              111,
+              114,
+              34,
+              58,
+              123,
+              34,
+              99,
+              111,
+              100,
+              101,
+              34,
+              58,
+              34,
+              105,
+              110,
+              118,
+              97,
+              108,
+              105,
+              100,
+              95,
+              114,
+              101,
+              113,
+              117,
+              101,
+              115,
+              116,
+              34,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              73,
+              110,
+              118,
+              97,
+              108,
+              105,
+              100,
+              32,
+              114,
+              101,
+              113,
+              117,
+              101,
+              115,
+              116,
+              34,
+              125,
+              44,
+              34,
+              116,
+              114,
+              97,
+              99,
+              101,
+              73,
+              100,
+              34,
+              58,
+              34,
+              57,
+              99,
+              97,
+              57,
+              48,
+              97,
+              101,
+              50,
+              97,
+              102,
+              101,
+              48,
+              49,
+              51,
+              99,
+              51,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 18,
+          "responseSize": 104
+        },
+        "id": "68eb9f31-40fa-4c05-b0f0-0c7eaf6179c5",
+        "assertions": [
+          {
+            "assertion": "Response time is less than 5s",
+            "skipped": false
+          },
+          {
+            "assertion": "Content-Type is application/json",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "f0eaec12-612c-4242-b0bd-4de78642c017",
+          "length": 8,
+          "cycles": 1,
+          "position": 6,
+          "iteration": 0,
+          "httpRequestId": "73d5c271-de01-4632-8593-d0f84d91e1f4"
+        },
+        "item": {
+          "id": "31e7209a-d5ea-44b0-a89d-f29bbf5375f3",
+          "name": "Get Chat History",
+          "request": {
+            "description": {
+              "content": "Get chat history for a specific session",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "sessions",
+                "{{sessionId}}",
+                "history"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "_": {
+                "postman_previewlanguage": "json"
+              },
+              "id": "33302163-2eb1-49f6-8efd-16c60d3f162b",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "sessions",
+                    "550e8400-e29b-41d4-a716-446655440000",
+                    "history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "x-tenant-id",
+                    "value": "example"
+                  }
+                ],
+                "method": "GET"
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"role\": \"user\",\n    \"content\": \"Hello! Can you explain what Cloudflare Workers are?\",\n    \"timestamp\": 1738886300000\n  },\n  {\n    \"role\": \"assistant\",\n    \"content\": \"Cloudflare Workers is a serverless computing platform...\",\n    \"timestamp\": 1738886305000\n  }\n]",
+              "cookie": []
+            }
+          ],
+          "event": []
+        },
+        "request": {
+          "description": {
+            "content": "Get chat history for a specific session",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "https",
+            "path": [
+              "sessions",
+              "",
+              "history"
+            ],
+            "host": [
+              "bluey-ai-worker-staging",
+              "mrrainbowsmoke",
+              "workers",
+              "dev"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "x-tenant-id",
+              "value": "mrrainbowsmoke",
+              "system": true
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "608d7b51-94c9-4aa2-8789-d15fcf00c500",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "bluey-ai-worker-staging.mrrainbowsmoke.workers.dev",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET",
+          "auth": {
+            "type": "apikey",
+            "apikey": [
+              {
+                "type": "string",
+                "value": "mrrainbowsmoke",
+                "key": "value"
+              },
+              {
+                "type": "string",
+                "value": "x-tenant-id",
+                "key": "key"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "86670dea-b823-4727-bf02-c0de272a8c4b",
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Sun, 08 Feb 2026 06:24:10 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=7%2BJxwzJw9cbLAoX6Wo09xHMI%2BVq8YpKmcNZxuEU3tbnkxR%2FTY4ZtJqse7BhMvGeVmC4z7%2Fi1nJOgGDIKTXtxWHkeVYT%2B4uY4C7U%2F3s4K1Tdw8mwF7qTNXkFMSf9Xxj767TpOGW9nCYcicU3bKI2Oqw%3D%3D\"}]}"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "br"
+            },
+            {
+              "key": "Server",
+              "value": "cloudflare"
+            },
+            {
+              "key": "CF-RAY",
+              "value": "9ca90ae2dff413c3-IAD"
+            },
+            {
+              "key": "alt-svc",
+              "value": "h3=\":443\"; ma=86400"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              111,
+              107,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              101,
+              114,
+              114,
+              111,
+              114,
+              34,
+              58,
+              123,
+              34,
+              99,
+              111,
+              100,
+              101,
+              34,
+              58,
+              34,
+              110,
+              111,
+              116,
+              95,
+              102,
+              111,
+              117,
+              110,
+              100,
+              34,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              78,
+              111,
+              116,
+              32,
+              102,
+              111,
+              117,
+              110,
+              100,
+              34,
+              125,
+              44,
+              34,
+              116,
+              114,
+              97,
+              99,
+              101,
+              73,
+              100,
+              34,
+              58,
+              34,
+              57,
+              99,
+              97,
+              57,
+              48,
+              97,
+              101,
+              50,
+              100,
+              102,
+              102,
+              52,
+              49,
+              51,
+              99,
+              51,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 17,
+          "responseSize": 92
+        },
+        "id": "31e7209a-d5ea-44b0-a89d-f29bbf5375f3",
+        "assertions": [
+          {
+            "assertion": "Response time is less than 5s",
+            "skipped": false
+          },
+          {
+            "assertion": "Content-Type is application/json",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "8528b87c-ffa8-4bc1-a070-82f8087c0418",
+          "length": 8,
+          "cycles": 1,
+          "position": 7,
+          "iteration": 0,
+          "httpRequestId": "d124a4d7-7cde-4171-8005-226d9e015b5a"
+        },
+        "item": {
+          "id": "e280696c-a0e7-4391-97ee-6fa26e75ded5",
+          "name": "Clear Chat Session",
+          "request": {
+            "description": {
+              "content": "Clear all messages from a chat session",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "sessions",
+                "{{sessionId}}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              }
+            ],
+            "method": "DELETE"
+          },
+          "response": [
+            {
+              "_": {
+                "postman_previewlanguage": "json"
+              },
+              "id": "df6af849-1174-4b56-a66d-3ace22fb2147",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "sessions",
+                    "550e8400-e29b-41d4-a716-446655440000"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "x-tenant-id",
+                    "value": "example"
+                  }
+                ],
+                "method": "DELETE"
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true\n}",
+              "cookie": []
+            }
+          ],
+          "event": []
+        },
+        "request": {
+          "description": {
+            "content": "Clear all messages from a chat session",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "https",
+            "path": [
+              "sessions",
+              ""
+            ],
+            "host": [
+              "bluey-ai-worker-staging",
+              "mrrainbowsmoke",
+              "workers",
+              "dev"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "x-tenant-id",
+              "value": "mrrainbowsmoke",
+              "system": true
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "75af3d90-13dd-4f00-a10a-ff489815e5a1",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "bluey-ai-worker-staging.mrrainbowsmoke.workers.dev",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "DELETE",
+          "auth": {
+            "type": "apikey",
+            "apikey": [
+              {
+                "type": "string",
+                "value": "mrrainbowsmoke",
+                "key": "value"
+              },
+              {
+                "type": "string",
+                "value": "x-tenant-id",
+                "key": "key"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "7aaea88e-eb99-443f-8a65-285f9a5a1584",
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Sun, 08 Feb 2026 06:24:10 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Report-To",
+              "value": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=wB3%2FCt4i6lexmOZAhrBzcgip6Ry5PEbMjAJt1nzkOAjSIkpWS%2BHnzetn5uAOuMJBrY%2FP6JAAHSyfm3bdk6qGBTKZleIhwzWHUmIqFFmhq1b6VirUpDlSiiVBmBAYh3Nq804T5Qr8pGbVMb73j3wzjA%3D%3D\"}]}"
+            },
+            {
+              "key": "Nel",
+              "value": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "br"
+            },
+            {
+              "key": "Server",
+              "value": "cloudflare"
+            },
+            {
+              "key": "CF-RAY",
+              "value": "9ca90ae3081513c3-IAD"
+            },
+            {
+              "key": "alt-svc",
+              "value": "h3=\":443\"; ma=86400"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              111,
+              107,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              101,
+              114,
+              114,
+              111,
+              114,
+              34,
+              58,
+              123,
+              34,
+              99,
+              111,
+              100,
+              101,
+              34,
+              58,
+              34,
+              110,
+              111,
+              116,
+              95,
+              102,
+              111,
+              117,
+              110,
+              100,
+              34,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              78,
+              111,
+              116,
+              32,
+              102,
+              111,
+              117,
+              110,
+              100,
+              34,
+              125,
+              44,
+              34,
+              116,
+              114,
+              97,
+              99,
+              101,
+              73,
+              100,
+              34,
+              58,
+              34,
+              57,
+              99,
+              97,
+              57,
+              48,
+              97,
+              101,
+              51,
+              48,
+              56,
+              49,
+              53,
+              49,
+              51,
+              99,
+              51,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 18,
+          "responseSize": 92
+        },
+        "id": "e280696c-a0e7-4391-97ee-6fa26e75ded5",
+        "assertions": [
+          {
+            "assertion": "Response time is less than 5s",
+            "skipped": false
+          },
+          {
+            "assertion": "Content-Type is application/json",
+            "skipped": false
+          }
+        ]
+      }
+    ],
+    "transfers": {
+      "responseTotal": 2154
+    },
+    "failures": [
+      {
+        "error": {
+          "name": "AssertionError",
+          "index": 0,
+          "test": "Response time is less than 5s",
+          "message": "expected 6695 to be below 5000",
+          "stack": "AssertionError: expected 6695 to be below 5000\n   at Object.eval sandbox-script.js:1:3)",
+          "checksum": "3835fda1f505c65fc7d318bc981bd75d",
+          "id": "e6ce7476-0fe7-42c8-a817-2adda4e853b2",
+          "timestamp": 1770531847091,
+          "stacktrace": [
+            {
+              "fileName": "sandbox-script.js",
+              "lineNumber": 1,
+              "functionName": "Object.eval",
+              "typeName": "Object",
+              "methodName": "eval",
+              "columnNumber": 3,
+              "native": false
+            }
+          ]
+        },
+        "at": "assertion:0 in test-script",
+        "source": {
+          "id": "c41f6a59-4648-4a88-8d8e-8779a571fe52",
+          "name": "Ingest Document",
+          "request": {
+            "description": {
+              "content": "Ingest a document into the RAG system. The text will be chunked, embedded, and stored in the vector database.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "ingest"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"docId\": \"{{docId}}\",\n  \"text\": \"Cloudflare Workers is a serverless platform that allows developers to deploy code at the edge. Workers run on Cloudflare's global network, providing low latency and high performance. You can use Workers to build APIs, modify requests and responses, and much more.\",\n  \"source\": \"cloudflare-docs\",\n  \"title\": \"Introduction to Cloudflare Workers\",\n  \"url\": \"https://developers.cloudflare.com/workers\",\n  \"chunking\": {\n    \"maxChunkSize\": 1000,\n    \"overlap\": 100\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "_": {
+                "postman_previewlanguage": "json"
+              },
+              "id": "7c007f97-a7e4-49ea-84fd-9ee956fa60e3",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ingest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "x-tenant-id",
+                    "value": "example"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"docId\": \"doc-001\",\n  \"text\": \"Cloudflare Workers is a serverless platform...\",\n  \"source\": \"cloudflare-docs\",\n  \"title\": \"Introduction to Cloudflare Workers\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"status\": \"ingested\",\n    \"docId\": \"doc-001\",\n    \"chunks\": 3,\n    \"embeddingModelId\": \"@cf/baai/bge-m3\"\n  }\n}",
+              "cookie": []
+            }
+          ],
+          "event": []
+        },
+        "parent": {
+          "id": "3b325b5d-380d-4254-a791-ff8d078501de",
+          "name": "RAG",
+          "description": {
+            "content": "RAG (Retrieval Augmented Generation) endpoints for document ingestion and search",
+            "type": "text/plain"
+          },
+          "item": [
+            {
+              "id": "c41f6a59-4648-4a88-8d8e-8779a571fe52",
+              "name": "Ingest Document",
+              "request": {
+                "description": {
+                  "content": "Ingest a document into the RAG system. The text will be chunked, embedded, and stored in the vector database.",
+                  "type": "text/plain"
+                },
+                "url": {
+                  "path": [
+                    "ingest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "x-tenant-id",
+                    "value": "{{tenantId}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"docId\": \"{{docId}}\",\n  \"text\": \"Cloudflare Workers is a serverless platform that allows developers to deploy code at the edge. Workers run on Cloudflare's global network, providing low latency and high performance. You can use Workers to build APIs, modify requests and responses, and much more.\",\n  \"source\": \"cloudflare-docs\",\n  \"title\": \"Introduction to Cloudflare Workers\",\n  \"url\": \"https://developers.cloudflare.com/workers\",\n  \"chunking\": {\n    \"maxChunkSize\": 1000,\n    \"overlap\": 100\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [
+                {
+                  "_": {
+                    "postman_previewlanguage": "json"
+                  },
+                  "id": "7c007f97-a7e4-49ea-84fd-9ee956fa60e3",
+                  "name": "Success",
+                  "originalRequest": {
+                    "url": {
+                      "path": [
+                        "ingest"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [],
+                      "variable": []
+                    },
+                    "header": [
+                      {
+                        "key": "x-tenant-id",
+                        "value": "example"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "method": "POST",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"docId\": \"doc-001\",\n  \"text\": \"Cloudflare Workers is a serverless platform...\",\n  \"source\": \"cloudflare-docs\",\n  \"title\": \"Introduction to Cloudflare Workers\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "header": [
+                    {
+                      "key": "content-type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"status\": \"ingested\",\n    \"docId\": \"doc-001\",\n    \"chunks\": 3,\n    \"embeddingModelId\": \"@cf/baai/bge-m3\"\n  }\n}",
+                  "cookie": []
+                }
+              ],
+              "event": []
+            },
+            {
+              "id": "779d6357-48a5-4a00-a90c-a9ebb6b37ffc",
+              "name": "Search Documents",
+              "request": {
+                "description": {
+                  "content": "Search documents using RAG. Returns an AI-generated answer with cited sources.",
+                  "type": "text/plain"
+                },
+                "url": {
+                  "path": [
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "x-tenant-id",
+                    "value": "{{tenantId}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"What are Cloudflare Workers?\",\n  \"topK\": 5\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [
+                {
+                  "_": {
+                    "postman_previewlanguage": "json"
+                  },
+                  "id": "8f77f272-37b3-477e-b309-8b1622472c88",
+                  "name": "Success",
+                  "originalRequest": {
+                    "url": {
+                      "path": [
+                        "search"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [],
+                      "variable": []
+                    },
+                    "header": [
+                      {
+                        "key": "x-tenant-id",
+                        "value": "example"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "method": "POST",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"query\": \"What are Cloudflare Workers?\",\n  \"topK\": 5\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "header": [
+                    {
+                      "key": "content-type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"status\": \"ok\",\n    \"answer\": \"Cloudflare Workers is a serverless platform that allows developers to deploy code at the edge of Cloudflare's global network. It provides low latency and high performance by running your code close to your users.\",\n    \"sources\": [\n      {\n        \"id\": \"doc-001:0\",\n        \"docId\": \"doc-001\",\n        \"chunkId\": \"0\",\n        \"title\": \"Introduction to Cloudflare Workers\",\n        \"url\": \"https://developers.cloudflare.com/workers\",\n        \"source\": \"cloudflare-docs\",\n        \"text\": \"Cloudflare Workers is a serverless platform that allows developers to deploy code at the edge.\",\n        \"score\": 0.92\n      }\n    ],\n    \"confidence\": 0.89,\n    \"followUps\": [\n      \"How do I deploy a Worker?\",\n      \"What languages can I use with Workers?\",\n      \"What are the pricing tiers?\"\n    ]\n  }\n}",
+                  "cookie": []
+                }
+              ],
+              "event": []
+            }
+          ],
+          "event": []
+        },
+        "cursor": {
+          "ref": "0ae09780-485f-482a-b1c7-fc761983bef4",
+          "length": 8,
+          "cycles": 1,
+          "position": 2,
+          "iteration": 0,
+          "httpRequestId": "d6d82652-c187-442e-8b98-e9446f612762",
+          "scriptId": "8dcc6e31-2441-4594-886e-485966003983",
+          "execution": "90b53cb8-3dff-493c-bae3-2f19e7271477"
+        }
+      }
+    ],
+    "error": null
+  }
+}
