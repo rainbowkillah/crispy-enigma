@@ -1,0 +1,22 @@
+{
+  "env": "staging",
+  "selectedTenants": [
+    "mrrainbowsmoke",
+    "rainbowsmokeofficial"
+  ],
+  "results": [
+    {
+      "tenant": "mrrainbowsmoke",
+      "success": true,
+      "exitCode": 0
+    },
+    {
+      "tenant": "rainbowsmokeofficial",
+      "success": false,
+      "exitCode": 1
+    }
+  ],
+  "failed": [
+    "rainbowsmokeofficial"
+  ]
+}

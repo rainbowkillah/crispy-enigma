@@ -1,0 +1,22 @@
+{
+  "tenant": "rainbowsmokeofficial",
+  "env": "staging",
+  "accountId": "7fde695caf9cc41efca391316eb71003",
+  "configPath": "/home/dfox/projects-cf/crispy-enigma/tenants/rainbowsmokeofficial/wrangler.jsonc",
+  "command": {
+    "bin": "wrangler",
+    "args": [
+      "deploy",
+      "--config",
+      "/home/dfox/projects-cf/crispy-enigma/tenants/rainbowsmokeofficial/wrangler.jsonc",
+      "--env",
+      "staging"
+    ]
+  },
+  "startedAt": "2026-02-08T14:45:36.514Z",
+  "finishedAt": "2026-02-08T14:45:37.617Z",
+  "exitCode": 1,
+  "success": false,
+  "gitSha": "9f08488ba93fb3bbb4373db62abfb135ccf8314f",
+  "output": "\n ⛅️ wrangler 4.63.0\n───────────────────\n\n\u001b[31m✘ \u001b[41;31m[\u001b[41;97mERROR\u001b[41;31m]\u001b[0m \u001b[1mA request to the Cloudflare API (/accounts/7fde695caf9cc41efca391316eb71003/workers/services/azure-ai-worker-staging) failed.\u001b[0m\n\n  Authentication error [code: 10000]\n\n\nGetting User settings...\n👋 You are logged in with an OAuth Token, associated with the email (redacted).\n┌──────────────┬──────────────────────────────────┐\n│ Account Name │ Account ID                       │\n├──────────────┼──────────────────────────────────┤\n│ (redacted)   │ 9acbaee838d01aa096e63ad4551fda77 │\n└──────────────┴──────────────────────────────────┘\n\u001b[33m▲ \u001b[43;33m[\u001b[43;30mWARNING\u001b[43;33m]\u001b[0m \u001b[1mThe `account_id` in your Wrangler configuration (7fde695caf9cc41efca391316eb71003) does not match any of your authenticated accounts.\u001b[0m\n\n  This may be causing the authentication error. Check your Wrangler configuration file and ensure the `account_id` is correct for your account.\n\n\n🔓 Token Permissions:\nScope (Access)\n- account (read)\n- user (read)\n- workers (write)\n- workers_kv (write)\n- workers_routes (write)\n- workers_scripts (write)\n- workers_tail (read)\n- d1 (write)\n- pages (write)\n- zone (read)\n- ssl_certs (write)\n- ai (write)\n- ai-search (write)\n- ai-search (run)\n- queues (write)\n- pipelines (write)\n- secrets_store (write)\n- containers (write)\n- cloudchamber (write)\n- connectivity (admin)\n- offline_access \n🪵  Logs were written to \"/home/dfox/projects-cf/crispy-enigma/tenants/rainbowsmokeofficial/.wrangler/logs/wrangler-2026-02-08_14-45-36_776.log\"\n"
+}
