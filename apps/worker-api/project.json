@@ -21,6 +21,13 @@
       "options": {
         "command": "npm run typecheck"
       }
+    },
+    "postman-perf": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx newman run postman-collection.json -e postman-env.staging.json --reporters cli,json --reporter-json-export docs/m4-results/newman-performance.json",
+        "cwd": "."
+      }
     }
   }
 }

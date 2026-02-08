@@ -1,7 +1,7 @@
 # M4 Staging Deployment & Validation Guide
 
-**Date:** 2026-02-07  
-**Status:** 📋 Ready for Staging Deployment  
+**Date:** 2026-02-08  
+**Status:** ✅ Staging Validation Run (Postman) Completed — follow‑ups needed for chat/session endpoints  
 **Objective:** Validate `/search` endpoint with live Vectorize + AI Gateway before M5  
 **Estimated Duration:** 2–4 hours (includes data setup + validation)
 
@@ -19,6 +19,58 @@ Local tests use mocks; staging validation confirms:
 - ✅ Live latency measurements (P50, P95, P99)
 - ✅ Cache behavior under realistic load
 - ✅ Metrics KV aggregation with production traffic
+
+### Latest Validation Run (Postman, 2026-02-08)
+
+Source: `docs/m4-results/m4-results.json`
+
+**Summary**
+- Total requests: 8
+- Postman test assertions: `totalPass=20`, `totalFail=0`
+- Completed in ~4.2s total across requests
+
+**Endpoint outcomes**
+- ✅ `GET /health` → 200 (60ms)
+- ✅ `GET /metrics/search-cache?period=24h` → 200 (92ms)
+- ✅ `POST /ingest` → 200 (1261ms)
+- ✅ `POST /search` → 200 (2685ms)
+- ⚠️ `POST /chat` → 400 (21ms)
+- ⚠️ `POST /chat` (streaming) → 400 (19ms)
+- ⚠️ `GET /sessions/{sessionId}/history` → 404 (17ms) because `sessionId` resolved to empty in the run (`/sessions//history`)
+- ⚠️ `DELETE /sessions/{sessionId}` → 404 (21ms) because `sessionId` resolved to empty in the run (`/sessions/`)
+
+**Gaps in current Postman assertions**
+- Chat endpoints only assert response time + content type; they do not assert `ok=true` or a 2xx status.
+- Session endpoints failed due to missing `sessionId` variable; the collection expects a populated `sessionId`.
+
+**Follow‑ups to resolve before “green”**
+- Ensure `sessionId` is set in the Postman environment or collection variables before running the Sessions folder.
+- Add assertions for `ok=true` + expected status code on `/chat` and `/sessions/*` requests.
+- Confirm `/chat` request body matches the current API contract (field names + required fields).
+
+### Performance Test (Postman, 2026-02-08)
+
+Source: `API-performance.html` (Postman performance report)
+
+**Run summary**
+- Environment: `mrrainbowsmoke.stg`
+- Load profile: Peak
+- Duration: ~2 minutes (2026-02-08 02:18:30–02:20:31 UTC)
+- Total requests: 1,673
+- Avg response time: 138 ms
+- Throughput: 13.82 requests/second
+- Error rate: 0.00%
+- Virtual users: 1→5 (max 5)
+
+**Slowest endpoints (avg response time)**
+- `POST /ingest`: avg 646 ms, p90 689 ms, p95 1,216 ms, p99 3,339 ms, max 6,153 ms
+- `POST /search`: avg 346 ms, p90 378 ms, p95 408 ms, p99 1,203 ms, max 1,573 ms
+- `GET /metrics/search-cache`: avg 29 ms, p90 31 ms, p95 37 ms, p99 103 ms, max 609 ms
+- `GET /health`: avg 18 ms, p90 22 ms, p95 24 ms, p99 43 ms, max 107 ms
+- `POST /chat`: avg 17 ms, p90 21 ms, p95 22 ms, p99 26 ms, max 32 ms
+
+**Notes**
+- The performance report indicates all requests returned 2xx, which conflicts with the earlier functional run where `/chat` and `/sessions/*` returned 400/404. Confirm the Postman performance run uses valid `sessionId` and request bodies before relying on the green status.
 
 ### What We're Validating
 
@@ -398,6 +450,31 @@ done
 - [ ] All error responses have correct status codes (400, 429, 503)
 - [ ] Error messages are descriptive but don't leak sensitive data
 - [ ] Rate limiting enforced (300/min per tenant)
+
+---
+
+## Postman Automation (Newman)
+
+We already have a collection and guide in the repo:
+- `postman-collection.json`
+- `POSTMAN_GUIDE.md`
+
+**Current setup**
+1) Environment file: `postman-env.staging.json`
+2) Newman CLI (dev dependency)
+3) Nx target: `nx run worker-api:postman-perf`
+
+**Run command**
+```bash
+nx run worker-api:postman-perf
+```
+
+**Outputs**
+- JSON report: `docs/m4-results/newman-performance.json`
+
+**Notes**
+- Ensure session endpoints run after a successful `/chat` request that sets `sessionId`.
+- Add assertions for status code + `ok=true` on chat/session endpoints to avoid false positives.
 - [ ] Timeout fallback works (original query used)
 
 ---
@@ -640,4 +717,3 @@ This guide provides a complete roadmap for validating the M4 `/search` endpoint 
 **Status:** 📋 Ready for Staging Deployment  
 **Estimated Time:** 2–4 hours  
 **Next Milestone:** M5 (Tool & Function Execution, Issues #54–#66)
-

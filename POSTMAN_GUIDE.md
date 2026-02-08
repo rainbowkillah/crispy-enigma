@@ -152,6 +152,21 @@ Each request includes automatic tests for:
 - Content-Type validation
 - Basic response structure checks
 
+## Newman (CLI)
+
+Run the collection via Nx (recommended):
+
+```bash
+nx run worker-api:postman-perf
+```
+
+This uses:
+- `postman-collection.json`
+- `postman-env.staging.json`
+- JSON report output: `docs/m4-results/newman-performance.json`
+
+Note: Newman is a functional/latency check, not a full load test. For true performance testing, keep using the Postman Performance Runner.
+
 ## Environment Setup
 
 For multiple environments (dev, staging, prod), create Postman environments:

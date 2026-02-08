@@ -317,8 +317,7 @@
                 "exec": [
                   "// Generate a session ID if not set",
                   "if (!pm.collectionVariables.get('sessionId')) {",
-                  "    const uuid = require('uuid');",
-                  "    pm.collectionVariables.set('sessionId', uuid.v4());",
+                  "    pm.collectionVariables.set('sessionId', pm.variables.replaceIn('{{$randomUUID}}'));",
                   "}"
                 ],
                 "type": "text/javascript"
@@ -407,8 +406,7 @@
                 "exec": [
                   "// Generate a session ID if not set",
                   "if (!pm.collectionVariables.get('sessionId')) {",
-                  "    const uuid = require('uuid');",
-                  "    pm.collectionVariables.set('sessionId', uuid.v4());",
+                  "    pm.collectionVariables.set('sessionId', pm.variables.replaceIn('{{$randomUUID}}'));",
                   "}"
                 ],
                 "type": "text/javascript"
