@@ -2,7 +2,7 @@
 
 **Last Updated:** 2026-02-08  
 **Overall Status:** 🟡 Active  
-**Progress:** 2/9 issues complete (22%)  
+**Progress:** 5/9 issues complete (56%)  
 
 ---
 
@@ -14,8 +14,8 @@
 | #46 | Config validation | ✅ COMPLETE | - | `scripts/validate-config.mjs` validates tenant + wrangler configs |
 | #47 | Environment selection | ✅ COMPLETE | - | Env validation added to dev script + validate config |
 | #49 | Deploy single tenant | ✅ COMPLETE | - | Staging deploys validated for both tenants |
-| #48 | Deploy all tenants | 🟡 IN PROGRESS | - | Deploy-all needs per-tenant auth handling (multi-account) |
-| #45 | Drift detection | 🟡 IN PROGRESS | - | `scripts/detect-drift.mjs` added; requires API token validation |
+| #48 | Deploy all tenants | ✅ COMPLETE | - | Deploy-all validated for both tenants with per-tenant auth |
+| #45 | Drift detection | ✅ COMPLETE | - | Drift validated for both tenants (staging) |
 | #44 | Multi-account auth | ⏸️ READY | - | Can start anytime |
 | #43 | Rollback runbook | ⏸️ READY | - | Can start anytime |
 | #42 | Incident runbook | ⏸️ READY | - | Can start anytime |
@@ -44,9 +44,9 @@
 ## Next Actions
 
 1. **Unblock:** Assign and complete issue #52 (CI gates)
-2. **Verify:** Deploy-all (#48) with per-tenant auth
-3. **Verify:** Drift detection (#45) for both tenants
-4. **Test:** Validate deployment scripts in dev environment before staging
+2. **Start:** Multi-account auth doc (#44)
+3. **Docs:** Rollback + incident runbooks (#43/#42)
+4. **Test:** Run post-deploy smoke checks for staging
 
 ---
 
@@ -64,6 +64,7 @@
 ### 2026-02-08
 - Config validation script added (`npm run validate`)
 - Environment selection validated for local dev and config checks
-- Deploy scripts added (`npm run deploy`, `npm run deploy:all`) pending validation
-- Drift detection script added (`npm run drift`) pending API token validation
- - Staging deploys verified for both tenants via `npm run deploy`
+- Deploy scripts added (`npm run deploy`, `npm run deploy:all`) and validated
+- Drift detection script added (`npm run drift`) and validated
+- Staging deploys verified for both tenants via `npm run deploy`
+- Deploy-all + drift validated for both tenants (staging)
