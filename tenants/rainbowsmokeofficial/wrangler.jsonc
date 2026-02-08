@@ -26,7 +26,7 @@
   "vectorize": [
     {
       "binding": "VECTORIZE",
-      "index_name": "ai-worker-dev",
+      "index_name": "ai-worker-stg",
       "remote": true
     }
   ],
