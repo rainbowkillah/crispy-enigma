@@ -8,6 +8,7 @@ Comprehensive documentation for the crispy-enigma multi-tenant AI chat platform.
 - **[Project Status](./PROJECT-STATUS.md)** — Current milestone progress and roadmap
 - **[Project Plan](./plan.md)** — Master plan and high-level strategy
 - **[Quick Reference](./quick-reference.md)** — Common commands and patterns
+- **[M5 Handoff](./handoff-M5.md)** — Claude handoff for M5 planning/architecture/implementation
 
 ### 🏗️ Architecture & Design
 Core technical documentation describing system design and implementation.

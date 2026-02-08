@@ -261,6 +261,7 @@ M2 is complete. Staging calls were verified; AI Gateway dashboard logs confirmed
 - **M1 Handoff:** [docs/handoff-M1.md](handoff-M1.md)
 - **M2 Handoff:** [docs/handoff-M2.md](handoff-M2.md)
 - **M3 Handoff:** [docs/handoff-M3.md](handoff-M3.md)
+- **M5 Handoff:** [docs/handoff-M5.md](handoff-M5.md)
 - **PR Handoff:** [docs/handoff-PR.md](handoff-PR.md)
 
 ---
