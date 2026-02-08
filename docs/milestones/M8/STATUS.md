@@ -62,3 +62,6 @@ None.
 - Multi-account auth and runbooks completed
 - CI integration smoke verified locally
 - Production deploy + drift validation pending
+
+### 2026-02-08
+- CI workflow updated to Node.js 20 (Wrangler requires >=20)

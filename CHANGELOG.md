@@ -18,6 +18,7 @@ All notable changes for this project are documented here.
 ### Changed
 - Smoke tests now support HTTPS for staging hosts.
 - Deploy-all resolves per-tenant tokens from `.env` files.
+- CI workflow uses Node.js 20 (Wrangler requires >=20).
 
 ## [1.7.0] - 2026-02-08 (M7: Observability & QA Complete)
 
