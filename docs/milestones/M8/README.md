@@ -1,6 +1,6 @@
 # M8: Deploy & Operations
 
-**Status:** ✅ Complete (staging validated; production pending)  
+**Status:** ✅ Complete (staging + production validated)  
 **Duration:** 16-24 hours  
 **Issues:** #42-#49 + #52 (9 total)  
 **Prerequisites:** M6 ✅ | M7 ✅ (Tier 1 complete)  
@@ -52,11 +52,16 @@ Transform manual `wrangler deploy` commands into:
 - Both have valid `tenant.config.json` and `wrangler.jsonc`
 - Local dev works: `npm run dev -- --tenant=<name>`
 - 198 tests passing, TypeScript compiles cleanly
-- Automated deploys and drift checks verified in staging
+- Automated deploys and drift checks verified in staging and production
 - Production uses `workers.dev` URLs (no custom domains in M8 scope)
 
-### ⚠️ Remaining
-- Production deploy + drift validation (not executed in this milestone closeout)
+### ✅ Production Validation
+- Production deploy + drift validation complete for both tenants
+- Smoke checks passed for production URLs
+
+**Production URLs**
+- `https://bluey-ai-worker-production.mrrainbowsmoke.workers.dev`
+- `https://azure-ai-worker-production.rainbowsmokeofficial.workers.dev`
 
 ---
 
@@ -117,11 +122,11 @@ graph TD
 
 ---
 
-## Production Validation (Pending)
+## Production Validation
 
-- [ ] Deploy both tenants with `--env=production`
-- [ ] Run drift checks for production
-- [ ] Run smoke checks against production URLs
+- [x] Deploy both tenants with `--env=production`
+- [x] Run drift checks for production
+- [x] Run smoke checks against production URLs
 
 See [PLANNING-BRIEF.md](./PLANNING-BRIEF.md) for detailed rationale.
 

@@ -1,7 +1,7 @@
 # M8 Status
 
 **Last Updated:** 2026-02-08  
-**Overall Status:** ✅ Complete (staging validated; production pending)  
+**Overall Status:** ✅ Complete (staging + production validated)  
 **Progress:** 9/9 issues complete (100%)  
 
 ---
@@ -37,7 +37,7 @@ None.
 ## Next Actions
 
 1. **Maintenance:** Keep CI gates green
-2. **Maintenance:** Keep staging deploy smoke checks passing
+2. **Maintenance:** Keep staging + production smoke checks passing
 
 ---
 
@@ -61,7 +61,10 @@ None.
 - Deploy-all + drift validated for both tenants (staging)
 - Multi-account auth and runbooks completed
 - CI integration smoke verified locally
-- Production deploy + drift validation pending
+- Production deploy + drift validated for both tenants
+- Production smoke checks passed for both tenants
 
 ### 2026-02-08
 - CI workflow updated to Node.js 20 (Wrangler requires >=20)
+- Production deploy validated for both tenants
+- Production drift + smoke checks passed

@@ -5,7 +5,7 @@ All notable changes for this project are documented here.
 ## [1.8.0] - 2026-02-08 (M8: Deploy & Operations Complete)
 
 ### Status
-- ✅ Staging validated for both production tenants
+- ✅ Staging + production validated for both tenants
 - ✅ Deploy automation, drift detection, and runbooks delivered
 
 ### Added

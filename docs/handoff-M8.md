@@ -8,7 +8,7 @@
 
 ## ✅ Completion Summary
 
-M8 is complete with staging validated for both production tenants.
+M8 is complete with staging **and production** validated for both production tenants.
 
 **Key Deliverables Completed**
 - Config validation (`scripts/validate-config.mjs`) with optional remote Vectorize checks.
@@ -22,6 +22,10 @@ M8 is complete with staging validated for both production tenants.
 **Staging URLs (verified):**
 - `https://bluey-ai-worker-staging.mrrainbowsmoke.workers.dev`
 - `https://azure-ai-worker-staging.rainbowsmokeofficial.workers.dev`
+
+**Production URLs (verified):**
+- `https://bluey-ai-worker-production.mrrainbowsmoke.workers.dev`
+- `https://azure-ai-worker-production.rainbowsmokeofficial.workers.dev`
 
 ---
 
@@ -58,7 +62,6 @@ M8 is complete with staging validated for both production tenants.
 
 ## Outstanding / Next Steps
 
-- **Production validation:** Production deploy + drift checks have not been executed in this handoff.
 - **CI in GitHub:** Workflow rerun triggered (manual `workflow_dispatch` not available); confirm passing in Actions UI.
 - **Optional:** Add production runbook and release tagging if needed.
 

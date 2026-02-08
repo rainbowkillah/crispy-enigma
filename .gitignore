@@ -159,7 +159,7 @@ m4-codex-prompt.sh
 .local/
 temp/
 tmp/
+docs/agents.nx-phase.prompt.yaml
+
+# Generated analysis artifacts
 VARIABLE_NAMES.md
-drift/mrrainbowsmoke-staging-2026-02-08T14-58-50-850Z.json
-.gitignore
-drift/mrrainbowsmoke-staging-2026-02-08T14-58-32-464Z.json

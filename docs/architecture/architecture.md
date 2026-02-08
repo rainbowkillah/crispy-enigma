@@ -311,5 +311,5 @@ npm run typecheck                 # TypeScript strict check
 | M5 | Tool Execution: tool registry, dispatcher, permission gating | Complete |
 | M6 | TTS Adapter: contract + stub + optional provider | Complete |
 | M7 | Observability: logging schema, metrics, CI gates, load tests | Complete |
-| M8 | Deployment Automation: per-tenant deploy, drift detection, rollback | Complete (staging validated) |
+| M8 | Deployment Automation: per-tenant deploy, drift detection, rollback | Complete (staging + production validated) |
 | NX-1–4 | Nx Plugin: generators for workers, tenants, bindings, deploy executors | Planned |

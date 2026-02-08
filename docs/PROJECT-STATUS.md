@@ -1,7 +1,7 @@
 # Project Status: M0–M8 Complete
 
 **Date:** 2026-02-08  
-**Current Milestone:** M8 ✅ COMPLETE (staging validated; production pending)  
+**Current Milestone:** M8 ✅ COMPLETE (staging + production validated)  
 **Previous Milestone:** M7 ✅ COMPLETE  
 **Next Milestone:** M9 TBD (post‑production validation + hardening)
 
@@ -19,7 +19,7 @@
 | M5 | Tool execution system | ✅ Complete | 2026-02-08 |
 | M6 | TTS adapter contract | ✅ Complete | 2026-02-08 |
 | M7 | Observability + QA | ✅ Complete | 2026-02-08 |
-| M8 | Deploy & operations | ✅ Complete (staging validated) | 2026-02-08 |
+| M8 | Deploy & operations | ✅ Complete (staging + production validated) | 2026-02-08 |
 
 ---
 
@@ -28,10 +28,15 @@
 ### Tenants
 - **Production tenants:** `mrrainbowsmoke`, `rainbowsmokeofficial`
 - **Staging validated:** yes
+- **Production validated:** yes
 
 ### Staging URLs
 - `https://bluey-ai-worker-staging.mrrainbowsmoke.workers.dev`
 - `https://azure-ai-worker-staging.rainbowsmokeofficial.workers.dev`
+
+### Production URLs
+- `https://bluey-ai-worker-production.mrrainbowsmoke.workers.dev`
+- `https://azure-ai-worker-production.rainbowsmokeofficial.workers.dev`
 
 ### Deployment Automation
 - `npm run validate -- --tenant=<name|all> [--env=<env>] [--remote]`
@@ -52,8 +57,7 @@ Per‑tenant auth is supported via:
 
 ## Pending Validation
 
-- **Production deploy + drift validation** for both tenants
-- **GitHub Actions CI run** confirmation in the Actions UI
+- **GitHub Actions CI run** confirmation in the Actions UI (post Node 20 update)
 
 ---
 

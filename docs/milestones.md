@@ -75,7 +75,7 @@ Finalize and implement the comprehensive observability strategy.
 
 ## M8: Deployment Automation
 Automate the deployment process for tenants to ensure repeatability and safety.
-- **Status:** ✅ Complete (staging validated; production pending) (2026-02-08)
+- **Status:** ✅ Complete (staging + production validated) (2026-02-08)
 - **Deliverables:**
   - Scripts to deploy a single tenant or all tenants.
   - Environment selection (`dev`, `stage`, `prod`).
