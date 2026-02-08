@@ -2,7 +2,7 @@
 
 **Multi-tenant Cloudflare Workers AI monorepo** with streaming chat, RAG search, tool execution, and per-tenant deployments.
 
-**Current status:** M3 ✅ COMPLETE | M4 🔵 NEXT (AI Search UX)
+**Current status:** M4 ✅ COMPLETE | M5 📋 NEXT (Tool/Function Execution)
 
 - **M0 (Foundation):** ✅ Complete
 - **M1 (Chat + Sessions):** ✅ Complete
@@ -123,7 +123,11 @@ tenants/
   - Model routing, token budgets, usage metrics
   - Gateway wrapper with tenant metadata
   - Usage tracking and response headers
-- **M3**: Embeddings + Vectorize + RAG 🔵 NEXT
+- **M3**: Embeddings + Vectorize + RAG ✅ COMPLETE
+- **M4**: AI Search UX endpoint ✅ COMPLETE (2026-02-07)
+  - Query rewriting, caching, latency metrics
+  - 85/85 tests passing
+- **M5**: Tool/function execution 📋 NEXT
 - **M4**: AI Search endpoint
 - **M5**: Tool/function execution
 - **M6**: TTS adapter interface

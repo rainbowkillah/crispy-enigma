@@ -2,10 +2,10 @@
 
 ## Status Summary
 
-**Date:** 2026-02-07  
-**Current Milestone:** M4 🔵 In Progress
-**Previous Milestone:** M3 ✅ COMPLETE  
-**Next Milestone:** M5 📋 Tool/Function Execution System
+**Date:** 2026-02-08
+**Current Milestone:** M5 📋 In Progress (Phase 1)
+**Previous Milestone:** M4 ✅ COMPLETE (2026-02-07)
+**Next Milestone:** M6 📋 TTS Adapter Boundary
 
 ---
 
@@ -212,11 +212,48 @@ M2 is complete. Staging calls were verified; AI Gateway dashboard logs confirmed
 
 ---
 
-## M4 Prep (AI Search UX Endpoint)
+## M4 Completion (AI Search UX Endpoint)
 
-**Status:** 🔵 Planning In Progress
-**Issues:** #46-#53
-**Prep document:** `docs/M4-PREP.md` created to outline goals, deliverables, and risks.
+**Status:** ✅ COMPLETE (2026-02-07)
+**Issues:** #46-#53 (all complete)
+**Tests:** 85/85 passing
+**Evidence:** See `docs/milestones/M4/STATUS.md` for full completion report
+
+### M4 Achievements
+- `/search` endpoint with structured output (answer, sources, confidence, follow-ups)
+- Query rewriting with timeout fallback
+- Tenant-scoped KV caching (24h TTL)
+- Search latency metrics + cache hit rate endpoint
+- 21 new test cases (schema validation + caching)
+- Repository cleanup: ~912K reduction (build artifacts removed, docs consolidated)
+
+---
+
+## M5 Prep (Tool/Function Execution System)
+
+**Status:** 📋 Phase 1 In Progress (Issue #54)
+**Issues:** #54-#66 (13 issues)
+**Prep document:** `docs/milestones/M5/PREP.md`
+**Estimated Duration:** 12-18 hours
+
+### Phase 1: Foundation (Issues #54-#56)
+- [x] #54: Tool schema & registry ✅ COMPLETE (2026-02-08)
+- [ ] #55: Tool dispatcher (NEXT)
+- [ ] #56: /chat integration
+
+### Phase 2: Initial Tools (Issues #57-#61)
+- [ ] #57: Summarize tool
+- [ ] #58: Extract entities tool
+- [ ] #59: Classify intent tool
+- [ ] #60: Tag/chunk docs tool
+- [ ] #61: Ingest docs tool
+
+### Phase 3: Testing & Observability (Issues #62-#66)
+- [ ] #62: Audit logging
+- [ ] #63: Permission tests
+- [ ] #64: Injection guard tests
+- [ ] #65: Tool correctness tests
+- [ ] #66: Tool documentation
 
 ### Handoffs
 
