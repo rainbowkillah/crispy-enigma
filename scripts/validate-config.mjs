@@ -47,7 +47,9 @@ const REQUIRED_BINDINGS = {
 };
 
 const usage = () => {
-  console.error('Usage: npm run validate -- --tenant=<name|all> [--env=<env>]');
+  console.error(
+    'Usage: npm run validate -- --tenant=<name|all> [--env=<env>] [--remote]'
+  );
 };
 
 const args = process.argv.slice(2);
@@ -65,6 +67,7 @@ const getArgValue = (name) => {
 
 const tenantArg = getArgValue('tenant');
 const envArg = getArgValue('env');
+const remote = args.includes('--remote');
 
 if (!tenantArg || args.includes('--help') || args.includes('-h')) {
   usage();
@@ -91,6 +94,15 @@ if (tenants.length === 0) {
 
 const errors = [];
 const warnings = [];
+
+const tokenForTenant = (tenant) => {
+  const normalized = tenant.toUpperCase().replace(/[^A-Z0-9]/g, '_');
+  return (
+    process.env[`CLOUDFLARE_API_TOKEN_${normalized}`] ??
+    process.env.CLOUDFLARE_API_TOKEN ??
+    null
+  );
+};
 
 const addError = (tenant, message) => {
   errors.push(`[${tenant}] ${message}`);
@@ -137,6 +149,51 @@ const validateBindings = (tenant, config, envKey) => {
   }
   if (typeof aiBinding !== 'string' || aiBinding.length === 0) {
     addError(tenant, 'Missing AI binding');
+  }
+};
+
+const ensureVectorizeIndexes = async (tenant, accountId, token, config, envKey) => {
+  const vectorizeEntries = getEffectiveSection(config, envKey, 'vectorize') ?? [];
+  if (!Array.isArray(vectorizeEntries)) {
+    addError(tenant, 'vectorize configuration must be an array');
+    return;
+  }
+
+  for (const entry of vectorizeEntries) {
+    const indexName = entry?.index_name;
+    if (!indexName || typeof indexName !== 'string') {
+      addError(tenant, 'vectorize entry missing index_name');
+      continue;
+    }
+
+    const response = await fetch(
+      `https://api.cloudflare.com/client/v4/accounts/${accountId}/vectorize/v2/indexes/${indexName}`,
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+          'content-type': 'application/json'
+        }
+      }
+    );
+
+    if (response.ok) {
+      const payload = await response.json().catch(() => null);
+      if (!payload?.success) {
+        addError(tenant, `Vectorize index check failed for "${indexName}"`);
+      }
+      continue;
+    }
+
+    if (response.status === 404) {
+      addError(tenant, `Vectorize index not found: "${indexName}"`);
+      continue;
+    }
+
+    const text = await response.text().catch(() => '');
+    addError(
+      tenant,
+      `Vectorize index check error for "${indexName}" (status ${response.status}): ${text}`
+    );
   }
 };
 
@@ -213,6 +270,24 @@ for (const tenant of tenants) {
   }
 
   validateBindings(tenant, wranglerConfig, envKey);
+
+  if (remote) {
+    const token = tokenForTenant(tenant);
+    if (!token) {
+      addError(
+        tenant,
+        'Missing API token for remote validation (set CLOUDFLARE_API_TOKEN_<TENANT> or CLOUDFLARE_API_TOKEN)'
+      );
+    } else {
+      await ensureVectorizeIndexes(
+        tenant,
+        parsedTenant.data.accountId,
+        token,
+        wranglerConfig,
+        envKey
+      );
+    }
+  }
 }
 
 if (warnings.length > 0) {

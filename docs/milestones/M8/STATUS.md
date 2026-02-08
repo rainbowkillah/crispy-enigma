@@ -13,8 +13,8 @@
 | #52 | Set up CI gates | 🟡 IN PROGRESS | - | Lint/typecheck/tests verified via Nx affected; integration smoke needs re-verification after prior Wrangler uv_interface_addresses errors (mitigations: WRANGLER_LOG_PATH, WRANGLER_NO_LOCALHOST_PROXY, --ip 127.0.0.1) |
 | #46 | Config validation | ✅ COMPLETE | - | `scripts/validate-config.mjs` validates tenant + wrangler configs |
 | #47 | Environment selection | ✅ COMPLETE | - | Env validation added to dev script + validate config |
-| #49 | Deploy single tenant | 🟡 IN PROGRESS | - | `scripts/deploy-tenant.mjs` added; needs dry-run validation |
-| #48 | Deploy all tenants | 🟡 IN PROGRESS | - | `scripts/deploy-all.mjs` added; depends on #49 validation |
+| #49 | Deploy single tenant | ✅ COMPLETE | - | Staging deploys validated for both tenants |
+| #48 | Deploy all tenants | 🟡 IN PROGRESS | - | Deploy-all needs per-tenant auth handling (multi-account) |
 | #45 | Drift detection | 🟡 IN PROGRESS | - | `scripts/detect-drift.mjs` added; requires API token validation |
 | #44 | Multi-account auth | ⏸️ READY | - | Can start anytime |
 | #43 | Rollback runbook | ⏸️ READY | - | Can start anytime |
@@ -44,8 +44,8 @@
 ## Next Actions
 
 1. **Unblock:** Assign and complete issue #52 (CI gates)
-2. **Verify:** Dry-run deploy single tenant (#49) in staging
-3. **Verify:** Deploy-all (#48) and validate drift detection (#45)
+2. **Verify:** Deploy-all (#48) with per-tenant auth
+3. **Verify:** Drift detection (#45) for both tenants
 4. **Test:** Validate deployment scripts in dev environment before staging
 
 ---
@@ -66,3 +66,4 @@
 - Environment selection validated for local dev and config checks
 - Deploy scripts added (`npm run deploy`, `npm run deploy:all`) pending validation
 - Drift detection script added (`npm run drift`) pending API token validation
+ - Staging deploys verified for both tenants via `npm run deploy`

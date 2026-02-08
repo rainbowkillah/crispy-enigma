@@ -34,7 +34,7 @@ if (!existsSync(configPath)) {
   process.exit(1);
 }
 
-const validateArgs = ['scripts/validate-config.mjs', `--tenant=${tenant}`];
+const validateArgs = ['scripts/validate-config.mjs', `--tenant=${tenant}`, '--remote'];
 if (env) {
   validateArgs.push(`--env=${env}`);
 }
