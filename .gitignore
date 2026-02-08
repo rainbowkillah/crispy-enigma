@@ -163,3 +163,10 @@ docs/agents.nx-phase.prompt.yaml
 
 # Generated analysis artifacts
 VARIABLE_NAMES.md
+
+# Environment & Secrets (Phase 9 update)
+.env
+.env.local
+.env.*.local
+tenants/**/.env
+tenants/**/.env.local
