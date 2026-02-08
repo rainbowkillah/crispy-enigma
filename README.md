@@ -134,6 +134,28 @@ tenants/
 - **M7**: Observability + metrics
 - **M8**: Deployment automation
 
+## Load Testing
+
+To run a load test against a deployed worker, use the `load-test` script:
+
+```bash
+npm run load-test
+```
+
+You can configure the load test using the following environment variables:
+
+- `BASE_URL`: The base URL of the worker to test (default: `http://localhost:8787`)
+- `TENANT_ID`: The tenant ID to use for the test (default: `example`)
+- `API_KEY`: The API key to use for the test (default: `test-api-key`)
+- `RPS`: The number of requests per second to send (default: `5`)
+- `DURATION`: The duration of the test in seconds (default: `10`)
+
+Example:
+
+```bash
+BASE_URL=https://my-worker.example.com TENANT_ID=my-tenant API_KEY=my-api-key RPS=10 DURATION=30 npm run load-test
+```
+
 See [docs/plan.md](docs/plan.md) for detailed breakdown and [docs/PROJECT-STATUS.md](docs/PROJECT-STATUS.md) for current status.
 
 ## Security Defaults

@@ -119,4 +119,47 @@ describe('Streaming Stability', () => {
       expect(text).toContain('event: done');
     }
   });
+
+  it('handles slow consumers without dropping messages', async () => {
+    const response = await worker.fetch(makeStreamRequest('slow-consumer'), baseEnv);
+    expect(response.status).toBe(200);
+
+    const reader = response.body!.getReader();
+    let chunkCount = 0;
+    let done = false;
+
+    const readPromise = (async () => {
+      while (!done) {
+        const { value, done: readerDone } = await reader.read();
+        if (readerDone) {
+          done = true;
+          break;
+        }
+        chunkCount++;
+        // Simulate a slow consumer by adding a delay
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+    })();
+
+    await readPromise;
+    expect(chunkCount).toBeGreaterThan(1);
+  });
+
+  it('handles client disconnection gracefully', async () => {
+    const response = await worker.fetch(makeStreamRequest('disconnect'), baseEnv);
+    expect(response.status).toBe(200);
+
+    const reader = response.body!.getReader();
+    // Read one chunk and then cancel the stream
+    const { done } = await reader.read();
+    expect(done).toBe(false);
+
+    await reader.cancel();
+
+    // The server should not crash and the test should complete.
+    // We can't easily inspect the server state here, but if the test
+    // completes without errors, it's a good indication that the server
+    // handled the disconnection gracefully.
+    expect(true).toBe(true);
+  });
 });

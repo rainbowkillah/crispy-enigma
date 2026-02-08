@@ -7,6 +7,9 @@ export interface LogEntry {
   level: LogLevel;
   event: string;
   route?: string;
+  sessionId?: string;
+  requestId?: string;
+  pathname?: string;
   durationMs?: number;
   meta?: Record<string, unknown>;
   message?: string;
@@ -16,6 +19,9 @@ export interface LoggerContext {
   tenantId: string;
   traceId: string;
   route?: string;
+  sessionId?: string;
+  requestId?: string;
+  pathname?: string;
 }
 
 export class Logger {
@@ -33,6 +39,9 @@ export class Logger {
       level,
       event,
       route: this.context.route,
+      sessionId: this.context.sessionId,
+      requestId: this.context.requestId,
+      pathname: this.context.pathname,
       durationMs,
       meta,
       message,

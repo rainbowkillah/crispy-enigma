@@ -11,7 +11,8 @@
     "test": "vitest run",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "load-test": "node scripts/load-test.ts"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240215.0",

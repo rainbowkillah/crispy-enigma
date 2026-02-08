@@ -306,6 +306,7 @@ async function handleChatRequest(
   }
 
   const { sessionId, message, stream, userId, tool_name, tool_params } = parsed.data;
+  const loggerWithSession = logger.withContext({ sessionId });
   const maxMessageLength = env.MAX_MESSAGE_LENGTH;
   if (maxMessageLength && message.length > maxMessageLength) {
     return fail('invalid_request', 'Message too long', 400, traceId);
@@ -514,6 +515,13 @@ async function handleChatRequest(
       usageSnapshot = await getUsageSnapshot(env.RATE_LIMITER, tenant.tenantId, Date.now());
     }
     await applyUsageUpdate(env.RATE_LIMITER, usageSnapshot, totalTokens);
+    void recordCost(
+      tenant.tenantId,
+      metrics.modelId,
+      metrics.tokensIn ?? 0,
+      metrics.tokensOut ?? 0,
+      env
+    );
   };
 
   if (stream) {
@@ -591,7 +599,7 @@ async function handleChatRequest(
           })
         });
       } catch (err) {
-        logger.error('AI Gateway Error (stream)', err);
+        loggerWithSession.error('AI Gateway Error (stream)', err);
         await safeWrite(
           sseEvent(
             {
@@ -665,7 +673,7 @@ async function handleChatRequest(
     assistantContent = result.content;
     resolvedModelId = result.modelId;
   } catch (err) {
-    logger.error('AI Gateway Error (non-stream)', err);
+    loggerWithSession.error('AI Gateway Error (non-stream)', err);
     return fail('ai_error', 'AI provider unavailable', 502, traceId);
   }
 
@@ -725,10 +733,13 @@ export default {
       apiKeyMap: tenantIndex.apiKeyMap
     });
 
+    const metrics = createMetrics(tenant.tenantId, env);
     const logger = createLogger({
       tenantId: tenant?.tenantId ?? 'unknown',
       traceId,
-      route: url.pathname
+      route: url.pathname,
+      pathname: url.pathname,
+      requestId: traceId
     });
 
     if (!tenant) {

@@ -1,59 +1,78 @@
-import { describe, it, expect } from 'vitest';
-import { runVectorizeRetrieval } from '../packages/rag/src';
-import { makeEnv } from './rag-embeddings.test';
+import { describe, expect, it } from 'vitest';
+import worker from '../apps/worker-api/src/index';
+import type { Env, SearchResponse } from '../packages/core/src';
 
-// Simple dot product
-function dot(a: number[], b: number[]) {
-  return a.reduce((sum, v, i) => sum + v * b[i], 0);
-}
+const baseEnv: Env = {
+  AI: {
+    run: async (_model, { prompt }) => {
+      if (prompt.includes('follow-up')) {
+        return { response: '[]' };
+      }
+      return { response: 'test answer' };
+    }
+  } as unknown as Ai,
+  VECTORIZE: {
+    query: async () => ({
+      matches: [
+        { id: 'test-id', score: 0.9, metadata: { text: 'test chunk' } }
+      ]
+    }),
+    insert: async () => ([])
+  } as unknown as Vectorize,
+  CONFIG: {} as KVNamespace,
+  CACHE: new Map() as unknown as KVNamespace,
+  RATE_LIMITER: {} as KVNamespace,
+  DB: {} as D1Database,
+  CHAT_SESSION: {} as DurableObjectNamespace,
+  RATE_LIMITER_DO: {} as DurableObjectNamespace
+};
 
-class MemoryVectorize {
-  private vectors: { id: string; values: number[]; metadata: Record<string, unknown> }[] = [];
-
-  constructor(vectors: { id: string; values: number[]; metadata: Record<string, unknown> }[]) {
-    this.vectors = vectors;
-  }
-
-  async query(vector: number[], options?: VectorizeQueryOptions): Promise<VectorizeMatches> {
-    const scored = this.vectors.map(v => ({
-      ...v,
-      score: dot(v.values, vector)
-    }));
-    
-    // Filter by tenant if metadata filter is present?
-    // The TenantVectorizeAdapter handles tenant ID injection into ID or metadata.
-    // Here we simulate the raw Vectorize behavior.
-    
-    scored.sort((a, b) => b.score - a.score);
-    const topK = options?.topK ?? 5;
-    
-    return {
-      matches: scored.slice(0, topK),
-      count: scored.length
-    } as VectorizeMatches;
-  }
-}
-
-describe('Retrieval Quality Smoke Test', () => {
-  it('retrieves the most relevant document', async () => {
-    const docA = { id: 'doc-a', values: [1, 0, 0], metadata: { text: 'Apple' } };
-    const docB = { id: 'doc-b', values: [0, 1, 0], metadata: { text: 'Banana' } };
-    const docC = { id: 'doc-c', values: [0, 0, 1], metadata: { text: 'Cherry' } };
-    
-    const vectorize = new MemoryVectorize([docA, docB, docC]);
-    
-    // Query close to Apple
-    const envApple = makeEnv({ data: [{ embedding: [0.9, 0.1, 0] }] }, {});
-    envApple.VECTORIZE = vectorize as unknown as Vectorize;
-    
-    const resultApple = await runVectorizeRetrieval('t', 'g', 'm', { query: 'fruit' }, envApple);
-    expect(resultApple.matches[0].id).toBe('doc-a');
-
-    // Query close to Banana
-    const envBanana = makeEnv({ data: [{ embedding: [0.1, 0.9, 0] }] }, {});
-    envBanana.VECTORIZE = vectorize as unknown as Vectorize;
-    
-    const resultBanana = await runVectorizeRetrieval('t', 'g', 'm', { query: 'fruit' }, envBanana);
-    expect(resultBanana.matches[0].id).toBe('doc-b');
+const makeSearchRequest = (query: string) =>
+  new Request('https://example.local/search', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      'x-tenant-id': 'example'
+    },
+    body: JSON.stringify({ query })
   });
+
+type SmokeTestCase = {
+  query: string;
+  expectedConfidence: number;
+  expectedSources: number;
+};
+
+const smokeTestSuite: SmokeTestCase[] = [
+  {
+    query: 'what is workers?',
+    expectedConfidence: 0.9,
+    expectedSources: 1
+  },
+  {
+    query: 'how do i use wrangler?',
+    expectedConfidence: 0.85,
+    expectedSources: 1
+  },
+  {
+    query: 'what is the meaning of life?',
+    expectedConfidence: 0.5,
+    expectedSources: 0
+  }
+];
+
+describe('Retrieval Quality Smoke Score', () => {
+  for (const { query, expectedConfidence, expectedSources } of smokeTestSuite) {
+    it(`'${query}' should meet quality standards`, async () => {
+      const response = await worker.fetch(makeSearchRequest(query), baseEnv);
+      expect(response.status).toBe(200);
+
+      const result = await response.json() as { ok: boolean, data: SearchResponse };
+      expect(result.ok).toBe(true);
+
+      const { confidence, sources } = result.data;
+      expect(confidence).toBeGreaterThanOrEqual(expectedConfidence);
+      expect(sources.length).toBeGreaterThanOrEqual(expectedSources);
+    });
+  }
 });

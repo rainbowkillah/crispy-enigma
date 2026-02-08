@@ -6,3 +6,4 @@ export * from './tenant/types';
 export { tenantConfigSchema } from './tenant/schema';
 export * from './tenant/loader';
 export * from './tenant/resolveTenant';
+export * from './metrics';

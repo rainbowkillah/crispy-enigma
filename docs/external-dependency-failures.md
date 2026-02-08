@@ -1,38 +1,25 @@
 # External Dependency Failure Strategies
 
-We rely on several Cloudflare services. Here is how we handle their failures.
+This document outlines strategies for handling failures of external dependencies, such as the AI Gateway, Vectorize, and Durable Objects.
 
-## 1. Workers AI (Inference)
+## AI Gateway
 
-- **Dependency:** `env.AI` binding or AI Gateway.
-- **Failure:** 500s, timeouts, rate limits.
-- **Strategy:**
-  - **Fallbacks:** Configure `FALLBACK_MODEL_ID` to use a different model (e.g., Llama 2 instead of 3).
-  - **Retries:** AI Gateway handles retries.
-  - **Degradation:** If chat fails, return "Service unavailable" but allow history read.
+The AI Gateway is a critical dependency for the chat and search endpoints. If the AI Gateway is unavailable, the following strategies can be used:
 
-## 2. Vectorize (Search)
+- **Fallback Model:** The `runGatewayChat` function in `packages/ai/src/gateway.ts` already supports a fallback model. If the primary model is unavailable, it will automatically fall back to the fallback model.
+- **Circuit Breaker:** A circuit breaker can be implemented to prevent requests from being sent to the AI Gateway if it is known to be unavailable. This can help to reduce the load on the system and prevent cascading failures.
+- **Caching:** The search endpoint already uses caching to reduce the number of requests to the AI Gateway. If the AI Gateway is unavailable, the cache can be used to serve stale results.
 
-- **Dependency:** `env.VECTORIZE`.
-- **Failure:** Query timeout, index unavailable.
-- **Strategy:**
-  - **Circuit Breaker:** Stop querying if error rate > 50%.
-  - **Fallback:** Return empty results or keyword search if available.
-  - **Ingest:** Queue vectors in R2/D1 if Vectorize is down (future work). Currently fails ingestion.
+## Vectorize
 
-## 3. KV (Config & Cache)
+Vectorize is a critical dependency for the search endpoint. If Vectorize is unavailable, the following strategies can be used:
 
-- **Dependency:** `env.CONFIG`, `env.CACHE`.
-- **Failure:** Read/Write errors.
-- **Strategy:**
-  - **Config:** Use hardcoded defaults for critical flags.
-  - **Cache:** Treat as cache miss (fail open). Log warning but proceed.
-  - **Metrics:** Metrics data loss is acceptable.
+- **Circuit Breaker:** A circuit breaker can be implemented to prevent requests from being sent to Vectorize if it is known to be unavailable.
+- **Graceful Degradation:** If Vectorize is unavailable, the search endpoint can be gracefully degraded to a simpler search algorithm that does not rely on vector embeddings.
 
-## 4. Durable Objects (State)
+## Durable Objects
 
-- **Dependency:** `CHAT_SESSION`, `RATE_LIMITER_DO`.
-- **Failure:** Unreachable, overload.
-- **Strategy:**
-  - **Sessions:** Fail request. Consistency is critical.
-  - **Rate Limiter:** Fail OPEN. Allow traffic if limiter is down, to avoid blocking legitimate users during outage.
+Durable Objects are used for session management and rate limiting. If a Durable Object is unavailable, the following strategies can be used:
+
+- **Retry with Backoff:** The client can retry the request with an exponential backoff.
+- **Graceful Degradation:** If the session management Durable Object is unavailable, the chat endpoint can be gracefully degraded to a stateless mode. If the rate limiting Durable Object is unavailable, the rate limiter can be temporarily disabled.

@@ -1,35 +1,38 @@
-# Observability Dashboards
+# Dashboards and Alerts Suggestions
 
-This document outlines the suggested dashboards and panels for monitoring the AI Worker system in Cloudflare.
+This document provides suggestions for creating dashboards and alerts to monitor the health, performance, and cost of the system.
 
-## Overview Dashboard
+## Dashboards
 
-| Panel Title | Visualization | Metric / Query | Description |
-|---|---|---|---|
-| Request Rate | Line Chart | `sum(requests)` by `route` | Traffic volume broken down by route (chat, search). |
-| Error Rate | Line Chart | `sum(errors) / sum(requests)` | Percentage of failed requests. Alert if > 1%. |
-| Latency (p95) | Line Chart | `histogram_quantile(0.95, latency)` | 95th percentile latency. |
-| Active Tenants | Counter | `count(distinct tenantId)` | Number of unique tenants active in the last hour. |
+### Overview Dashboard
 
-## AI Performance
+This dashboard should provide a high-level overview of the system's health.
 
-| Panel Title | Visualization | Metric / Query | Description |
-|---|---|---|---|
-| Token Usage | Bar Chart | `sum(tokensIn + tokensOut)` by `modelId` | Total tokens consumed per model. |
-| AI Latency | Heatmap | `ai_latency` | Distribution of AI Gateway response times. |
-| Cost Est. | Counter | `sum(cost)` | Estimated cost based on token usage. |
+- **Request Rate:** The number of requests per minute, broken down by endpoint and tenant.
+- **Error Rate:** The number of errors per minute, broken down by endpoint and tenant.
+- **Latency:** The 95th percentile latency for each endpoint, broken down by tenant.
+- **Cost:** The total cost of the system, broken down by tenant and model.
 
-## Search & RAG
+### Chat Dashboard
 
-| Panel Title | Visualization | Metric / Query | Description |
-|---|---|---|---|
-| Cache Hit Rate | Gauge | `hits / (hits + misses)` | Search cache efficiency. Target > 50%. |
-| Vectorize Latency | Line Chart | `retrievalMs` | Time taken for vector search. |
-| Embedding Latency | Line Chart | `embeddingMs` | Time taken for query embedding. |
+This dashboard should provide a detailed view of the chat endpoint.
+
+- **Message Rate:** The number of messages per minute, broken down by tenant.
+- **Token Usage:** The number of tokens used per minute, broken down by tenant and model.
+- **User Sessions:** The number of active user sessions, broken down by tenant.
+
+### Search Dashboard
+
+This dashboard should provide a detailed view of the search endpoint.
+
+- **Search Rate:** The number of searches per minute, broken down by tenant.
+- **Cache Hit Rate:** The cache hit rate for search queries, broken down by tenant.
+- **Retrieval Quality:** The smoke score for the retrieval quality regression suite.
 
 ## Alerts
 
-- **High Error Rate:** > 5% errors for 5 minutes.
-- **High Latency:** p95 > 5s for 5 minutes.
-- **Low Cache Hit Rate:** < 10% for 1 hour.
-- **Cost Spike:** Cost > $10 in 1 hour.
+- **High Error Rate:** Alert when the error rate for any endpoint exceeds a certain threshold.
+- **High Latency:** Alert when the 95th percentile latency for any endpoint exceeds a certain threshold.
+- **High Cost:** Alert when the total cost of the system exceeds a certain threshold.
+- **Low Cache Hit Rate:** Alert when the cache hit rate for search queries drops below a certain threshold.
+- **Retrieval Quality Degradation:** Alert when the smoke score for the retrieval quality regression suite drops below a certain threshold.

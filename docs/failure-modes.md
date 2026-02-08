@@ -1,55 +1,24 @@
-# Failure Modes & Mitigation
+# Failure Mode Analysis
 
-This document catalogues known failure modes, their impact, and how to handle them.
+This document provides a template for analyzing and documenting potential failure modes in the system.
 
-## Template
+## [Name of Failure Mode]
 
-| Field | Description |
-|---|---|
-| **Scenario** | What goes wrong? |
-| **Impact** | What does the user see? |
-| **Detection** | How do we know it's happening? |
-| **Mitigation** | Automated handling (retries, fallbacks). |
-| **Recovery** | Manual or automatic recovery steps. |
+- **Description:** A brief description of the failure mode.
+- **Impact:** The impact of the failure mode on the system and its users.
+- **Dependencies:** The external dependencies that are involved in the failure mode.
+- **Detection:** How the failure mode can be detected.
+- **Mitigation:** How the failure mode can be mitigated.
+- **Recovery:** How the system can recover from the failure mode.
 
-## Scenarios
+## Example: AI Gateway Unavailable
 
-### 1. AI Gateway Downtime
-
-| Field | Details |
-|---|---|
-| **Scenario** | Cloudflare AI Gateway returns 5xx errors. |
-| **Impact** | Chat and Search endpoints fail. Users see "AI provider unavailable". |
-| **Detection** | Spike in `ai_error` metric. Logs show `AI Gateway Error`. |
-| **Mitigation** | Automatic retry (3x) with exponential backoff. Fallback to direct model access if configured. |
-| **Recovery** | Auto-recovery when upstream restores service. |
-
-### 2. Vectorize Timeout
-
-| Field | Details |
-|---|---|
-| **Scenario** | Vector DB queries take > 10s or timeout. |
-| **Impact** | Search returns fallback results (keyword only) or fails. |
-| **Detection** | `retrievalMs` spike. `ai_error` logs. |
-| **Mitigation** | Circuit breaker opens after 5 failures. Return "No sources found" gracefully. |
-| **Recovery** | Circuit breaker resets after 1 minute. |
-
-### 3. Rate Limiter DO Overload
-
-| Field | Details |
-|---|---|
-| **Scenario** | Durable Object hosting rate limiter is overwhelmed. |
-| **Impact** | Requests hang or fail with 503. |
-| **Detection** | High CPU on DO. Latency spike in `rateLimit` check. |
-| **Mitigation** | Fail open (allow request) if limiter is unreachable (config flag). |
-| **Recovery** | DO restarts automatically. |
-
-### 4. KV Propagation Delay
-
-| Field | Details |
-|---|---|
-| **Scenario** | New tenant config not visible immediately. |
-| **Impact** | "Unknown tenant" error for valid new tenant. |
-| **Detection** | 404 metrics for valid tenants. |
-| **Mitigation** | Cache tenant config in memory with short TTL. |
-| **Recovery** | Wait for eventual consistency (up to 60s). |
+- **Description:** The AI Gateway is unavailable, and all requests to it are failing.
+- **Impact:** The chat and search endpoints are unavailable.
+- **Dependencies:** AI Gateway.
+- **Detection:** High error rate for the chat and search endpoints.
+- **Mitigation:**
+  - Use the fallback model.
+  - Implement a circuit breaker to prevent requests from being sent to the AI Gateway.
+  - Use the cache to serve stale results for the search endpoint.
+- **Recovery:** The system will automatically recover when the AI Gateway becomes available again.
