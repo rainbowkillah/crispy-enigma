@@ -9,6 +9,8 @@
     "smoke:dev": "node scripts/smoke-dev.mjs",
     "tenants:generate": "node scripts/generate-tenant-index.mjs",
     "validate": "node scripts/validate-config.mjs",
+    "deploy": "node scripts/deploy-tenant.mjs",
+    "deploy:all": "node scripts/deploy-all.mjs",
     "test": "vitest run",
     "lint": "eslint .",
     "format": "prettier --write .",
