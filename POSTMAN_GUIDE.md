@@ -48,6 +48,34 @@ The collection uses the `x-tenant-id` header for tenant identification. You can 
 - Query parameters:
   - `period`: Time window (1h, 24h, or 7d)
 
+#### SLI Metrics (M7)
+- **GET** `/metrics/slis?period={1h|24h|7d}&fresh={0|1}`
+- Get Service Level Indicators for chat success rate, search accuracy, tool reliability, and latency
+- Query parameters:
+  - `period`: Time window (1h, 24h, or 7d)
+  - `fresh`: Set to 1 to bypass cache
+
+#### Anomaly Detection (M7)
+- **GET** `/metrics/anomalies?period={1h|24h|7d}`
+- Detect anomalies in system metrics using statistical analysis
+- Query parameters:
+  - `period`: Time window (1h, 24h, or 7d)
+
+#### Alert Rules (M7)
+- **GET** `/metrics/alerts?period={1h|24h|7d}`
+- Get configured alert rules and their evaluation status
+- **POST** `/metrics/alerts` - Create/update alert rules
+- **DELETE** `/metrics/alerts?id={ruleId}` - Delete alert rule
+- Query parameters:
+  - `period`: Optional filter by period (1h, 24h, or 7d)
+  - `id`: Alert rule ID (for DELETE)
+
+#### Metrics Overview (M7)
+- **GET** `/metrics/overview?period={1h|24h|7d}`
+- Get aggregated dashboard view with SLIs, anomalies, and alerts
+- Query parameters:
+  - `period`: Time window (1h, 24h, or 7d)
+
 #### Cost Metrics
 - **GET** `/metrics/cost?period={1h|24h|7d}`
 - Get cost metrics for AI operations (chat, embeddings, TTS)
