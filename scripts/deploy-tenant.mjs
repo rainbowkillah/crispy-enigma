@@ -8,6 +8,15 @@ import {
   resolveEnvKey
 } from './lib/wrangler-config.mjs';
 
+const tokenForTenant = (name) => {
+  const normalized = name.toUpperCase().replace(/[^A-Z0-9]/g, '_');
+  return (
+    process.env[`CLOUDFLARE_API_TOKEN_${normalized}`] ??
+    process.env.CLOUDFLARE_API_TOKEN ??
+    null
+  );
+};
+
 const tenantArg = process.argv.find((arg) => arg.startsWith('--tenant='));
 const tenant = tenantArg?.split('=')[1];
 const envArg = process.argv.find((arg) => arg.startsWith('--env='));
@@ -69,11 +78,13 @@ if (resolvedEnv) {
 
 const startedAt = new Date().toISOString();
 const output = [];
+const token = tokenForTenant(tenant);
 
 const child = spawn('wrangler', args, {
   stdio: ['inherit', 'pipe', 'pipe'],
   env: {
     ...process.env,
+    ...(token ? { CLOUDFLARE_API_TOKEN: token } : {}),
     WRANGLER_LOG_PATH: wranglerLogPath
   }
 });
