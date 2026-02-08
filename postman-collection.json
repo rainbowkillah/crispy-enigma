@@ -426,6 +426,135 @@
             },
             "description": "Get combined overview (SLIs, anomalies, alerts)"
           }
+        },
+        {
+          "name": "SLI Metrics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/metrics/slis?period=1h&fresh=0",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "metrics",
+                "slis"
+              ],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "1h",
+                  "description": "Time period: 1h, 24h, or 7d"
+                },
+                {
+                  "key": "fresh",
+                  "value": "0",
+                  "description": "Set to 1 to bypass cache"
+                }
+              ]
+            },
+            "description": "Get Service Level Indicators (SLIs) for chat success rate, search accuracy, tool reliability, and system latency over the specified time period."
+          }
+        },
+        {
+          "name": "Anomaly Detection",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/metrics/anomalies?period=1h",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "metrics",
+                "anomalies"
+              ],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "1h",
+                  "description": "Time period: 1h, 24h, or 7d"
+                }
+              ]
+            },
+            "description": "Detect anomalies in system metrics using statistical analysis (z-score and IQR methods) to identify unusual patterns in SLI data."
+          }
+        },
+        {
+          "name": "Alert Rules",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/metrics/alerts?period=1h",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "metrics",
+                "alerts"
+              ],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "1h",
+                  "description": "Optional: Filter rules by period (1h, 24h, or 7d)"
+                }
+              ]
+            },
+            "description": "Get all configured alert rules and their current evaluation status. Supports GET (list), POST (create/update), and DELETE (remove) operations."
+          }
+        },
+        {
+          "name": "Metrics Overview",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/metrics/overview?period=1h",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "metrics",
+                "overview"
+              ],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "1h",
+                  "description": "Time period: 1h, 24h, or 7d"
+                }
+              ]
+            },
+            "description": "Get aggregated dashboard view with SLIs, detected anomalies, and active alerts in a single response for operational monitoring."
+          }
         }
       ],
       "description": "API metrics and analytics endpoints"
