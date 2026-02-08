@@ -78,7 +78,7 @@ function usageKeys(tenantId: string): { daily: string; monthly: string } {
 describe('token budget enforcement', () => {
   it('rejects requests when daily budget is exceeded', async () => {
     const kv = new FakeKV();
-    const keys = usageKeys('alpha');
+    const keys = usageKeys('rainbowsmokeofficial');
     await kv.put(keys.daily, '50000');
     await kv.put(keys.monthly, '50000');
 
@@ -96,7 +96,7 @@ describe('token budget enforcement', () => {
     };
 
     const response = await worker.fetch(
-      new Request('https://alpha.local/chat', {
+      new Request('https://rainbowsmokeofficial.local/chat', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
@@ -116,7 +116,7 @@ describe('token budget enforcement', () => {
 
   it('records token usage after successful request', async () => {
     const kv = new FakeKV();
-    const keys = usageKeys('alpha');
+    const keys = usageKeys('rainbowsmokeofficial');
 
     const env: Env = {
       AI: {
@@ -132,7 +132,7 @@ describe('token budget enforcement', () => {
     };
 
     const response = await worker.fetch(
-      new Request('https://alpha.local/chat', {
+      new Request('https://rainbowsmokeofficial.local/chat', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({

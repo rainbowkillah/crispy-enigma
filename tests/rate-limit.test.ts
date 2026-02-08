@@ -55,11 +55,11 @@ const baseEnv: Env = {
 describe('rate limit enforcement', () => {
   it('returns 429 and headers when over limit', async () => {
     const response = await worker.fetch(
-      new Request('https://example.local/chat', {
+      new Request('https://mrrainbowsmoke.local/chat', {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
-          'x-tenant-id': 'example'
+          'x-tenant-id': 'mrrainbowsmoke'
         },
         body: JSON.stringify({
           sessionId: '11111111-1111-1111-1111-111111111111',
@@ -82,11 +82,11 @@ describe('rate limit enforcement', () => {
   it('passes burst and window config to rate limiter DO', async () => {
     lastCheckBody = null;
     await worker.fetch(
-      new Request('https://example.local/chat', {
+      new Request('https://mrrainbowsmoke.local/chat', {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
-          'x-tenant-id': 'example'
+          'x-tenant-id': 'mrrainbowsmoke'
         },
         body: JSON.stringify({
           sessionId: '11111111-1111-1111-1111-111111111111',

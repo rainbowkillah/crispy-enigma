@@ -4,9 +4,16 @@ import type { Env, SearchResponse } from '../packages/core/src';
 
 const baseEnv: Env = {
   AI: {
-    run: async (_model, { prompt }) => {
-      if (prompt.includes('follow-up')) {
-        return { response: '[]' };
+    run: async (_model: string, input: unknown) => {
+      if (typeof input === 'object' && input !== null) {
+        const record = input as { prompt?: unknown; text?: unknown };
+        if (Array.isArray(record.text)) {
+          return { embeddings: record.text.map(() => [0.1, 0.2, 0.3]) };
+        }
+        const prompt = typeof record.prompt === 'string' ? record.prompt : '';
+        if (prompt.includes('follow-up')) {
+          return { response: '[]' };
+        }
       }
       return { response: 'test answer' };
     }
@@ -28,11 +35,11 @@ const baseEnv: Env = {
 };
 
 const makeSearchRequest = (query: string) =>
-  new Request('https://example.local/search', {
+  new Request('https://mrrainbowsmoke.local/search', {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
-      'x-tenant-id': 'example'
+      'x-tenant-id': 'mrrainbowsmoke'
     },
     body: JSON.stringify({ query })
   });

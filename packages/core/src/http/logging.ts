@@ -39,7 +39,20 @@ export type Next = (request: RequestWithLogger) => Promise<Response>;
  */
 export async function loggingMiddleware(request: CfRequest, next: Next): Promise<Response> {
 	const startTime = Date.now();
-	const logger = createLogger(request, { source: 'api-request' });
+	const url = new URL(request.url);
+	const tenantId = request.headers.get('x-tenant-id') ?? 'unknown';
+	const traceId =
+		request.headers.get('x-trace-id') ??
+		request.headers.get('cf-ray') ??
+		request.headers.get('x-request-id') ??
+		crypto.randomUUID();
+	const logger = createLogger({
+		tenantId,
+		traceId,
+		route: url.pathname,
+		pathname: url.pathname,
+		requestId: traceId,
+	});
 
 	const requestWithLogger = request as RequestWithLogger;
 	requestWithLogger.logger = logger;
@@ -48,12 +61,15 @@ export async function loggingMiddleware(request: CfRequest, next: Next): Promise
 		const response = await next(requestWithLogger);
 		const latencyMs = Date.now() - startTime;
 
-		logger.info('Request processed', {
-			latencyMs,
-			status: response.status,
-			route: new URL(request.url).pathname,
-			method: request.method,
-		});
+		logger.info(
+			'request.processed',
+			{
+				status: response.status,
+				route: url.pathname,
+				method: request.method,
+			},
+			latencyMs
+		);
 
 		return response;
 	} catch (err) {
@@ -61,13 +77,16 @@ export async function loggingMiddleware(request: CfRequest, next: Next): Promise
 		const error = err instanceof Error ? err : new Error(String(err) || 'Unknown error');
 		const status = (err as { status?: number } | null | undefined)?.status ?? 500;
 
-		logger.error('Request failed', {
-			latencyMs,
-			status,
-			route: new URL(request.url).pathname,
-			method: request.method,
+		logger.error(
+			'request.failed',
 			error,
-		});
+			{
+				status,
+				route: url.pathname,
+				method: request.method,
+			},
+			latencyMs
+		);
 
 		// If a handler throws a Response, we should return it as-is.
 		if (err instanceof Response) {

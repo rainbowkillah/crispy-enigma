@@ -1,7 +1,7 @@
 import { open } from 'node:fs/promises';
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:8787';
-const TENANT_ID = process.env.TENANT_ID || 'example';
+const TENANT_ID = process.env.TENANT_ID || 'mrrainbowsmoke';
 const API_KEY = process.env.API_KEY || 'test-api-key';
 const RPS = Number(process.env.RPS) || 5;
 const DURATION_SEC = Number(process.env.DURATION) || 10;
@@ -80,8 +80,7 @@ async function makeRequest(endpoint: string): Promise<RequestResult> {
 }
 
 function printReport(results: RequestResult[]) {
-  console.log('
---- Load Test Report ---');
+  console.log('\n--- Load Test Report ---');
   console.log(`Total Requests: ${results.length}`);
   
   const byEndpoint = results.reduce((acc, r) => {

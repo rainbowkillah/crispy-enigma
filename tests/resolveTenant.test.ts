@@ -6,13 +6,13 @@ const makeRequest = (url: string, headers: Record<string, string> = {}) =>
 
 describe('resolveTenant', () => {
   it('resolves tenant from header first', () => {
-    const request = makeRequest('https://example.local/health', {
+    const request = makeRequest('https://mrrainbowsmoke.local/health', {
       'x-tenant-id': 'header-tenant',
       'x-api-key': 'api-key'
     });
 
     const result = resolveTenant(request, {
-      hostMap: { 'example.local': 'host-tenant' },
+      hostMap: { 'mrrainbowsmoke.local': 'host-tenant' },
       apiKeyMap: { 'api-key': 'api-tenant' }
     });
 
@@ -20,17 +20,17 @@ describe('resolveTenant', () => {
   });
 
   it('resolves tenant from host when header is missing', () => {
-    const request = makeRequest('https://example.local/health');
+    const request = makeRequest('https://mrrainbowsmoke.local/health');
 
     const result = resolveTenant(request, {
-      hostMap: { 'example.local': 'host-tenant' }
+      hostMap: { 'mrrainbowsmoke.local': 'host-tenant' }
     });
 
     expect(result).toEqual({ tenantId: 'host-tenant', source: 'host' });
   });
 
   it('resolves tenant from api key last', () => {
-    const request = makeRequest('https://example.local/health', {
+    const request = makeRequest('https://mrrainbowsmoke.local/health', {
       'x-api-key': 'api-key'
     });
 
@@ -42,7 +42,7 @@ describe('resolveTenant', () => {
   });
 
   it('returns null when no tenant is resolved', () => {
-    const request = makeRequest('https://example.local/health');
+    const request = makeRequest('https://mrrainbowsmoke.local/health');
 
     const result = resolveTenant(request);
 

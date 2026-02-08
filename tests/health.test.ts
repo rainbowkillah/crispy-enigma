@@ -26,8 +26,8 @@ const json = async (response: Response) =>
 
 describe('/health', () => {
   it('returns ok for header-based tenant', async () => {
-    const response = await fetchWorker('https://example.local/health', {
-      'x-tenant-id': 'example'
+    const response = await fetchWorker('https://mrrainbowsmoke.local/health', {
+      'x-tenant-id': 'mrrainbowsmoke'
     });
 
     expect(response.status).toBe(200);
@@ -36,12 +36,12 @@ describe('/health', () => {
       throw new Error('Expected ok response');
     }
     expect(body.ok).toBe(true);
-    expect(body.data.tenantId).toBe('example');
+    expect(body.data.tenantId).toBe('mrrainbowsmoke');
     expect(body.data.modelId).toBeDefined();
   });
 
   it('returns ok for host-based tenant', async () => {
-    const response = await fetchWorker('https://alpha.local/health');
+    const response = await fetchWorker('https://rainbowsmokeofficial.local/health');
 
     expect(response.status).toBe(200);
     const body = await json(response);
@@ -49,12 +49,12 @@ describe('/health', () => {
       throw new Error('Expected ok response');
     }
     expect(body.ok).toBe(true);
-    expect(body.data.tenantId).toBe('alpha');
+    expect(body.data.tenantId).toBe('rainbowsmokeofficial');
   });
 
-  it('returns ok for api key tenant', async () => {
-    const response = await fetchWorker('https://unknown.local/health', {
-      'x-api-key': 'alpha-key'
+  it('returns ok for secondary tenant via header', async () => {
+    const response = await fetchWorker('https://rainbowsmokeofficial.local/health', {
+      'x-tenant-id': 'rainbowsmokeofficial'
     });
 
     expect(response.status).toBe(200);
@@ -63,7 +63,7 @@ describe('/health', () => {
       throw new Error('Expected ok response');
     }
     expect(body.ok).toBe(true);
-    expect(body.data.tenantId).toBe('alpha');
+    expect(body.data.tenantId).toBe('rainbowsmokeofficial');
   });
 
   it('rejects missing tenant', async () => {

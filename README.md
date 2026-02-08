@@ -145,7 +145,7 @@ npm run load-test
 You can configure the load test using the following environment variables:
 
 - `BASE_URL`: The base URL of the worker to test (default: `http://localhost:8787`)
-- `TENANT_ID`: The tenant ID to use for the test (default: `example`)
+- `TENANT_ID`: The tenant ID to use for the test (default: `mrrainbowsmoke`)
 - `API_KEY`: The API key to use for the test (default: `test-api-key`)
 - `RPS`: The number of requests per second to send (default: `5`)
 - `DURATION`: The duration of the test in seconds (default: `10`)

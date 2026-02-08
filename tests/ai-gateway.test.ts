@@ -86,11 +86,11 @@ describe('AI Gateway integration', () => {
     const env = makeEnv(calls);
 
     const response = await worker.fetch(
-      new Request('https://example.local/chat', {
+      new Request('https://mrrainbowsmoke.local/chat', {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
-          'x-tenant-id': 'example'
+          'x-tenant-id': 'mrrainbowsmoke'
         },
         body: JSON.stringify({
           sessionId: '11111111-1111-1111-1111-111111111111',
@@ -103,8 +103,8 @@ describe('AI Gateway integration', () => {
 
     expect(response.status).toBe(200);
     expect(calls).toHaveLength(1);
-    expect(calls[0]?.options?.gateway?.id).toBe('example-gateway');
-    expect(calls[0]?.options?.gateway?.metadata?.tenantId).toBe('example');
+    expect(calls[0]?.options?.gateway?.id).toBe('ai-gate');
+    expect(calls[0]?.options?.gateway?.metadata?.tenantId).toBe('mrrainbowsmoke');
     expect(calls[0]?.options?.gateway?.metadata?.route).toBe('/chat');
     expect(calls[0]?.options?.gateway?.metadata?.sessionId).toBe(
       '11111111-1111-1111-1111-111111111111'
@@ -116,7 +116,7 @@ describe('AI Gateway integration', () => {
     const env = makeEnv(calls);
 
     await worker.fetch(
-      new Request('https://example.local/chat', {
+      new Request('https://mrrainbowsmoke.local/chat', {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
@@ -142,11 +142,11 @@ describe('AI Gateway integration', () => {
     const env = makeEnv(calls);
 
     const response = await worker.fetch(
-      new Request('https://example.local/chat', {
+      new Request('https://mrrainbowsmoke.local/chat', {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
-          'x-tenant-id': 'example'
+          'x-tenant-id': 'mrrainbowsmoke'
         },
         body: JSON.stringify({
           sessionId: '11111111-1111-1111-1111-111111111111',
@@ -170,11 +170,11 @@ describe('AI Gateway integration', () => {
     const env = makeEnv(calls);
 
     await worker.fetch(
-      new Request('https://example.local/chat', {
+      new Request('https://mrrainbowsmoke.local/chat', {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
-          'x-tenant-id': 'example'
+          'x-tenant-id': 'mrrainbowsmoke'
         },
         body: JSON.stringify({
           sessionId: '11111111-1111-1111-1111-111111111111',
@@ -195,7 +195,7 @@ describe('AI Gateway integration', () => {
     const env = makeEnv(calls);
 
     const response = await worker.fetch(
-      new Request('https://alpha.local/chat', {
+      new Request('https://rainbowsmokeofficial.local/chat', {
         method: 'POST',
         headers: {
           'content-type': 'application/json'
@@ -235,11 +235,11 @@ describe('AI Gateway integration', () => {
     };
 
     const response = await worker.fetch(
-      new Request('https://example.local/chat', {
+      new Request('https://mrrainbowsmoke.local/chat', {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
-          'x-tenant-id': 'example'
+          'x-tenant-id': 'mrrainbowsmoke'
         },
         body: JSON.stringify({
           sessionId: '11111111-1111-1111-1111-111111111111',

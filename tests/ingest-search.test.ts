@@ -41,7 +41,7 @@ class FakeVectorize {
         id: 'doc-1:0',
         score: 0.9,
         metadata: {
-          tenantId: 'example',
+          tenantId: 'mrrainbowsmoke',
           docId: 'doc-1',
           chunkId: '0',
           text: 'Hello from vectorize'
@@ -124,11 +124,11 @@ describe('ingest/search endpoints', () => {
     const env = makeEnv(vectorize);
 
     const response = await worker.fetch(
-      new Request('https://example.local/ingest', {
+      new Request('https://mrrainbowsmoke.local/ingest', {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
-          'x-tenant-id': 'example'
+          'x-tenant-id': 'mrrainbowsmoke'
         },
         body: JSON.stringify({
           docId: 'doc-1',
@@ -149,11 +149,11 @@ describe('ingest/search endpoints', () => {
     const env = makeEnv(vectorize);
 
     const response = await worker.fetch(
-      new Request('https://example.local/search', {
+      new Request('https://mrrainbowsmoke.local/search', {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
-          'x-tenant-id': 'example'
+          'x-tenant-id': 'mrrainbowsmoke'
         },
         body: JSON.stringify({
           query: 'hello',

@@ -60,11 +60,11 @@ const baseEnv: Env = {
 };
 
 const makeStreamRequest = (message: string) =>
-  new Request('https://example.local/chat', {
+  new Request('https://mrrainbowsmoke.local/chat', {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
-      'x-tenant-id': 'example'
+      'x-tenant-id': 'mrrainbowsmoke'
     },
     body: JSON.stringify({
       sessionId: '11111111-1111-1111-1111-111111111111',

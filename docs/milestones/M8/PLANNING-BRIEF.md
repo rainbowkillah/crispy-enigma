@@ -2,7 +2,7 @@
 
 **Date:** 2026-02-08  
 **Status:** Ready for Planning  
-**Prerequisites:** M6 Complete ✅ | M7 Partial ⚠️  
+**Prerequisites:** M6 Complete ✅ | M7 Complete ✅  
 **Duration Estimate:** 16-24 hours  
 
 ---
@@ -11,18 +11,19 @@
 
 M8 focuses on **deployment automation and operational readiness**. The goal is to move from manual `wrangler deploy` commands to repeatable, validated, multi-tenant deployment workflows with drift detection and runbooks.
 
-**Core Challenge:** We have 4 tenants (`mrrainbowsmoke`, `rainbowsmokeofficial`, `alpha`, `example`) each with their own Cloudflare account, and need to deploy the worker-api consistently across dev/staging/prod environments.
+**Core Challenge:** We have 2 production tenants (`mrrainbowsmoke`, `rainbowsmokeofficial`) each with their own Cloudflare account, and need to deploy the worker-api consistently across dev/staging/prod environments.
 
 ---
 
 ## Current State Assessment
 
 ### ✅ What's Working
-- **Tenant Configs:** All 4 tenants have `tenant.config.json` with valid schemas
+- **Tenant Configs:** Both production tenants have `tenant.config.json` with valid schemas
 - **Wrangler Configs:** Each tenant has `tenants/<name>/wrangler.jsonc` 
 - **Local Dev:** `npm run dev -- --tenant=<name>` works for all tenants
 - **Testing:** 198 tests passing, TypeScript compiles cleanly
 - **Manual Deploy:** `wrangler deploy` works when run manually in tenant directory
+- **Scope Update:** Dev/pre-staging tenants (`alpha`, `example`) removed from repo; production tenants only
 
 ### ⚠️ Gaps & Blockers
 1. **No Deployment Scripts:** Deployment is manual and error-prone
@@ -30,7 +31,7 @@ M8 focuses on **deployment automation and operational readiness**. The goal is t
 3. **No Drift Detection:** Can't verify deployed state matches expected config
 4. **No Multi-Account Strategy:** Managing credentials for 4 accounts is ad-hoc
 5. **No Rollback Procedure:** No documented way to revert bad deployments
-6. **M7 Incomplete:** Logging/metrics/CI gates (Tier 1) should be complete first
+6. **M7 Complete:** Logging/metrics/CI gates are implemented; verify CI gates (#52) before automation
 
 ### 📊 Repository Structure
 ```
@@ -40,9 +41,7 @@ crispy-enigma/
 │   ├── mrrainbowsmoke/
 │   │   ├── tenant.config.json    # Runtime config
 │   │   └── wrangler.jsonc        # Deploy config
-│   ├── rainbowsmokeofficial/
-│   ├── alpha/
-│   └── example/
+│   └── rainbowsmokeofficial/
 ├── scripts/
 │   └── dev.mjs                   # Local dev script (template for deploy)
 └── packages/                     # Shared libraries
@@ -70,7 +69,7 @@ crispy-enigma/
 - **Environments:**
   - `dev` - Local wrangler dev with Miniflare
   - `staging` - Preview deployment (`<worker>.<tenant>.workers.dev`)
-  - `production` - Custom domain (future, not M8 scope)
+  - `production` - Workers.dev deployment (same URL pattern as staging)
 - **Implementation:**
   - Add `--env` flag support to scripts
   - Map to wrangler's `--env` parameter
@@ -195,7 +194,7 @@ crispy-enigma/
   - On push to protected branches
   - Manual trigger for testing
 - **Branch Protection:** Require CI to pass before merge
-- **Note:** This is an M7 issue but CRITICAL for M8. Deploy automation is unsafe without CI gates.
+- **Note:** This is an M7 issue but CRITICAL for M8. Deploy automation is unsafe without verified CI gates.
 
 ---
 
@@ -203,15 +202,15 @@ crispy-enigma/
 
 ### Must Complete Before M8 Start
 1. ✅ M6 Complete (TTS adapter boundary)
-2. ⚠️ M7 Tier 1 (#58-#61) - Logging, metrics, tracing foundation
-3. ⚠️ M7 #52 - CI gates (blocker for deployment automation)
+2. ✅ M7 Tier 1 (#58-#61) - Logging, metrics, tracing foundation
+3. ⚠️ M7 #52 - CI gates (verify before deployment automation)
 
 ### Nice to Have (Can Defer)
 - M7 Tier 2-4 (load tests, retrieval quality, dashboards)
 - M6 #64 (TTS provider implementation - stub is sufficient)
 
 ### External Dependencies
-- Cloudflare API tokens for all 4 tenant accounts
+- Cloudflare API tokens for both production tenant accounts
 - Access to Cloudflare dashboard for each tenant
 - GitHub repository permissions to set up Actions (for #52)
 
@@ -220,8 +219,8 @@ crispy-enigma/
 ## Acceptance Criteria for M8
 
 ### Functional Requirements
-- [ ] **Single Tenant Deploy:** `npm run deploy -- --tenant=X --env=staging` works for all 4 tenants
-- [ ] **Multi-Tenant Deploy:** `npm run deploy:all -- --env=staging` deploys all tenants successfully
+- [ ] **Single Tenant Deploy:** `npm run deploy -- --tenant=X --env=staging` works for both tenants
+- [ ] **Multi-Tenant Deploy:** `npm run deploy:all -- --env=staging` deploys both tenants successfully
 - [ ] **Config Validation:** Invalid configs are rejected before deployment attempt
 - [ ] **Drift Detection:** Can identify differences between deployed and expected state
 - [ ] **Rollback Runbook:** Documented procedure tested with staging rollback
@@ -280,7 +279,7 @@ crispy-enigma/
 **Options:**
 - **A) Sequential:** One tenant at a time, stop on first failure
   - Pros: Easier to debug, less Cloudflare API load
-  - Cons: Slower (4 tenants × 30s = 2 minutes)
+  - Cons: Slower (2 tenants × 30s = ~1 minute)
 - **B) Parallel:** All tenants at once
   - Pros: Faster (30 seconds total)
   - Cons: Harder to debug, may hit rate limits, complex error handling
@@ -309,7 +308,7 @@ crispy-enigma/
 ## Risk Assessment
 
 ### High Risk
-1. **Incomplete M7 (#52):** Deploying without CI gates could push broken code
+1. **Unverified CI Gates (#52):** Deploying without CI gates could push broken code
    - **Mitigation:** Make #52 a hard blocker for M8
 2. **Multi-Account Token Management:** Tokens leaked in git or CI logs
    - **Mitigation:** Use `.env.deploy` (git-ignored), audit CI logs carefully
@@ -338,12 +337,12 @@ crispy-enigma/
 1. Issue #46 - Config validation script
 2. Issue #47 - Environment selection
 3. Issue #49 - Single tenant deploy script
-4. **Checkpoint:** Successfully deploy `alpha` tenant to staging
+4. **Checkpoint:** Successfully deploy `mrrainbowsmoke` tenant to staging
 
 ### Sprint 2: Multi-Tenant & Drift Detection (4-6 hours)
 1. Issue #48 - Deploy all tenants script
 2. Issue #45 - Drift detection
-3. **Checkpoint:** Deploy all 4 tenants to staging, verify no drift
+3. **Checkpoint:** Deploy both tenants to staging, verify no drift
 
 ### Sprint 3: Credentials & Runbooks (4-6 hours)
 1. Issue #44 - Multi-account credential strategy
@@ -398,9 +397,9 @@ crispy-enigma/
 
 ## Questions for Planning Session
 
-1. **M7 Blocker Resolution:** Should we complete M7 Tier 1 (#58-#61) before starting M8?
+1. **M7 Blocker Resolution:** Confirm CI gates (#52) are passing before starting M8?
 2. **CI Priority:** Is #52 (CI gates) mandatory before deployment automation?
-3. **Token Acquisition:** Who owns getting API tokens for all 4 tenant accounts?
+3. **Token Acquisition:** Who owns getting API tokens for both production tenant accounts?
 4. **Production Scope:** Is M8 scoped to staging only, or also production deployments?
 5. **Timeline:** Is 16-24 hours realistic for the team's current velocity?
 6. **External Dependencies:** Are there any org-level blockers (permissions, approvals)?

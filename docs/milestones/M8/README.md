@@ -3,7 +3,7 @@
 **Status:** 📋 Ready for Planning  
 **Duration:** 16-24 hours  
 **Issues:** #42-#49 + #52 (9 total)  
-**Prerequisites:** M6 ✅ | M7 Tier 1 ⚠️  
+**Prerequisites:** M6 ✅ | M7 ✅ (Tier 1 complete)  
 
 ---
 
@@ -48,11 +48,12 @@ Transform manual `wrangler deploy` commands into:
 ## Current State
 
 ### ✅ What Works
-- 4 tenants configured: `mrrainbowsmoke`, `rainbowsmokeofficial`, `alpha`, `example`
-- All have valid `tenant.config.json` and `wrangler.jsonc`
+- 2 production tenants configured: `mrrainbowsmoke`, `rainbowsmokeofficial`
+- Both have valid `tenant.config.json` and `wrangler.jsonc`
 - Local dev works: `npm run dev -- --tenant=<name>`
 - 198 tests passing, TypeScript compiles cleanly
 - Manual `wrangler deploy` works per tenant
+- Production uses `workers.dev` URLs (no custom domains in M8 scope)
 
 ### ⚠️ What's Missing
 - No automated deployment scripts
@@ -60,7 +61,7 @@ Transform manual `wrangler deploy` commands into:
 - No drift detection after deploy
 - No multi-account credential management
 - No rollback or incident procedures
-- **BLOCKER:** CI gates (#52 from M7) not set up
+- **BLOCKER:** CI gates (#52 from M7) need verification
 
 ---
 
@@ -95,8 +96,8 @@ graph TD
 ## Acceptance Criteria
 
 ### Deployment Works
-- [ ] `npm run deploy -- --tenant=X --env=staging` succeeds for all 4 tenants
-- [ ] `npm run deploy:all -- --env=staging` deploys all tenants
+- [ ] `npm run deploy -- --tenant=X --env=staging` succeeds for both tenants
+- [ ] `npm run deploy:all -- --env=staging` deploys both tenants
 - [ ] Invalid configs rejected before deployment attempt
 - [ ] Deployment logs stored in `deployments/` directory
 

@@ -57,11 +57,11 @@ const baseEnv: Env = {
 describe('session isolation', () => {
   it('uses tenant-scoped DO names for session and rate limiter', async () => {
     await worker.fetch(
-      new Request('https://example.local/chat', {
+      new Request('https://mrrainbowsmoke.local/chat', {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
-          'x-tenant-id': 'example'
+          'x-tenant-id': 'mrrainbowsmoke'
         },
         body: JSON.stringify({
           sessionId: '11111111-1111-1111-1111-111111111111',
@@ -74,14 +74,14 @@ describe('session isolation', () => {
     );
 
     expect(sessionNamespace.names).toContain(
-      'example:11111111-1111-1111-1111-111111111111'
+      'mrrainbowsmoke:11111111-1111-1111-1111-111111111111'
     );
-    expect(rateLimiterNamespace.names).toContain('example:ratelimit:user-123');
+    expect(rateLimiterNamespace.names).toContain('mrrainbowsmoke:ratelimit:user-123');
   });
 
   it('changes DO names across tenants', async () => {
     await worker.fetch(
-      new Request('https://alpha.local/chat', {
+      new Request('https://rainbowsmokeofficial.local/chat', {
         method: 'POST',
         headers: {
           'content-type': 'application/json'
@@ -97,8 +97,8 @@ describe('session isolation', () => {
     );
 
     expect(sessionNamespace.names).toContain(
-      'alpha:22222222-2222-2222-2222-222222222222'
+      'rainbowsmokeofficial:22222222-2222-2222-2222-222222222222'
     );
-    expect(rateLimiterNamespace.names).toContain('alpha:ratelimit:user-123');
+    expect(rateLimiterNamespace.names).toContain('rainbowsmokeofficial:ratelimit:user-123');
   });
 });

@@ -1,14 +1,10 @@
 # Quick Reference
 
 ## Tenants
-- `alpha`
-- `example`
 - `mrrainbowsmoke`
 - `rainbowsmokeofficial`
 
 ## Worker Names
-- `alpha-worker` (alpha)
-- `worker-api-example` (example)
 - `bluey-ai-worker` (mrrainbowsmoke)
 - `azure-ai-worker` (rainbowsmokeofficial)
 
@@ -30,10 +26,6 @@
 - `docs/rate-limiting.md`
 
 ## Tenant Config Paths
-- `tenants/alpha/tenant.config.json`
-- `tenants/alpha/wrangler.jsonc`
-- `tenants/example/tenant.config.json`
-- `tenants/example/wrangler.jsonc`
 - `tenants/mrrainbowsmoke/tenant.config.json`
 - `tenants/mrrainbowsmoke/wrangler.jsonc`
 - `tenants/rainbowsmokeofficial/tenant.config.json`
@@ -41,8 +33,6 @@
 
 ## Local Dev
 - `npm run tenants:generate`
-- `npm run dev -- --tenant=alpha`
-- `npm run dev -- --tenant=example`
 - `npm run dev -- --tenant=mrrainbowsmoke`
 - `npm run dev -- --tenant=rainbowsmokeofficial`
 

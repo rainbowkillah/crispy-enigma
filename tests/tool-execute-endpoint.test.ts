@@ -42,11 +42,11 @@ const json = async (response: Response) =>
 describe('/tools/execute endpoint', () => {
   it('POST /tools/execute returns tool result', async () => {
     const response = await fetchWorker(
-      'https://example.local/tools/execute',
+      'https://mrrainbowsmoke.local/tools/execute',
       {
         method: 'POST',
         headers: {
-          'x-tenant-id': 'example',
+          'x-tenant-id': 'mrrainbowsmoke',
           'content-type': 'application/json',
         },
         body: JSON.stringify({
@@ -65,11 +65,11 @@ describe('/tools/execute endpoint', () => {
 
   it('POST /tools/execute returns 404 for unknown tool', async () => {
     const response = await fetchWorker(
-      'https://example.local/tools/execute',
+      'https://mrrainbowsmoke.local/tools/execute',
       {
         method: 'POST',
         headers: {
-          'x-tenant-id': 'example',
+          'x-tenant-id': 'mrrainbowsmoke',
           'content-type': 'application/json',
         },
         body: JSON.stringify({
@@ -87,11 +87,11 @@ describe('/tools/execute endpoint', () => {
 
   it('POST /tools/execute with invalid params returns 400', async () => {
     const response = await fetchWorker(
-      'https://example.local/tools/execute',
+      'https://mrrainbowsmoke.local/tools/execute',
       {
         method: 'POST',
         headers: {
-          'x-tenant-id': 'example',
+          'x-tenant-id': 'mrrainbowsmoke',
           'content-type': 'application/json',
         },
         body: JSON.stringify({
@@ -109,11 +109,11 @@ describe('/tools/execute endpoint', () => {
 
   it('POST /tools/execute with missing tool_name returns 400', async () => {
     const response = await fetchWorker(
-      'https://example.local/tools/execute',
+      'https://mrrainbowsmoke.local/tools/execute',
       {
         method: 'POST',
         headers: {
-          'x-tenant-id': 'example',
+          'x-tenant-id': 'mrrainbowsmoke',
           'content-type': 'application/json',
         },
         body: JSON.stringify({
@@ -132,10 +132,10 @@ describe('/tools/execute endpoint', () => {
 describe('/schema/tools endpoint', () => {
   it('GET /schema/tools returns tool definitions without handlers', async () => {
     const response = await fetchWorker(
-      'https://example.local/schema/tools',
+      'https://mrrainbowsmoke.local/schema/tools',
       {
         method: 'GET',
-        headers: { 'x-tenant-id': 'example' },
+        headers: { 'x-tenant-id': 'mrrainbowsmoke' },
       }
     );
 
@@ -160,10 +160,10 @@ describe('/schema/tools endpoint', () => {
 
   it('rejects non-GET requests', async () => {
     const response = await fetchWorker(
-      'https://example.local/schema/tools',
+      'https://mrrainbowsmoke.local/schema/tools',
       {
         method: 'POST',
-        headers: { 'x-tenant-id': 'example' },
+        headers: { 'x-tenant-id': 'mrrainbowsmoke' },
       }
     );
 
@@ -174,10 +174,10 @@ describe('/schema/tools endpoint', () => {
 describe('/metrics/tools/execution endpoint', () => {
   it('GET /metrics/tools/execution returns metrics summary', async () => {
     const response = await fetchWorker(
-      'https://example.local/metrics/tools/execution',
+      'https://mrrainbowsmoke.local/metrics/tools/execution',
       {
         method: 'GET',
-        headers: { 'x-tenant-id': 'example' },
+        headers: { 'x-tenant-id': 'mrrainbowsmoke' },
       }
     );
 
@@ -185,17 +185,17 @@ describe('/metrics/tools/execution endpoint', () => {
     const body = await json(response);
     expect(body.ok).toBe(true);
     expect(body.data).toBeDefined();
-    expect((body.data as Record<string, unknown>).tenantId).toBe('example');
+    expect((body.data as Record<string, unknown>).tenantId).toBe('mrrainbowsmoke');
     expect((body.data as Record<string, unknown>).period).toBe('24h');
     expect(typeof (body.data as Record<string, unknown>).totalExecutions).toBe('number');
   });
 
   it('rejects invalid period', async () => {
     const response = await fetchWorker(
-      'https://example.local/metrics/tools/execution?period=30d',
+      'https://mrrainbowsmoke.local/metrics/tools/execution?period=30d',
       {
         method: 'GET',
-        headers: { 'x-tenant-id': 'example' },
+        headers: { 'x-tenant-id': 'mrrainbowsmoke' },
       }
     );
 

@@ -210,14 +210,14 @@ Each tenant has two files under `tenants/<name>/`:
 **tenant.config.json** — runtime configuration consumed by the Worker:
 ```json
 {
-  "tenantId": "example",
-  "accountId": "example-account",
-  "aiGatewayId": "example-gateway",
+  "tenantId": "tenant-id",
+  "accountId": "account-id",
+  "aiGatewayId": "gateway-id",
   "aiModels": { "chat": "@cf/meta/llama-3.1-8b-instruct", "embeddings": "@cf/baai/bge-m3" },
-  "vectorizeNamespace": "example",
+  "vectorizeNamespace": "tenant-namespace",
   "rateLimit": { "perMinute": 60, "burst": 20 },
   "featureFlags": {},
-  "allowedHosts": ["example.local"],
+  "allowedHosts": ["tenant.local"],
   "apiKeys": []
 }
 ```
@@ -292,8 +292,8 @@ Vitest runs all tests in the `tests/` directory. Current coverage (M0+M1):
 ```bash
 npm install
 npm run tenants:generate          # Generate tenants/index.ts
-npm run dev -- --tenant=example   # Start wrangler dev for a tenant
-npm run smoke:dev -- --tenant=example  # Health check smoke test
+npm run dev -- --tenant=mrrainbowsmoke   # Start wrangler dev for a tenant
+npm run smoke:dev -- --tenant=mrrainbowsmoke  # Health check smoke test
 npm test                          # Run all tests
 npm run lint                      # ESLint
 npm run typecheck                 # TypeScript strict check

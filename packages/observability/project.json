@@ -6,15 +6,24 @@
   "tags": ["scope:observability", "type:lib"],
   "targets": {
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx eslint \"packages/observability/**/*.{ts,tsx,js,mjs}\"",
+        "cwd": "."
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run typecheck",
+        "cwd": "."
+      }
     },
     "test": {
-      "executor": "@nx/vite:test",
-      "outputs": ["{workspaceRoot}/coverage/packages/observability"],
+      "executor": "nx:run-commands",
       "options": {
-        "passWithNoTests": true,
-        "reportsDirectory": "../../coverage/packages/observability"
+        "command": "npm test",
+        "cwd": "."
       }
     }
   }

@@ -1,4 +1,4 @@
-import { TtsRequest, TtsResponse } from './schema';
+import type { TtsRequest, TtsResponse } from './schema';
 
 export interface TtsAdapter {
   generate(request: TtsRequest, options?: { traceId?: string }): Promise<TtsResponse>;

@@ -4,12 +4,12 @@
   "sourceRoot": "apps/worker-api/src",
   "projectType": "application",
   "targets": {
-    "dev": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "npm run dev -- --tenant=example"
-      }
-    },
+      "dev": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "npm run dev -- --tenant=mrrainbowsmoke"
+        }
+      },
     "dev-tenant": {
       "executor": "nx:run-commands",
       "options": {

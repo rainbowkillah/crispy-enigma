@@ -15,17 +15,19 @@ All log entries will adhere to a common JSON format.
 - **Format:** Structured JSON
 - **Required Fields:**
   - `timestamp`: ISO 8601 timestamp.
-  - `level`: `info`, `warn`, `error`.
-  - `message`: The log message.
+  - `level`: `debug`, `info`, `warn`, `error`.
+  - `event`: A machine-readable event name.
   - `tenantId`: The resolved tenant ID for the request.
-  - `requestId`: The unique correlation ID for the request (e.g., from `cf-ray`).
+  - `traceId`: The correlation ID for the request lifecycle.
+- **Optional Context Fields (when available):**
+  - `message`: A human-readable message.
+  - `meta`: Additional structured context.
   - `route`: The matched URL route (e.g., `/chat`, `/search`).
-  - `latencyMs`: Total request processing time in milliseconds.
-  - `status`: The HTTP status code of the response.
-  - `source`: The package or module emitting the log (e.g., `storage-adapter`, `rag-pipeline`).
-  - `cf`: Cloudflare-specific request properties like colo (`cf.colo`).
-  - `durableObjectClass`: The class name of a DO being invoked.
-  - `durableObjectId`: The ID of the DO instance.
+  - `sessionId`: Session identifier (if applicable).
+  - `requestId`: Request identifier (if tracked separately).
+  - `pathname`: Raw request pathname.
+  - `durationMs`: Total request processing time in milliseconds.
+  - `status`, `source`, `cf`, `durableObjectClass`, `durableObjectId`: Emitted by callers when available.
 
 ## 3. Metrics
 Metrics will be collected for key performance and usage indicators. They must all be tagged with `tenantId` to allow for per-tenant monitoring.
@@ -59,9 +61,9 @@ These are critical for monitoring cost and AI provider performance.
 
 ## 4. Tracing
 Full distributed tracing may not be available. We will emulate it using a correlation ID.
-- A `requestId` will be generated at the start of each request or, preferably, read from an incoming `cf-ray` or `X-Request-ID` header.
-- This `requestId` will be included in all structured logs.
-- This `requestId` will be passed in metadata to the AI Gateway to correlate AI calls with specific API requests.
+- A `traceId` is read from the incoming `x-trace-id` header (or generated if absent).
+- This `traceId` is included in structured logs and propagated into AI Gateway metadata.
+- Streaming responses echo `x-trace-id`; JSON responses include the `traceId` field in the payload.
 
 ## 5. Dashboards & Alerts
 
@@ -81,3 +83,15 @@ Automated alerts should be configured for:
 - **High DO CPU Time:** Durable Object CPU time exceeding a threshold, indicating a hot spot.
 - **High D1 Query Latency:** D1 queries taking longer than expected.
 - **Critical Test Failure:** A failure in the retrieval quality regression suite.
+
+## 6. Metrics Endpoints
+Tenant-scoped operational endpoints for observability:
+- `GET /metrics/search-cache` — Cache hit rate and latency.
+- `GET /metrics/cost` — Token/cost totals by model.
+- `GET /metrics/tools/execution` — Tool execution success/latency.
+- `GET /metrics/slis` — SLI rollups (latency, error rate, cache hit rate, cost).
+- `GET /metrics/anomalies` — Anomaly detection output.
+- `GET /metrics/overview` — Combined SLI + alerts + anomalies overview.
+- `GET /metrics/alerts` — Active alert evaluations.
+- `POST /metrics/alerts` — Upsert alert rules.
+- `DELETE /metrics/alerts?id=<ruleId>` — Remove an alert rule.

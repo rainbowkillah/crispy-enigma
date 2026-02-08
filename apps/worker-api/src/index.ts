@@ -1,10 +1,10 @@
 import { tenantConfigs } from '../../../tenants/index';
 import {
   buildTenantIndex,
+  createMetrics,
   chatRequestSchema,
   ingestRequestSchema,
   fail,
-  getTraceId,
   loadTenantConfig,
   ok,
   searchRequestSchema,
@@ -36,14 +36,23 @@ import {
 import {
   createLogger,
   extractTraceId,
-  recordMetric,
   getCostMetrics,
+  recordCost,
   getSearchCacheMetrics,
   recordSearchMetrics,
   recordCacheCheck,
   type SearchMetrics,
   type CacheCheckEvent,
-  type Logger
+  type Logger,
+  getSliSummary,
+  detectAnomalies,
+  getStoredAnomalies,
+  getAlertRules,
+  upsertAlertRules,
+  deleteAlertRule,
+  evaluateAlertRules,
+  type ToolSliSummary,
+  type SliPeriod
 } from '../../../packages/observability/src';
 import { bootstrapTools } from '../../../packages/tools/src/bootstrap';
 import { dispatchTool } from '../../../packages/tools/src/dispatcher';
@@ -91,6 +100,30 @@ function buildToolContext(
     aiGatewayId: tenant.aiGatewayId,
     chatModelId: env.MODEL_ID ?? tenant.aiModels.chat,
     embeddingModelId: env.EMBEDDING_MODEL_ID ?? tenant.aiModels.embeddings,
+  };
+}
+
+const allowedPeriods = new Set<SliPeriod>(['1h', '24h', '7d']);
+
+function parsePeriod(url: URL): SliPeriod | null {
+  const periodParam = url.searchParams.get('period') ?? '24h';
+  if (!allowedPeriods.has(periodParam as SliPeriod)) {
+    return null;
+  }
+  return periodParam as SliPeriod;
+}
+
+async function buildToolSliSummary(
+  tenantId: string,
+  period: SliPeriod,
+  env: Env
+): Promise<ToolSliSummary> {
+  const metrics = await getToolMetrics(tenantId, period, env);
+  const total = metrics.totalExecutions;
+  return {
+    totalExecutions: total,
+    errorRate: total > 0 ? metrics.errorCount / total : 0,
+    avgDurationMs: metrics.avgDurationMs,
   };
 }
 
@@ -733,7 +766,6 @@ export default {
       apiKeyMap: tenantIndex.apiKeyMap
     });
 
-    const metrics = createMetrics(tenant.tenantId, env);
     const logger = createLogger({
       tenantId: tenant?.tenantId ?? 'unknown',
       traceId,
@@ -753,6 +785,7 @@ export default {
       return fail('tenant_unknown', 'Unknown tenant', 404, traceId);
     }
 
+    const metrics = createMetrics(tenant.tenantId, env);
     const maxBodySize = env.MAX_REQUEST_BODY_SIZE ?? 10240;
     if (request.method !== 'GET' && request.method !== 'HEAD') {
       const contentLength = request.headers.get('content-length');
@@ -779,14 +812,13 @@ export default {
       if (request.method !== 'GET') {
         return fail('method_not_allowed', 'Method not allowed', 405, traceId);
       }
-      const periodParam = url.searchParams.get('period') ?? '24h';
-      const allowedPeriods = new Set(['1h', '24h', '7d']);
-      if (!allowedPeriods.has(periodParam)) {
+      const period = parsePeriod(url);
+      if (!period) {
         return fail('invalid_request', 'Invalid period', 400, traceId);
       }
       const metrics = await getSearchCacheMetrics(
         config.tenantId,
-        periodParam as '1h' | '24h' | '7d',
+        period,
         env
       );
       return ok(metrics, traceId);
@@ -796,14 +828,13 @@ export default {
       if (request.method !== 'GET') {
         return fail('method_not_allowed', 'Method not allowed', 405, traceId);
       }
-      const periodParam = url.searchParams.get('period') ?? '24h';
-      const allowedPeriods = new Set(['1h', '24h', '7d']);
-      if (!allowedPeriods.has(periodParam)) {
+      const period = parsePeriod(url);
+      if (!period) {
         return fail('invalid_request', 'Invalid period', 400, traceId);
       }
       const metrics = await getCostMetrics(
         config.tenantId,
-        periodParam as '1h' | '24h' | '7d',
+        period,
         env
       );
       return ok(metrics, traceId);
@@ -923,17 +954,152 @@ export default {
       if (request.method !== 'GET') {
         return fail('method_not_allowed', 'Method not allowed', 405, traceId);
       }
-      const periodParam = url.searchParams.get('period') ?? '24h';
-      const allowedPeriods = new Set(['1h', '24h', '7d']);
-      if (!allowedPeriods.has(periodParam)) {
+      const period = parsePeriod(url);
+      if (!period) {
         return fail('invalid_request', 'Invalid period', 400, traceId);
       }
       const metrics = await getToolMetrics(
         config.tenantId,
-        periodParam as '1h' | '24h' | '7d',
+        period,
         env
       );
       return ok(metrics, traceId);
+    }
+
+    if (url.pathname === '/metrics/slis') {
+      if (request.method !== 'GET') {
+        return fail('method_not_allowed', 'Method not allowed', 405, traceId);
+      }
+      const period = parsePeriod(url);
+      if (!period) {
+        return fail('invalid_request', 'Invalid period', 400, traceId);
+      }
+      const toolSummary = await buildToolSliSummary(config.tenantId, period, env);
+      const force = url.searchParams.get('fresh') === '1';
+      const summary = await getSliSummary(config.tenantId, period, env, {
+        toolSummary,
+        force
+      });
+      return ok(summary, traceId);
+    }
+
+    if (url.pathname === '/metrics/anomalies') {
+      if (request.method !== 'GET') {
+        return fail('method_not_allowed', 'Method not allowed', 405, traceId);
+      }
+      const period = parsePeriod(url);
+      if (!period) {
+        return fail('invalid_request', 'Invalid period', 400, traceId);
+      }
+      const toolSummary = await buildToolSliSummary(config.tenantId, period, env);
+      const anomalies = await detectAnomalies(config.tenantId, period, env, {
+        toolSummary
+      });
+      return ok(anomalies, traceId);
+    }
+
+    if (url.pathname === '/metrics/alerts') {
+      if (request.method === 'GET') {
+        const rules = await getAlertRules(config.tenantId, env);
+        const periodParam = url.searchParams.get('period');
+        let filteredRules = rules;
+        if (periodParam) {
+          if (!allowedPeriods.has(periodParam as SliPeriod)) {
+            return fail('invalid_request', 'Invalid period', 400, traceId);
+          }
+          filteredRules = rules.filter((rule) => rule.period === periodParam);
+        }
+
+        const periods = Array.from(new Set(filteredRules.map((rule) => rule.period)));
+        const summaries = new Map<SliPeriod, Awaited<ReturnType<typeof getSliSummary>>>();
+
+        for (const rulePeriod of periods) {
+          const toolSummary = await buildToolSliSummary(config.tenantId, rulePeriod, env);
+          const summary = await getSliSummary(config.tenantId, rulePeriod, env, {
+            toolSummary,
+            force: true
+          });
+          summaries.set(rulePeriod, summary);
+        }
+
+        const evaluations = filteredRules.map((rule) => {
+          const summary = summaries.get(rule.period);
+          if (!summary) {
+            return {
+              ruleId: rule.id,
+              name: rule.name,
+              metric: rule.metric,
+              comparator: rule.comparator,
+              threshold: rule.threshold,
+              period: rule.period,
+              value: null,
+              triggered: false,
+              evaluatedAt: Date.now(),
+              reason: 'summary_unavailable',
+            };
+          }
+          return evaluateAlertRules([rule], summary)[0];
+        });
+
+        const active = evaluations.filter((evaluation) => evaluation.triggered);
+        return ok({ rules: filteredRules, evaluations, active }, traceId);
+      }
+
+      if (request.method === 'POST') {
+        let payload: unknown;
+        try {
+          payload = await request.json();
+        } catch {
+          return fail('invalid_json', 'Invalid JSON', 400, traceId);
+        }
+        const body = payload as Record<string, unknown>;
+        const rulesInput = body.rules;
+        if (!Array.isArray(rulesInput)) {
+          return fail('invalid_request', 'rules must be an array', 400, traceId);
+        }
+        const updated = await upsertAlertRules(config.tenantId, rulesInput, env);
+        return ok({ rules: updated }, traceId);
+      }
+
+      if (request.method === 'DELETE') {
+        const ruleId = url.searchParams.get('id');
+        if (!ruleId) {
+          return fail('invalid_request', 'Missing id', 400, traceId);
+        }
+        const updated = await deleteAlertRule(config.tenantId, ruleId, env);
+        return ok({ rules: updated }, traceId);
+      }
+
+      return fail('method_not_allowed', 'Method not allowed', 405, traceId);
+    }
+
+    if (url.pathname === '/metrics/overview') {
+      if (request.method !== 'GET') {
+        return fail('method_not_allowed', 'Method not allowed', 405, traceId);
+      }
+      const period = parsePeriod(url);
+      if (!period) {
+        return fail('invalid_request', 'Invalid period', 400, traceId);
+      }
+      const toolSummary = await buildToolSliSummary(config.tenantId, period, env);
+      const slis = await getSliSummary(config.tenantId, period, env, { toolSummary });
+      const anomalies = await getStoredAnomalies(config.tenantId, period, env);
+      const rules = await getAlertRules(config.tenantId, env);
+      const evaluations = evaluateAlertRules(rules, slis);
+      const active = evaluations.filter((evaluation) => evaluation.triggered);
+
+      return ok(
+        {
+          slis,
+          anomalies,
+          alerts: {
+            rules,
+            evaluations,
+            active,
+          },
+        },
+        traceId
+      );
     }
 
     if (url.pathname === '/tts') {

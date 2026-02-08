@@ -75,7 +75,7 @@ export async function getMetrics(
   const cutoff = Date.now() - periodMs;
   const prefix = `${tenantId}:metrics:${metricName}:`;
 
-  let values: number[] = [];
+  const values: number[] = [];
   let cursor: string | undefined;
 
   do {
@@ -179,7 +179,7 @@ export async function recordSearchMetrics(
     await env.CACHE.put(key, JSON.stringify(metrics), {
       expirationTtl: 604800
     });
-  } catch (error) {
+  } catch {
     // Best effort
   }
 }
@@ -200,7 +200,7 @@ export async function recordCacheCheck(
     await env.CACHE.put(key, JSON.stringify(event), {
       expirationTtl: 86400
     });
-  } catch (error) {
+  } catch {
     // Best effort
   }
 }

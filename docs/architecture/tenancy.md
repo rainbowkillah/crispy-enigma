@@ -215,18 +215,18 @@ Runtime configuration consumed by the Worker. Validated at startup via Zod.
 
 ```json
 {
-  "tenantId": "alpha",
-  "accountId": "alpha-account",
-  "aiGatewayId": "alpha-gateway",
+  "tenantId": "tenant-id",
+  "accountId": "account-id",
+  "aiGatewayId": "gateway-id",
   "aiModels": {
     "chat": "@cf/meta/llama-3.1-8b-instruct",
     "embeddings": "@cf/baai/bge-m3"
   },
-  "vectorizeNamespace": "alpha",
+  "vectorizeNamespace": "tenant-namespace",
   "rateLimit": { "perMinute": 60, "burst": 20 },
   "featureFlags": {},
-  "allowedHosts": ["alpha.local"],
-  "apiKeys": ["alpha-key"]
+  "allowedHosts": ["tenant.local"],
+  "apiKeys": ["tenant-key"]
 }
 ```
 
@@ -240,8 +240,6 @@ Each tenant's wrangler file references the same Worker entry point (`apps/worker
 
 | Tenant | Worker name | Account | Hosts | API Keys |
 |--------|-------------|---------|-------|----------|
-| `alpha` | `alpha-worker` | `alpha-account` | `alpha.local` | `alpha-key` |
-| `example` | `worker-api-example` | `example-account` | `example.local` | (none) |
 | `mrrainbowsmoke` | `bluey-ai-worker` | `9acbaee...` | `mrrainbowsmoke.local` | (none) |
 | `rainbowsmokeofficial` | `azure-ai-worker` | `7fde695...` | `rainbowsmokeofficial.local` | (none) |
 

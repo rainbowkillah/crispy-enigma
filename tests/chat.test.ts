@@ -78,11 +78,11 @@ const baseEnv: Env = {
 
 describe('chat endpoint', () => {
   it('accepts valid requests with stream=false', async () => {
-    const request = new Request('https://example.local/chat', {
+    const request = new Request('https://mrrainbowsmoke.local/chat', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        'x-tenant-id': 'example'
+        'x-tenant-id': 'mrrainbowsmoke'
       },
       body: JSON.stringify({
         sessionId: '11111111-1111-1111-1111-111111111111',
@@ -107,11 +107,11 @@ describe('chat endpoint', () => {
   });
 
   it('rejects invalid requests', async () => {
-    const request = new Request('https://example.local/chat', {
+    const request = new Request('https://mrrainbowsmoke.local/chat', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        'x-tenant-id': 'example'
+        'x-tenant-id': 'mrrainbowsmoke'
       },
       body: JSON.stringify({
         sessionId: 'not-a-uuid',
@@ -143,11 +143,11 @@ describe('chat endpoint', () => {
   });
 
   it('defaults to streaming when stream is omitted', async () => {
-    const request = new Request('https://example.local/chat', {
+    const request = new Request('https://mrrainbowsmoke.local/chat', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        'x-tenant-id': 'example'
+        'x-tenant-id': 'mrrainbowsmoke'
       },
       body: JSON.stringify({
         sessionId: '11111111-1111-1111-1111-111111111111',
@@ -164,11 +164,11 @@ describe('chat endpoint', () => {
   });
 
   it('streams when stream=true', async () => {
-    const request = new Request('https://example.local/chat', {
+    const request = new Request('https://mrrainbowsmoke.local/chat', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        'x-tenant-id': 'example'
+        'x-tenant-id': 'mrrainbowsmoke'
       },
       body: JSON.stringify({
         sessionId: '11111111-1111-1111-1111-111111111111',
@@ -185,10 +185,10 @@ describe('chat endpoint', () => {
   it('returns history for session', async () => {
     const response = await worker.fetch(
       new Request(
-        'https://example.local/chat/11111111-1111-1111-1111-111111111111/history',
+        'https://mrrainbowsmoke.local/chat/11111111-1111-1111-1111-111111111111/history',
         {
           method: 'GET',
-          headers: { 'x-tenant-id': 'example' }
+          headers: { 'x-tenant-id': 'mrrainbowsmoke' }
         }
       ),
       baseEnv
@@ -204,10 +204,10 @@ describe('chat endpoint', () => {
   it('clears session on delete', async () => {
     const response = await worker.fetch(
       new Request(
-        'https://example.local/chat/11111111-1111-1111-1111-111111111111',
+        'https://mrrainbowsmoke.local/chat/11111111-1111-1111-1111-111111111111',
         {
           method: 'DELETE',
-          headers: { 'x-tenant-id': 'example' }
+          headers: { 'x-tenant-id': 'mrrainbowsmoke' }
         }
       ),
       baseEnv
@@ -220,9 +220,9 @@ describe('chat endpoint', () => {
 
   it('rejects invalid sessionId on history', async () => {
     const response = await worker.fetch(
-      new Request('https://example.local/chat/not-a-uuid/history', {
+      new Request('https://mrrainbowsmoke.local/chat/not-a-uuid/history', {
         method: 'GET',
-        headers: { 'x-tenant-id': 'example' }
+        headers: { 'x-tenant-id': 'mrrainbowsmoke' }
       }),
       baseEnv
     );
@@ -235,9 +235,9 @@ describe('chat endpoint', () => {
 
   it('rejects invalid sessionId on delete', async () => {
     const response = await worker.fetch(
-      new Request('https://example.local/chat/not-a-uuid', {
+      new Request('https://mrrainbowsmoke.local/chat/not-a-uuid', {
         method: 'DELETE',
-        headers: { 'x-tenant-id': 'example' }
+        headers: { 'x-tenant-id': 'mrrainbowsmoke' }
       }),
       baseEnv
     );

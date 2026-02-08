@@ -16,10 +16,10 @@ const baseEnv: Env = {
 
 describe('request size limits', () => {
   it('rejects bodies larger than MAX_REQUEST_BODY_SIZE when Content-Length is present', async () => {
-    const request = new Request('https://example.local/health', {
+    const request = new Request('https://mrrainbowsmoke.local/health', {
       method: 'POST',
       headers: {
-        'x-tenant-id': 'example',
+        'x-tenant-id': 'mrrainbowsmoke',
         'content-length': '6'
       },
       body: '012345'
@@ -30,10 +30,10 @@ describe('request size limits', () => {
   });
 
   it('accepts bodies within MAX_REQUEST_BODY_SIZE when Content-Length is present', async () => {
-    const request = new Request('https://example.local/health', {
+    const request = new Request('https://mrrainbowsmoke.local/health', {
       method: 'POST',
       headers: {
-        'x-tenant-id': 'example',
+        'x-tenant-id': 'mrrainbowsmoke',
         'content-length': '4'
       },
       body: '0123'

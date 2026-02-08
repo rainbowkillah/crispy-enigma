@@ -1,4 +1,5 @@
-import { recordMetric, type Env, type MetricEntry } from '../../observability/src/metrics';
+import { recordMetric, type MetricEntry } from '../../observability/src/metrics';
+import type { Env } from './env';
 
 export class Metrics {
   private tenantId: string;

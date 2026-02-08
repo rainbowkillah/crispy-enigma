@@ -65,6 +65,7 @@ Finalize and implement the comprehensive observability strategy.
 - **Deliverables:**
   - Structured JSON logging with correlation IDs.
   - Core metrics for API usage, AI costs, and RAG performance.
+  - SLI aggregation, alert rules, anomaly detection, and overview endpoints.
   - Load testing scripts and a retrieval quality regression suite.
   - CI gates for linting, type checking, and automated testing.
 

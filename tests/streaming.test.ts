@@ -59,11 +59,11 @@ const baseEnv: Env = {
 describe('streaming behavior', () => {
   it('streams SSE when stream=true', async () => {
     const response = await worker.fetch(
-      new Request('https://example.local/chat', {
+      new Request('https://mrrainbowsmoke.local/chat', {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
-          'x-tenant-id': 'example'
+          'x-tenant-id': 'mrrainbowsmoke'
         },
         body: JSON.stringify({
           sessionId: '11111111-1111-1111-1111-111111111111',
@@ -83,11 +83,11 @@ describe('streaming behavior', () => {
 
   it('falls back to JSON when stream=false', async () => {
     const response = await worker.fetch(
-      new Request('https://example.local/chat', {
+      new Request('https://mrrainbowsmoke.local/chat', {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
-          'x-tenant-id': 'example'
+          'x-tenant-id': 'mrrainbowsmoke'
         },
         body: JSON.stringify({
           sessionId: '11111111-1111-1111-1111-111111111111',
