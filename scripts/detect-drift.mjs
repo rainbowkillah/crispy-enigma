@@ -166,7 +166,10 @@ durableBindings.forEach((name) => expectedBindings.push({ type: 'durable_object_
 if (typeof aiBinding === 'string') {
   expectedBindings.push({ type: 'ai', name: aiBinding });
 }
-Object.keys(vars).forEach((name) => expectedBindings.push({ type: 'plain_text', name }));
+Object.entries(vars).forEach(([name, value]) => {
+  const type = typeof value === 'string' ? 'plain_text' : 'json';
+  expectedBindings.push({ type, name });
+});
 
 const actualBindings = normalizeBindings(bindings);
 
