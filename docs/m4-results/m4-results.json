@@ -1,0 +1,342 @@
+{
+	"id": "dcad6113-a2de-42be-8e06-d54ccdd7ed72",
+	"name": "Crispy Enigma API",
+	"timestamp": "2026-02-08T01:46:45.695Z",
+	"collection_id": "51276200-1ac10025-750c-4d31-bf4d-5950c0570d70",
+	"folder_id": 0,
+	"environment_id": "51276200-b5708719-2106-4cae-b752-4639ad03c893",
+	"totalPass": 20,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2026-02-08T01:46:40.702Z",
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "3c549750-c03b-4870-863a-ec84da46344e",
+			"name": "Health Check",
+			"url": "https://bluey-ai-worker-staging.mrrainbowsmoke.workers.dev/health",
+			"time": 60,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response time is less than 5s": true,
+				"Content-Type is application/json": true,
+				"Response has ok field": true
+			},
+			"testPassFailCounts": {
+				"Response time is less than 5s": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has ok field": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				60
+			],
+			"allTests": [
+				{
+					"Response time is less than 5s": true,
+					"Content-Type is application/json": true,
+					"Response has ok field": true
+				}
+			]
+		},
+		{
+			"id": "e4607e18-42bf-490f-abf4-53f17bc31d5a",
+			"name": "Search Cache Metrics",
+			"url": "https://bluey-ai-worker-staging.mrrainbowsmoke.workers.dev/metrics/search-cache?period=24h",
+			"time": 92,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response time is less than 5s": true,
+				"Content-Type is application/json": true,
+				"Response has ok field": true
+			},
+			"testPassFailCounts": {
+				"Response time is less than 5s": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has ok field": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				92
+			],
+			"allTests": [
+				{
+					"Response time is less than 5s": true,
+					"Content-Type is application/json": true,
+					"Response has ok field": true
+				}
+			]
+		},
+		{
+			"id": "1e2675c7-9395-444e-91fc-b12db3817a39",
+			"name": "Ingest Document",
+			"url": "https://bluey-ai-worker-staging.mrrainbowsmoke.workers.dev/ingest",
+			"time": 1261,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response time is less than 5s": true,
+				"Content-Type is application/json": true,
+				"Response has ok field": true
+			},
+			"testPassFailCounts": {
+				"Response time is less than 5s": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has ok field": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				1261
+			],
+			"allTests": [
+				{
+					"Response time is less than 5s": true,
+					"Content-Type is application/json": true,
+					"Response has ok field": true
+				}
+			]
+		},
+		{
+			"id": "d54acdbb-f533-4d30-918b-a9f7554bf663",
+			"name": "Search Documents",
+			"url": "https://bluey-ai-worker-staging.mrrainbowsmoke.workers.dev/search",
+			"time": 2685,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response time is less than 5s": true,
+				"Content-Type is application/json": true,
+				"Response has ok field": true
+			},
+			"testPassFailCounts": {
+				"Response time is less than 5s": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has ok field": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				2685
+			],
+			"allTests": [
+				{
+					"Response time is less than 5s": true,
+					"Content-Type is application/json": true,
+					"Response has ok field": true
+				}
+			]
+		},
+		{
+			"id": "ac6619b8-dd64-4d74-b3f1-0fb37df53a0b",
+			"name": "Send Chat Message",
+			"url": "https://bluey-ai-worker-staging.mrrainbowsmoke.workers.dev/chat",
+			"time": 21,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Response time is less than 5s": true,
+				"Content-Type is application/json": true
+			},
+			"testPassFailCounts": {
+				"Response time is less than 5s": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type is application/json": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				21
+			],
+			"allTests": [
+				{
+					"Response time is less than 5s": true,
+					"Content-Type is application/json": true
+				}
+			]
+		},
+		{
+			"id": "558d2184-504d-4479-84ea-9eafdf85afb2",
+			"name": "Send Chat Message (Streaming)",
+			"url": "https://bluey-ai-worker-staging.mrrainbowsmoke.workers.dev/chat",
+			"time": 19,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Response time is less than 5s": true,
+				"Content-Type is application/json": true
+			},
+			"testPassFailCounts": {
+				"Response time is less than 5s": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type is application/json": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				19
+			],
+			"allTests": [
+				{
+					"Response time is less than 5s": true,
+					"Content-Type is application/json": true
+				}
+			]
+		},
+		{
+			"id": "dd875a68-5e28-4567-9cc1-8adeb3bd6749",
+			"name": "Get Chat History",
+			"url": "https://bluey-ai-worker-staging.mrrainbowsmoke.workers.dev/sessions//history",
+			"time": 17,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Response time is less than 5s": true,
+				"Content-Type is application/json": true
+			},
+			"testPassFailCounts": {
+				"Response time is less than 5s": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type is application/json": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				17
+			],
+			"allTests": [
+				{
+					"Response time is less than 5s": true,
+					"Content-Type is application/json": true
+				}
+			]
+		},
+		{
+			"id": "b79fa542-cdc3-4aff-b493-326789a3a7f7",
+			"name": "Clear Chat Session",
+			"url": "https://bluey-ai-worker-staging.mrrainbowsmoke.workers.dev/sessions/",
+			"time": 21,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Response time is less than 5s": true,
+				"Content-Type is application/json": true
+			},
+			"testPassFailCounts": {
+				"Response time is less than 5s": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type is application/json": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				21
+			],
+			"allTests": [
+				{
+					"Response time is less than 5s": true,
+					"Content-Type is application/json": true
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 4176,
+	"collection": {
+		"requests": [
+			{
+				"id": "3c549750-c03b-4870-863a-ec84da46344e",
+				"method": "GET"
+			},
+			{
+				"id": "e4607e18-42bf-490f-abf4-53f17bc31d5a",
+				"method": "GET"
+			},
+			{
+				"id": "1e2675c7-9395-444e-91fc-b12db3817a39",
+				"method": "POST"
+			},
+			{
+				"id": "d54acdbb-f533-4d30-918b-a9f7554bf663",
+				"method": "POST"
+			},
+			{
+				"id": "ac6619b8-dd64-4d74-b3f1-0fb37df53a0b",
+				"method": "POST"
+			},
+			{
+				"id": "558d2184-504d-4479-84ea-9eafdf85afb2",
+				"method": "POST"
+			},
+			{
+				"id": "dd875a68-5e28-4567-9cc1-8adeb3bd6749",
+				"method": "GET"
+			},
+			{
+				"id": "b79fa542-cdc3-4aff-b493-326789a3a7f7",
+				"method": "DELETE"
+			}
+		]
+	}
+}
