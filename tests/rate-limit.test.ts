@@ -29,8 +29,10 @@ const sessionNamespace = new FakeNamespace(async (request) => {
   return new Response('Not found', { status: 404 });
 });
 
+let lastCheckBody: any = null;
 const rateLimiterNamespace = new FakeNamespace(async (request) => {
   if (request.url.endsWith('/check')) {
+    lastCheckBody = await request.json();
     return new Response(
       JSON.stringify({ allowed: false, remaining: 0, resetAt: 1700000000000 }),
       { headers: { 'content-type': 'application/json' } }
@@ -75,5 +77,30 @@ describe('rate limit enforcement', () => {
     const body = (await response.json()) as { ok: boolean; error: { code: string } };
     expect(body.ok).toBe(false);
     expect(body.error.code).toBe('rate_limited');
+  });
+
+  it('passes burst and window config to rate limiter DO', async () => {
+    lastCheckBody = null;
+    await worker.fetch(
+      new Request('https://example.local/chat', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-tenant-id': 'example'
+        },
+        body: JSON.stringify({
+          sessionId: '11111111-1111-1111-1111-111111111111',
+          message: 'hello',
+          stream: false
+        })
+      }),
+      baseEnv
+    );
+
+    expect(lastCheckBody).not.toBeNull();
+    expect(lastCheckBody.limit).toBe(60);
+    expect(lastCheckBody.windowSec).toBe(60);
+    expect(lastCheckBody.burst).toBe(20);
+    expect(lastCheckBody.burstWindowSec).toBe(10);
   });
 });

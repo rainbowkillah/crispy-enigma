@@ -33,6 +33,8 @@ export function applyRateLimit(
 type CheckRequest = {
   limit: number;
   windowSec: number;
+  burst?: number;
+  burstWindowSec?: number;
 };
 
 export class RateLimiter {
@@ -48,11 +50,35 @@ export class RateLimiter {
     const now = Date.now();
     const stored = (await this.state.storage.get<number[]>('timestamps')) ?? [];
 
-    const { next, result } = applyRateLimit(stored, {
+    const { next, result: sustainedResult } = applyRateLimit(stored, {
       now,
       limit: body.limit,
       windowSec: body.windowSec
     });
+
+    let result = sustainedResult;
+
+    if (body.burst !== undefined && body.burstWindowSec !== undefined) {
+      const { result: burstResult } = applyRateLimit(stored, {
+        now,
+        limit: body.burst,
+        windowSec: body.burstWindowSec
+      });
+
+      if (!burstResult.allowed) {
+        result = {
+          allowed: false,
+          remaining: Math.min(sustainedResult.remaining, burstResult.remaining),
+          resetAt: burstResult.resetAt
+        };
+      } else if (sustainedResult.allowed) {
+        result = {
+          allowed: true,
+          remaining: Math.min(sustainedResult.remaining, burstResult.remaining),
+          resetAt: sustainedResult.resetAt
+        };
+      }
+    }
 
     if (next.length !== stored.length) {
       await this.state.storage.put('timestamps', next);

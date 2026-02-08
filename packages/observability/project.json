@@ -1,19 +1,20 @@
 {
+  "extends": "../../packages/core/project.json",
   "name": "observability",
-  "root": "packages/observability",
   "sourceRoot": "packages/observability/src",
   "projectType": "library",
+  "tags": ["scope:observability", "type:lib"],
   "targets": {
-    "test": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "npm test"
-      }
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
     },
-    "typecheck": {
-      "executor": "nx:run-commands",
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{workspaceRoot}/coverage/packages/observability"],
       "options": {
-        "command": "npm run typecheck"
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/packages/observability"
       }
     }
   }

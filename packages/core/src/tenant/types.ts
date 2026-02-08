@@ -10,6 +10,8 @@ export type TenantContext = {
   rateLimit: {
     perMinute: number;
     burst: number;
+    windowSec?: number;
+    burstWindowSec?: number;
   };
   tokenBudget?: {
     daily?: number;

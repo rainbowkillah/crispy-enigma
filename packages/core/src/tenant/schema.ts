@@ -11,7 +11,9 @@ export const tenantConfigSchema = z.object({
   vectorizeNamespace: z.string().min(1),
   rateLimit: z.object({
     perMinute: z.number().int().positive(),
-    burst: z.number().int().positive()
+    burst: z.number().int().positive(),
+    windowSec: z.number().int().min(1).max(3600).optional().default(60),
+    burstWindowSec: z.number().int().min(1).max(600).optional()
   }),
   tokenBudget: z
     .object({

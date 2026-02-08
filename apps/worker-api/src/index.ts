@@ -33,7 +33,18 @@ import {
   hashSearchQuery,
   setCachedSearch
 } from '../../../packages/storage/src/search-cache';
-import { getSearchCacheMetrics } from '../../../packages/observability/src/metrics';
+import {
+  createLogger,
+  extractTraceId,
+  recordMetric,
+  getCostMetrics,
+  getSearchCacheMetrics,
+  recordSearchMetrics,
+  recordCacheCheck,
+  type SearchMetrics,
+  type CacheCheckEvent,
+  type Logger
+} from '../../../packages/observability/src';
 import { bootstrapTools } from '../../../packages/tools/src/bootstrap';
 import { dispatchTool } from '../../../packages/tools/src/dispatcher';
 import { listTools } from '../../../packages/tools/src/registry';
@@ -41,6 +52,8 @@ import { ToolExecutionError } from '../../../packages/tools/src/errors';
 import { recordToolAudit, hashToolParams } from '../../../packages/tools/src/audit';
 import { recordToolMetrics, getToolMetrics } from '../../../packages/tools/src/metrics';
 import type { ToolContext } from '../../../packages/tools/src/schema';
+import { ttsRequestSchema } from '../../../packages/tts/src/schema';
+import { StubTtsAdapter } from '../../../packages/tts/src/stub';
 
 const textEncoder = new TextEncoder();
 const tokenUsagePrefix = 'token-usage';
@@ -56,36 +69,6 @@ type UsageMetrics = {
   status: 'success' | 'error';
   traceId?: string;
   route?: string;
-};
-
-type SearchMetrics = {
-  tenantId: string;
-  traceId?: string;
-  route: 'search';
-  status: 'success' | 'error' | 'cache-hit';
-  cacheHit: boolean;
-  latencies: {
-    totalMs: number;
-    rewriteMs?: number;
-    embeddingMs?: number;
-    retrievalMs?: number;
-    ragAssemblyMs?: number;
-    generationMs?: number;
-    followUpGenerationMs?: number;
-  };
-  tokensUsed?: {
-    rewrite?: { in: number; out: number };
-    followUpGeneration?: { in: number; out: number };
-  };
-  topK: number;
-  matchesReturned: number;
-};
-
-type CacheCheckEvent = {
-  timestamp: number;
-  hit: boolean;
-  latencyMs: number;
-  queryHash: string;
 };
 
 const configs = tenantConfigs.map((config) => loadTenantConfig(config));
@@ -301,53 +284,13 @@ function extractJsonArray(text: string): string[] {
   }
 }
 
-async function recordSearchMetrics(
-  env: Env,
-  tenantId: string,
-  metrics: SearchMetrics
-): Promise<void> {
-  if (!env.CACHE?.put) {
-    return;
-  }
-  const key = `${tenantId}:search:metrics:${Date.now()}`;
-  try {
-    await env.CACHE.put(key, JSON.stringify(metrics), {
-      expirationTtl: 604800
-    });
-  } catch (error) {
-    if (env.DEBUG_LOGGING) {
-      console.warn('Failed to write search metrics', { tenantId, error });
-    }
-  }
-}
 
-async function recordCacheCheck(
-  env: Env,
-  tenantId: string,
-  event: CacheCheckEvent
-): Promise<void> {
-  if (!env.CACHE?.put) {
-    return;
-  }
-  const suffix = typeof crypto.randomUUID === 'function'
-    ? crypto.randomUUID()
-    : String(Math.random()).slice(2);
-  const key = `${tenantId}:search:cache-check:${event.timestamp}:${suffix}`;
-  try {
-    await env.CACHE.put(key, JSON.stringify(event), {
-      expirationTtl: 86400
-    });
-  } catch (error) {
-    if (env.DEBUG_LOGGING) {
-      console.warn('Failed to write cache check', { tenantId, error });
-    }
-  }
-}
 
 async function handleChatRequest(
   request: Request,
   env: Env,
   tenant: TenantConfig,
+  logger: Logger,
   traceId?: string
 ): Promise<Response> {
   let payload: unknown;
@@ -397,9 +340,16 @@ async function handleChatRequest(
     `ratelimit:${limiterKey}`
   );
 
+  const windowSec = tenant.rateLimit.windowSec ?? 60;
+  const burstWindowSec = tenant.rateLimit.burstWindowSec ?? Math.floor(windowSec / 6);
   const limitResponse = await limiterStub.fetch('https://internal/check', {
     method: 'POST',
-    body: JSON.stringify({ limit: tenant.rateLimit.perMinute, windowSec: 60 })
+    body: JSON.stringify({
+      limit: tenant.rateLimit.perMinute,
+      windowSec,
+      burst: tenant.rateLimit.burst,
+      burstWindowSec,
+    })
   });
   const rateLimit = (await limitResponse.json()) as {
     allowed: boolean;
@@ -641,11 +591,7 @@ async function handleChatRequest(
           })
         });
       } catch (err) {
-        console.error('AI Gateway Error (stream):', {
-          tenantId: tenant.tenantId,
-          traceId,
-          error: err
-        });
+        logger.error('AI Gateway Error (stream)', err);
         await safeWrite(
           sseEvent(
             {
@@ -719,11 +665,7 @@ async function handleChatRequest(
     assistantContent = result.content;
     resolvedModelId = result.modelId;
   } catch (err) {
-    console.error('AI Gateway Error (non-stream):', {
-      tenantId: tenant.tenantId,
-      traceId,
-      error: err
-    });
+    logger.error('AI Gateway Error (non-stream)', err);
     return fail('ai_error', 'AI provider unavailable', 502, traceId);
   }
 
@@ -772,26 +714,33 @@ async function handleChatRequest(
 
 export { ChatSession } from './session-do';
 export { RateLimiter } from './rate-limiter-do';
-export type { SearchMetrics };
+
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
-    const traceId = getTraceId(request);
+    const traceId = extractTraceId(request);
+    const url = new URL(request.url);
     const tenant = resolveTenant(request, {
       hostMap: tenantIndex.hostMap,
       apiKeyMap: tenantIndex.apiKeyMap
     });
 
+    const logger = createLogger({
+      tenantId: tenant?.tenantId ?? 'unknown',
+      traceId,
+      route: url.pathname
+    });
+
     if (!tenant) {
+      logger.warn('Tenant resolution failed');
       return fail('tenant_required', 'Tenant required', 400, traceId);
     }
 
     const config = tenantIndex.byId[tenant.tenantId];
     if (!config) {
+      logger.warn('Tenant config not found', { tenantId: tenant.tenantId });
       return fail('tenant_unknown', 'Unknown tenant', 404, traceId);
     }
-
-    const url = new URL(request.url);
 
     const maxBodySize = env.MAX_REQUEST_BODY_SIZE ?? 10240;
     if (request.method !== 'GET' && request.method !== 'HEAD') {
@@ -825,6 +774,23 @@ export default {
         return fail('invalid_request', 'Invalid period', 400, traceId);
       }
       const metrics = await getSearchCacheMetrics(
+        config.tenantId,
+        periodParam as '1h' | '24h' | '7d',
+        env
+      );
+      return ok(metrics, traceId);
+    }
+
+    if (url.pathname === '/metrics/cost') {
+      if (request.method !== 'GET') {
+        return fail('method_not_allowed', 'Method not allowed', 405, traceId);
+      }
+      const periodParam = url.searchParams.get('period') ?? '24h';
+      const allowedPeriods = new Set(['1h', '24h', '7d']);
+      if (!allowedPeriods.has(periodParam)) {
+        return fail('invalid_request', 'Invalid period', 400, traceId);
+      }
+      const metrics = await getCostMetrics(
         config.tenantId,
         periodParam as '1h' | '24h' | '7d',
         env
@@ -959,6 +925,42 @@ export default {
       return ok(metrics, traceId);
     }
 
+    if (url.pathname === '/tts') {
+      if (request.method !== 'POST') {
+        return fail('method_not_allowed', 'Method not allowed', 405, traceId);
+      }
+
+      if (!config.featureFlags?.tts_enabled) {
+        return fail('tts_not_enabled', 'TTS is not enabled for this tenant', 403, traceId);
+      }
+
+      let payload: unknown;
+      try {
+        payload = await request.json();
+      } catch {
+        return fail('invalid_json', 'Invalid JSON', 400, traceId);
+      }
+
+      const parsed = ttsRequestSchema.safeParse(payload);
+      if (!parsed.success) {
+        return fail('invalid_request', 'Invalid request', 400, traceId);
+      }
+
+      const adapter = new StubTtsAdapter();
+      try {
+        const result = await adapter.generate(parsed.data, { traceId });
+        return new Response(result.data, {
+          headers: {
+            'content-type': result.contentType,
+            'x-trace-id': traceId ?? '',
+          },
+        });
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'TTS generation failed';
+        return fail('tts_error', errorMessage, 500, traceId);
+      }
+    }
+
     const ragRoute = getRagRoute(url.pathname);
     if (ragRoute === 'ingest') {
       if (request.method !== 'POST') {
@@ -1004,12 +1006,9 @@ export default {
         );
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Embedding provider unavailable';
-        console.error('Embedding error:', {
-          tenantId: config.tenantId,
+        logger.error('Embedding error', error, {
           gatewayId: config.aiGatewayId,
-          modelId: embeddingModelId,
-          error: errorMessage,
-          traceId
+          modelId: embeddingModelId
         });
         return fail('ai_error', `Embedding error: ${errorMessage}`, 502, traceId);
       }
@@ -1134,12 +1133,9 @@ export default {
         embeddingMs = performance.now() - embeddingStart;
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Embedding provider unavailable';
-        console.error('Search embedding error:', {
-          tenantId: config.tenantId,
+        logger.error('Search embedding error', error, {
           gatewayId: config.aiGatewayId,
-          modelId: embeddingModelId,
-          error: errorMessage,
-          traceId
+          modelId: embeddingModelId
         });
         void recordSearchMetrics(env, config.tenantId, {
           tenantId: config.tenantId,
@@ -1387,7 +1383,7 @@ export default {
         return fail('method_not_allowed', 'Method not allowed', 405, traceId);
       }
 
-      return handleChatRequest(request, env, config, traceId);
+      return handleChatRequest(request, env, config, logger, traceId);
     }
 
     if (chatRoute.kind === 'history' && chatRoute.sessionId) {
