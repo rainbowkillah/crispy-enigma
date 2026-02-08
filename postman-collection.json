@@ -1,0 +1,600 @@
+{
+  "info": {
+    "name": "Crispy Enigma API",
+    "description": "Multi-tenant Cloudflare Workers API with RAG search and chat capabilities",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "crispy-enigma"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://example.local",
+      "type": "string"
+    },
+    {
+      "key": "tenantId",
+      "value": "example",
+      "type": "string"
+    },
+    {
+      "key": "sessionId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "docId",
+      "value": "doc-001",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Check API health status and tenant configuration"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-tenant-id",
+                    "value": "example"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/health",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["health"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"status\": \"ok\",\n    \"tenantId\": \"example\",\n    \"environment\": \"development\",\n    \"modelId\": \"@cf/meta/llama-2-7b-chat-int8\",\n    \"fallbackModelId\": \"@cf/meta/llama-2-7b-chat-int8\"\n  }\n}"
+            }
+          ]
+        }
+      ],
+      "description": "Health check endpoints"
+    },
+    {
+      "name": "Metrics",
+      "item": [
+        {
+          "name": "Search Cache Metrics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/metrics/search-cache?period=24h",
+              "host": ["{{baseUrl}}"],
+              "path": ["metrics", "search-cache"],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "24h",
+                  "description": "Time period: 1h, 24h, or 7d"
+                }
+              ]
+            },
+            "description": "Get search cache performance metrics for a specific time period"
+          },
+          "response": [
+            {
+              "name": "Success - 24h metrics",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-tenant-id",
+                    "value": "example"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/metrics/search-cache?period=24h",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["metrics", "search-cache"],
+                  "query": [
+                    {
+                      "key": "period",
+                      "value": "24h"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"period\": \"24h\",\n    \"hitRate\": 0.65,\n    \"totalSearches\": 150,\n    \"cacheHits\": 98,\n    \"cacheMisses\": 52,\n    \"avgCachedLatency\": 45,\n    \"avgUncachedLatency\": 320,\n    \"latencyImprovement\": 85.9,\n    \"topCachedQueries\": [\n      { \"query\": \"what are workers\", \"hits\": 23 },\n      { \"query\": \"how to deploy\", \"hits\": 15 }\n    ]\n  }\n}"
+            }
+          ]
+        }
+      ],
+      "description": "API metrics and analytics endpoints"
+    },
+    {
+      "name": "RAG",
+      "item": [
+        {
+          "name": "Ingest Document",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"docId\": \"{{docId}}\",\n  \"text\": \"Cloudflare Workers is a serverless platform that allows developers to deploy code at the edge. Workers run on Cloudflare's global network, providing low latency and high performance. You can use Workers to build APIs, modify requests and responses, and much more.\",\n  \"source\": \"cloudflare-docs\",\n  \"title\": \"Introduction to Cloudflare Workers\",\n  \"url\": \"https://developers.cloudflare.com/workers\",\n  \"chunking\": {\n    \"maxChunkSize\": 1000,\n    \"overlap\": 100\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/ingest",
+              "host": ["{{baseUrl}}"],
+              "path": ["ingest"]
+            },
+            "description": "Ingest a document into the RAG system. The text will be chunked, embedded, and stored in the vector database."
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-tenant-id",
+                    "value": "example"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"docId\": \"doc-001\",\n  \"text\": \"Cloudflare Workers is a serverless platform...\",\n  \"source\": \"cloudflare-docs\",\n  \"title\": \"Introduction to Cloudflare Workers\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/ingest",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["ingest"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"status\": \"ingested\",\n    \"docId\": \"doc-001\",\n    \"chunks\": 3,\n    \"embeddingModelId\": \"@cf/baai/bge-m3\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Search Documents",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"What are Cloudflare Workers?\",\n  \"topK\": 5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/search",
+              "host": ["{{baseUrl}}"],
+              "path": ["search"]
+            },
+            "description": "Search documents using RAG. Returns an AI-generated answer with cited sources."
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-tenant-id",
+                    "value": "example"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"What are Cloudflare Workers?\",\n  \"topK\": 5\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/search",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["search"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"status\": \"ok\",\n    \"answer\": \"Cloudflare Workers is a serverless platform that allows developers to deploy code at the edge of Cloudflare's global network. It provides low latency and high performance by running your code close to your users.\",\n    \"sources\": [\n      {\n        \"id\": \"doc-001:0\",\n        \"docId\": \"doc-001\",\n        \"chunkId\": \"0\",\n        \"title\": \"Introduction to Cloudflare Workers\",\n        \"url\": \"https://developers.cloudflare.com/workers\",\n        \"source\": \"cloudflare-docs\",\n        \"text\": \"Cloudflare Workers is a serverless platform that allows developers to deploy code at the edge.\",\n        \"score\": 0.92\n      }\n    ],\n    \"confidence\": 0.89,\n    \"followUps\": [\n      \"How do I deploy a Worker?\",\n      \"What languages can I use with Workers?\",\n      \"What are the pricing tiers?\"\n    ]\n  }\n}"
+            }
+          ]
+        }
+      ],
+      "description": "RAG (Retrieval Augmented Generation) endpoints for document ingestion and search"
+    },
+    {
+      "name": "Chat",
+      "item": [
+        {
+          "name": "Send Chat Message",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Generate a session ID if not set",
+                  "if (!pm.collectionVariables.get('sessionId')) {",
+                  "    const uuid = require('uuid');",
+                  "    pm.collectionVariables.set('sessionId', uuid.v4());",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionId\": \"{{sessionId}}\",\n  \"message\": \"Hello! Can you explain what Cloudflare Workers are?\",\n  \"stream\": false,\n  \"userId\": \"user-123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/chat",
+              "host": ["{{baseUrl}}"],
+              "path": ["chat"]
+            },
+            "description": "Send a chat message. Supports both streaming and non-streaming responses."
+          },
+          "response": [
+            {
+              "name": "Success - Non-streaming",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-tenant-id",
+                    "value": "example"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sessionId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"message\": \"Hello! Can you explain what Cloudflare Workers are?\",\n  \"stream\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/chat",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["chat"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"role\": \"assistant\",\n    \"content\": \"Cloudflare Workers is a serverless computing platform that runs on Cloudflare's edge network. It allows you to deploy JavaScript, TypeScript, Rust, C, and C++ code that runs close to users worldwide, providing low latency and high performance.\",\n    \"timestamp\": 1738886400000,\n    \"usage\": {\n      \"tokensIn\": 45,\n      \"tokensOut\": 62,\n      \"totalTokens\": 107\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Send Chat Message (Streaming)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Generate a session ID if not set",
+                  "if (!pm.collectionVariables.get('sessionId')) {",
+                  "    const uuid = require('uuid');",
+                  "    pm.collectionVariables.set('sessionId', uuid.v4());",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionId\": \"{{sessionId}}\",\n  \"message\": \"Tell me more about Workers features\",\n  \"stream\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/chat",
+              "host": ["{{baseUrl}}"],
+              "path": ["chat"]
+            },
+            "description": "Send a chat message with streaming enabled (Server-Sent Events)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Chat History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/sessions/{{sessionId}}/history",
+              "host": ["{{baseUrl}}"],
+              "path": ["sessions", "{{sessionId}}", "history"]
+            },
+            "description": "Get chat history for a specific session"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-tenant-id",
+                    "value": "example"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/sessions/550e8400-e29b-41d4-a716-446655440000/history",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["sessions", "550e8400-e29b-41d4-a716-446655440000", "history"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"role\": \"user\",\n    \"content\": \"Hello! Can you explain what Cloudflare Workers are?\",\n    \"timestamp\": 1738886300000\n  },\n  {\n    \"role\": \"assistant\",\n    \"content\": \"Cloudflare Workers is a serverless computing platform...\",\n    \"timestamp\": 1738886305000\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Clear Chat Session",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/sessions/{{sessionId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["sessions", "{{sessionId}}"]
+            },
+            "description": "Clear all messages from a chat session"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "x-tenant-id",
+                    "value": "example"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/sessions/550e8400-e29b-41d4-a716-446655440000",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["sessions", "550e8400-e29b-41d4-a716-446655440000"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true\n}"
+            }
+          ]
+        }
+      ],
+      "description": "Chat endpoints for conversational AI interactions"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "value",
+        "value": "{{tenantId}}",
+        "type": "string"
+      },
+      {
+        "key": "key",
+        "value": "x-tenant-id",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Common tests for all requests",
+          "pm.test('Response time is less than 5s', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(5000);",
+          "});",
+          "",
+          "pm.test('Content-Type is application/json', function () {",
+          "    pm.expect(pm.response.headers.get('content-type')).to.include('application/json');",
+          "});",
+          "",
+          "// Check for successful responses",
+          "if (pm.response.code === 200) {",
+          "    pm.test('Response has ok field', function () {",
+          "        const jsonData = pm.response.json();",
+          "        pm.expect(jsonData).to.have.property('ok');",
+          "    });",
+          "}"
+        ]
+      }
+    }
+  ]
+}

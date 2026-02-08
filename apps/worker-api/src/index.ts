@@ -770,8 +770,16 @@ export default {
             }
           }
         );
-      } catch {
-        return fail('ai_error', 'Embedding provider unavailable', 502, traceId);
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Embedding provider unavailable';
+        console.error('Embedding error:', {
+          tenantId: config.tenantId,
+          gatewayId: config.aiGatewayId,
+          modelId: embeddingModelId,
+          error: errorMessage,
+          traceId
+        });
+        return fail('ai_error', `Embedding error: ${errorMessage}`, 502, traceId);
       }
 
       const snippetLength = 512;
@@ -892,7 +900,15 @@ export default {
           }
         );
         embeddingMs = performance.now() - embeddingStart;
-      } catch {
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Embedding provider unavailable';
+        console.error('Search embedding error:', {
+          tenantId: config.tenantId,
+          gatewayId: config.aiGatewayId,
+          modelId: embeddingModelId,
+          error: errorMessage,
+          traceId
+        });
         void recordSearchMetrics(env, config.tenantId, {
           tenantId: config.tenantId,
           traceId,
@@ -907,7 +923,7 @@ export default {
           topK: requestedTopK,
           matchesReturned: 0
         });
-        return fail('ai_error', 'Embedding provider unavailable', 502, traceId);
+        return fail('ai_error', `Embedding error: ${errorMessage}`, 502, traceId);
       }
 
       const vector = embeddingResult.embeddings[0] ?? [];

@@ -90,9 +90,10 @@ export async function runGatewayEmbeddings(
   }
 
   const input = { text: texts } as unknown;
-  const runOptions = {
-    ...buildGatewayOptions(tenantId, gatewayId, options.metadata)
-  } as unknown;
+  
+  // Note: AI Gateway doesn't support embeddings properly (expects chat format)
+  // Use direct Workers AI for embeddings instead
+  const runOptions = {} as unknown;
 
   const result = await (
     env.AI as unknown as {
