@@ -36,6 +36,19 @@ function buildGatewayOptions(
 }
 
 function extractEmbeddingVectors(result: unknown): number[][] | null {
+  if (typeof result === 'object' && result !== null) {
+    const record = result as Record<string, unknown>;
+    const nestedCandidates = [record.result, record.response, record.output];
+    for (const candidate of nestedCandidates) {
+      if (candidate && typeof candidate === 'object') {
+        const nested = extractEmbeddingVectors(candidate);
+        if (nested) {
+          return nested;
+        }
+      }
+    }
+  }
+
   if (Array.isArray(result)) {
     if (result.every((item) => Array.isArray(item))) {
       return result as number[][];
@@ -59,6 +72,12 @@ function extractEmbeddingVectors(result: unknown): number[][] | null {
 
   const data = record.data;
   if (Array.isArray(data) && data.length > 0) {
+    if (data.every((item) => Array.isArray(item))) {
+      return data as number[][];
+    }
+    if (data.every((item) => typeof item === 'number')) {
+      return [data as number[]];
+    }
     const vectors: number[][] = [];
     for (const item of data) {
       if (typeof item !== 'object' || item === null) {
@@ -90,10 +109,8 @@ export async function runGatewayEmbeddings(
   }
 
   const input = { text: texts } as unknown;
-  
-  // Note: AI Gateway doesn't support embeddings properly (expects chat format)
-  // Use direct Workers AI for embeddings instead
-  const runOptions = {} as unknown;
+
+  const runOptions = buildGatewayOptions(tenantId, gatewayId, options.metadata) as unknown;
 
   const result = await (
     env.AI as unknown as {
