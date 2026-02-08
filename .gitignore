@@ -143,6 +143,7 @@ archive/*
 
 # Wrangler cache
 .wrangler/
+deployments/
 M4-CODEX-PROMPTS.sh
 m4-codex-prompt.sh
 
