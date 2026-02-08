@@ -40,11 +40,23 @@ The collection uses the `x-tenant-id` header for tenant identification. You can 
 - Check API status and tenant configuration
 - No request body required
 
-### 2. Search Cache Metrics
+### 2. Metrics
+
+#### Search Cache Metrics
 - **GET** `/metrics/search-cache?period={1h|24h|7d}`
 - Get cache performance metrics
 - Query parameters:
   - `period`: Time window (1h, 24h, or 7d)
+
+#### Cost Metrics
+- **GET** `/metrics/cost?period={1h|24h|7d}`
+- Get cost metrics for AI operations (chat, embeddings, TTS)
+- Query parameters:
+  - `period`: Time window (1h, 24h, or 7d)
+- Response includes:
+  - Total cost
+  - Breakdown by operation type (chat, embeddings, TTS)
+  - Request counts and token/character usage
 
 ### 3. Ingest Document
 - **POST** `/ingest`
@@ -102,6 +114,25 @@ The collection uses the `x-tenant-id` header for tenant identification. You can 
 - **DELETE** `/sessions/{sessionId}`
 - Delete all messages in a session
 - Replace `{sessionId}` with your session UUID
+
+### 8. Text to Speech
+- **POST** `/tts`
+- Convert text to speech audio
+- Request body:
+```json
+{
+  "text": "Text to convert to speech",
+  "voice": "alloy",
+  "format": "mp3",
+  "speed": 1.0,
+  "streaming": false
+}
+```
+- Supported formats: `mp3`, `wav`, `opus`
+- Speed range: 0.25 to 4.0
+- Max text length: 5000 characters
+- Requires `tts_enabled` feature flag for tenant
+- Returns audio data in specified format
 
 ## Usage Workflow
 

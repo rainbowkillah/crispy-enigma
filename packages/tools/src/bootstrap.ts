@@ -6,7 +6,8 @@ import { tagChunkDocsTool } from './builtin/tag_chunk_docs.js';
 import { ingestDocsTool } from './builtin/ingest_docs.js';
 import type { ToolDefinition } from './schema.js';
 
-const builtinTools: ToolDefinition[] = [
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const builtinTools: ToolDefinition<any, any>[] = [
   summarizeTool,
   extractEntitiesTool,
   classifyIntentTool,

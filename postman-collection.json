@@ -163,6 +163,77 @@
               "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"period\": \"24h\",\n    \"hitRate\": 0.65,\n    \"totalSearches\": 150,\n    \"cacheHits\": 98,\n    \"cacheMisses\": 52,\n    \"avgCachedLatency\": 45,\n    \"avgUncachedLatency\": 320,\n    \"latencyImprovement\": 85.9,\n    \"topCachedQueries\": [\n      { \"query\": \"what are workers\", \"hits\": 23 },\n      { \"query\": \"how to deploy\", \"hits\": 15 }\n    ]\n  }\n}"
             }
           ]
+        },
+        {
+          "name": "Cost Metrics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/metrics/cost?period=24h",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "metrics",
+                "cost"
+              ],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "24h",
+                  "description": "Time period: 1h, 24h, or 7d"
+                }
+              ]
+            },
+            "description": "Get cost metrics for AI operations (tokens, embeddings, TTS) over a specific time period"
+          },
+          "response": [
+            {
+              "name": "Success - 24h metrics",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-tenant-id",
+                    "value": "example"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/metrics/cost?period=24h",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "metrics",
+                    "cost"
+                  ],
+                  "query": [
+                    {
+                      "key": "period",
+                      "value": "24h"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"period\": \"24h\",\n    \"totalCost\": 0.0234,\n    \"breakdown\": {\n      \"chat\": { \"requests\": 150, \"tokensIn\": 12340, \"tokensOut\": 8920, \"cost\": 0.0189 },\n      \"embeddings\": { \"requests\": 45, \"tokens\": 23450, \"cost\": 0.0032 },\n      \"tts\": { \"requests\": 12, \"characters\": 5600, \"cost\": 0.0013 }\n    }\n  }\n}"
+            }
+          ]
         }
       ],
       "description": "API metrics and analytics endpoints"
@@ -829,6 +900,95 @@
                 }
               ],
               "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"period\": \"24h\",\n    \"totalExecutions\": 245,\n    \"successRate\": 0.92,\n    \"avgExecutionTime\": 156,\n    \"toolStats\": [\n      { \"tool\": \"calculator\", \"executions\": 89, \"successRate\": 0.98 },\n      { \"tool\": \"search\", \"executions\": 156, \"successRate\": 0.89 }\n    ]\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "TTS",
+      "description": "Text-to-Speech endpoint for audio generation",
+      "item": [
+        {
+          "name": "Text to Speech",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Hello, this is a test of the text-to-speech system.\",\n  \"voice\": \"alloy\",\n  \"format\": \"mp3\",\n  \"speed\": 1.0,\n  \"streaming\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tts"
+              ]
+            },
+            "description": "Convert text to speech audio. Returns audio in the specified format (mp3, wav, opus). Requires TTS feature flag enabled for tenant."
+          },
+          "response": [
+            {
+              "name": "Success - Audio returned",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-tenant-id",
+                    "value": "example"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"text\": \"Hello world\",\n  \"format\": \"mp3\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/tts",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "tts"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "audio/mpeg"
+                }
+              ],
+              "body": "(Binary audio data)"
             }
           ]
         }
