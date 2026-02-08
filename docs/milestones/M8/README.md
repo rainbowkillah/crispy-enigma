@@ -1,6 +1,6 @@
 # M8: Deploy & Operations
 
-**Status:** 📋 Ready for Planning  
+**Status:** ✅ Complete (staging validated; production pending)  
 **Duration:** 16-24 hours  
 **Issues:** #42-#49 + #52 (9 total)  
 **Prerequisites:** M6 ✅ | M7 ✅ (Tier 1 complete)  
@@ -52,16 +52,11 @@ Transform manual `wrangler deploy` commands into:
 - Both have valid `tenant.config.json` and `wrangler.jsonc`
 - Local dev works: `npm run dev -- --tenant=<name>`
 - 198 tests passing, TypeScript compiles cleanly
-- Manual `wrangler deploy` works per tenant
+- Automated deploys and drift checks verified in staging
 - Production uses `workers.dev` URLs (no custom domains in M8 scope)
 
-### ⚠️ What's Missing
-- No automated deployment scripts
-- No config validation before deploy
-- No drift detection after deploy
-- No multi-account credential management
-- No rollback or incident procedures
-- **BLOCKER:** CI gates (#52 from M7) need verification
+### ⚠️ Remaining
+- Production deploy + drift validation (not executed in this milestone closeout)
 
 ---
 
@@ -96,20 +91,20 @@ graph TD
 ## Acceptance Criteria
 
 ### Deployment Works
-- [ ] `npm run deploy -- --tenant=X --env=staging` succeeds for both tenants
-- [ ] `npm run deploy:all -- --env=staging` deploys both tenants
-- [ ] Invalid configs rejected before deployment attempt
-- [ ] Deployment logs stored in `deployments/` directory
+- [x] `npm run deploy -- --tenant=X --env=staging` succeeds for both tenants
+- [x] `npm run deploy:all -- --env=staging` deploys both tenants
+- [x] Invalid configs rejected before deployment attempt
+- [x] Deployment logs stored in `deployments/` directory (gitignored)
 
 ### Verification Works  
-- [ ] `npm run drift -- --tenant=X --env=staging` detects config drift
-- [ ] Health check verifies deployment success
-- [ ] Zero secrets in git or CI logs
+- [x] `npm run drift -- --tenant=X --env=staging` detects config drift
+- [x] Health check verifies deployment success
+- [x] Zero secrets in git or CI logs
 
 ### Operations Ready
-- [ ] Rollback procedure documented and tested
-- [ ] Incident response runbook covers detection → resolution
-- [ ] CI gates prevent merging broken code
+- [x] Rollback procedure documented and tested
+- [x] Incident response runbook covers detection → resolution
+- [x] CI gates prevent merging broken code
 
 ---
 
@@ -119,6 +114,14 @@ graph TD
 2. **Local File Storage:** Store deployment logs in `deployments/` directory
 3. **Sequential by Default:** Deploy tenants one at a time (safer), opt-in parallel
 4. **HTTP Health Checks:** Verify deployment by calling `GET /health`
+
+---
+
+## Production Validation (Pending)
+
+- [ ] Deploy both tenants with `--env=production`
+- [ ] Run drift checks for production
+- [ ] Run smoke checks against production URLs
 
 See [PLANNING-BRIEF.md](./PLANNING-BRIEF.md) for detailed rationale.
 

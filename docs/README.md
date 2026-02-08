@@ -9,6 +9,7 @@ Comprehensive documentation for the crispy-enigma multi-tenant AI chat platform.
 - **[Project Plan](./plan.md)** — Master plan and high-level strategy
 - **[Quick Reference](./quick-reference.md)** — Common commands and patterns
 - **[M5 Handoff](./handoff-M5.md)** — Claude handoff for M5 planning/architecture/implementation
+- **[M8 Handoff](./handoff-M8.md)** — M8 completion summary and operational notes
 
 ### 🏗️ Architecture & Design
 Core technical documentation describing system design and implementation.
@@ -42,6 +43,9 @@ User-facing guides for development, testing, and operations.
 - **[Security Best Practices](./guides/security.md)** — Authentication, authorization, and secrets
 - **[Troubleshooting](./guides/troubleshooting.md)** — Common issues and solutions
 - **[Cross-Tenant References](./guides/references.md)** — Useful links and external resources
+- **[Multi-Account Auth](./deployment/multi-account-auth.md)** — Per-tenant token strategy
+- **[Rollback Runbook](./runbooks/rollback-deployment.md)** — Deployment rollback procedure
+- **[Incident Response](./runbooks/incident-response.md)** — Incident management steps
 
 ### 🎯 Architecture Decision Records (ADRs)
 Design decisions and rationale.
@@ -64,17 +68,16 @@ Code examples and patterns.
 Status and documentation for project milestones.
 
 #### Current
-- **[M4 Plan](./milestones/M4/PLAN.md)** — M4 scope, objectives, and preparation
-- **[M4 Status](./milestones/M4/STATUS.md)** — Completion results and validation
-- **[M4 Deployment](./milestones/M4/DEPLOYMENT.md)** — Staging deployment guide
-- **[M4 Notes](./milestones/M4/NOTES.md)** — Issues, decisions, and notes
-- **[M4 Repository Cleanup](./milestones/M4/REPO-CLEANUP.md)** — Git cleanup procedures
+- **[M8 Status](./milestones/M8/STATUS.md)** — Completion results and validation
+- **[M8 README](./milestones/M8/README.md)** — Scope, outcomes, and links
+- **[M8 Planning Brief](./milestones/M8/PLANNING-BRIEF.md)** — Historical planning notes
 
 #### Next
-- **[M5 Preparation](./milestones/M5/PREP.md)** — M5 planning and scope
+- **TBD** — Next milestone definition pending production validation
 
 #### Archive
 - **[Completed Milestones](./archive/milestones/)** — Documentation for M0, M1, M2, M3
+- **[M5 Preparation](./milestones/M5/PREP.md)** — Historical planning and scope
 
 ## 🔍 Finding What You Need
 

@@ -1,7 +1,7 @@
 # M8 Planning Brief for Codex
 
 **Date:** 2026-02-08  
-**Status:** Ready for Planning  
+**Status:** Completed (see STATUS.md)  
 **Prerequisites:** M6 Complete ✅ | M7 Complete ✅  
 **Duration Estimate:** 16-24 hours  
 

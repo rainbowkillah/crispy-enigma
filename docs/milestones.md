@@ -40,6 +40,7 @@ Build the Retrieval-Augmented Generation (RAG) pipeline for AI Search capabiliti
 
 ## M4: AI Search Endpoint
 Expose the RAG pipeline through a user-facing `/search` endpoint.
+- **Status:** ✅ Complete (2026-02-07)
 - **Deliverables:**
   - `/search` endpoint with a structured response (answer, sources, confidence).
   - Query rewriting and intent detection capabilities.
@@ -47,6 +48,7 @@ Expose the RAG pipeline through a user-facing `/search` endpoint.
 
 ## M5: Tool & Function Execution
 Implement a system for the AI to execute predefined tools (functions).
+- **Status:** ✅ Complete (2026-02-08)
 - **Deliverables:**
   - A tool registry and dispatcher.
   - JSON schema for defining tools and their arguments.
@@ -55,6 +57,7 @@ Implement a system for the AI to execute predefined tools (functions).
 
 ## M6: TTS Adapter Interface
 Define a standard interface for Text-to-Speech (TTS) functionality.
+- **Status:** ✅ Complete (2026-02-08)
 - **Deliverables:**
   - `/tts` API endpoint contract.
   - An adapter interface to allow for different TTS provider implementations.
@@ -62,6 +65,7 @@ Define a standard interface for Text-to-Speech (TTS) functionality.
 
 ## M7: Observability & Metrics
 Finalize and implement the comprehensive observability strategy.
+- **Status:** ✅ Complete (2026-02-08)
 - **Deliverables:**
   - Structured JSON logging with correlation IDs.
   - Core metrics for API usage, AI costs, and RAG performance.
@@ -71,6 +75,7 @@ Finalize and implement the comprehensive observability strategy.
 
 ## M8: Deployment Automation
 Automate the deployment process for tenants to ensure repeatability and safety.
+- **Status:** ✅ Complete (staging validated; production pending) (2026-02-08)
 - **Deliverables:**
   - Scripts to deploy a single tenant or all tenants.
   - Environment selection (`dev`, `stage`, `prod`).

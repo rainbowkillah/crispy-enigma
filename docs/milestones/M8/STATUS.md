@@ -1,7 +1,7 @@
 # M8 Status
 
 **Last Updated:** 2026-02-08  
-**Overall Status:** ✅ Complete  
+**Overall Status:** ✅ Complete (staging validated; production pending)  
 **Progress:** 9/9 issues complete (100%)  
 
 ---
@@ -61,3 +61,4 @@ None.
 - Deploy-all + drift validated for both tenants (staging)
 - Multi-account auth and runbooks completed
 - CI integration smoke verified locally
+- Production deploy + drift validation pending

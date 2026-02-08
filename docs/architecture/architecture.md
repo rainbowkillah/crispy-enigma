@@ -307,9 +307,9 @@ npm run typecheck                 # TypeScript strict check
 | M1 | Chat + Sessions: /chat streaming, DO sessions, KV cache, rate limiter | Complete |
 | M2 | AI Gateway: gateway integration, model routing, budget/limits, observability hooks | Complete |
 | M3 | Embeddings + Vectorize + RAG: ingestion, retrieval, citations | Complete |
-| M4 | AI Search UX: /search endpoint, query rewriting, caching | Next |
-| M5 | Tool Execution: tool registry, dispatcher, permission gating | Planned |
-| M6 | TTS Adapter: contract + stub + optional provider | Planned |
-| M7 | Observability: logging schema, metrics, CI gates, load tests | Planned |
-| M8 | Deployment Automation: per-tenant deploy, drift detection, rollback | Planned |
+| M4 | AI Search UX: /search endpoint, query rewriting, caching | Complete |
+| M5 | Tool Execution: tool registry, dispatcher, permission gating | Complete |
+| M6 | TTS Adapter: contract + stub + optional provider | Complete |
+| M7 | Observability: logging schema, metrics, CI gates, load tests | Complete |
+| M8 | Deployment Automation: per-tenant deploy, drift detection, rollback | Complete (staging validated) |
 | NX-1–4 | Nx Plugin: generators for workers, tenants, bindings, deploy executors | Planned |

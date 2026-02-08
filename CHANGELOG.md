@@ -2,6 +2,44 @@
 
 All notable changes for this project are documented here.
 
+## [1.8.0] - 2026-02-08 (M8: Deploy & Operations Complete)
+
+### Status
+- ✅ Staging validated for both production tenants
+- ✅ Deploy automation, drift detection, and runbooks delivered
+
+### Added
+- Config validation with optional remote Vectorize checks (`scripts/validate-config.mjs`).
+- Single-tenant and multi-tenant deploy scripts (`scripts/deploy-tenant.mjs`, `scripts/deploy-all.mjs`).
+- Drift detection script (`scripts/detect-drift.mjs`).
+- Runbooks: rollback + incident response.
+- Multi-account auth guide with per-tenant token strategy.
+
+### Changed
+- Smoke tests now support HTTPS for staging hosts.
+- Deploy-all resolves per-tenant tokens from `.env` files.
+
+## [1.7.0] - 2026-02-08 (M7: Observability & QA Complete)
+
+### Added
+- Structured logging, metrics, and cost tracking utilities.
+- Metrics endpoints for cache, cost, tool execution, SLI summaries, alerts, anomalies, and overview.
+- Streaming stability + retrieval quality tests.
+- CI gates for lint, typecheck, tests, and integration smoke.
+
+## [1.6.0] - 2026-02-08 (M6: TTS Adapter Boundary Complete)
+
+### Added
+- TTS adapter contract and `/tts` endpoint skeleton.
+- Tenant-level TTS gating via feature flags.
+
+## [1.5.0] - 2026-02-08 (M5: Tool Execution Complete)
+
+### Added
+- Tool registry + dispatcher with validation and error handling.
+- `/schema/tools` and `/tools/execute` endpoints.
+- Tool execution metrics and audit logging.
+
 ## [1.4.0] - 2026-02-07 (M4: AI Search UX Planning)
 
 ### Added
