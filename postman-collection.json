@@ -44,8 +44,12 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/health",
-              "host": ["{{baseUrl}}"],
-              "path": ["health"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
             },
             "description": "Check API health status and tenant configuration"
           },
@@ -62,8 +66,12 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/health",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["health"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "health"
+                  ]
                 }
               },
               "status": "OK",
@@ -98,8 +106,13 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/metrics/search-cache?period=24h",
-              "host": ["{{baseUrl}}"],
-              "path": ["metrics", "search-cache"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "metrics",
+                "search-cache"
+              ],
               "query": [
                 {
                   "key": "period",
@@ -123,8 +136,13 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/metrics/search-cache?period=24h",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["metrics", "search-cache"],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "metrics",
+                    "search-cache"
+                  ],
                   "query": [
                     {
                       "key": "period",
@@ -179,8 +197,12 @@
             },
             "url": {
               "raw": "{{baseUrl}}/ingest",
-              "host": ["{{baseUrl}}"],
-              "path": ["ingest"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ingest"
+              ]
             },
             "description": "Ingest a document into the RAG system. The text will be chunked, embedded, and stored in the vector database."
           },
@@ -210,8 +232,12 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/ingest",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["ingest"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "ingest"
+                  ]
                 }
               },
               "status": "OK",
@@ -254,8 +280,12 @@
             },
             "url": {
               "raw": "{{baseUrl}}/search",
-              "host": ["{{baseUrl}}"],
-              "path": ["search"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search"
+              ]
             },
             "description": "Search documents using RAG. Returns an AI-generated answer with cited sources."
           },
@@ -285,8 +315,12 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/search",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["search"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "search"
+                  ]
                 }
               },
               "status": "OK",
@@ -349,8 +383,12 @@
             },
             "url": {
               "raw": "{{baseUrl}}/chat",
-              "host": ["{{baseUrl}}"],
-              "path": ["chat"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "chat"
+              ]
             },
             "description": "Send a chat message. Supports both streaming and non-streaming responses."
           },
@@ -380,8 +418,12 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/chat",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["chat"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "chat"
+                  ]
                 }
               },
               "status": "OK",
@@ -438,8 +480,12 @@
             },
             "url": {
               "raw": "{{baseUrl}}/chat",
-              "host": ["{{baseUrl}}"],
-              "path": ["chat"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "chat"
+              ]
             },
             "description": "Send a chat message with streaming enabled (Server-Sent Events)"
           },
@@ -458,8 +504,14 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/sessions/{{sessionId}}/history",
-              "host": ["{{baseUrl}}"],
-              "path": ["sessions", "{{sessionId}}", "history"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "{{sessionId}}",
+                "history"
+              ]
             },
             "description": "Get chat history for a specific session"
           },
@@ -476,8 +528,14 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/sessions/550e8400-e29b-41d4-a716-446655440000/history",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["sessions", "550e8400-e29b-41d4-a716-446655440000", "history"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "sessions",
+                    "550e8400-e29b-41d4-a716-446655440000",
+                    "history"
+                  ]
                 }
               },
               "status": "OK",
@@ -506,8 +564,13 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/sessions/{{sessionId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["sessions", "{{sessionId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "{{sessionId}}"
+              ]
             },
             "description": "Clear all messages from a chat session"
           },
@@ -524,8 +587,13 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/sessions/550e8400-e29b-41d4-a716-446655440000",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["sessions", "550e8400-e29b-41d4-a716-446655440000"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "sessions",
+                    "550e8400-e29b-41d4-a716-446655440000"
+                  ]
                 }
               },
               "status": "OK",
@@ -543,6 +611,228 @@
         }
       ],
       "description": "Chat endpoints for conversational AI interactions"
+    },
+    {
+      "name": "Tools",
+      "description": "Tool execution and schema endpoints for AI-powered tool calling",
+      "item": [
+        {
+          "name": "Get Tools Schema",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/schema/tools",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "schema",
+                "tools"
+              ]
+            },
+            "description": "Get the schema and metadata for all available tools"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-tenant-id",
+                    "value": "example"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/schema/tools",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "schema",
+                    "tools"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"tools\": [\n      {\n        \"name\": \"calculator\",\n        \"description\": \"Perform basic arithmetic operations\",\n        \"parameters\": {\n          \"type\": \"object\",\n          \"properties\": {\n            \"operation\": { \"type\": \"string\", \"enum\": [\"add\", \"subtract\", \"multiply\", \"divide\"] },\n            \"a\": { \"type\": \"number\" },\n            \"b\": { \"type\": \"number\" }\n          },\n          \"required\": [\"operation\", \"a\", \"b\"]\n        },\n        \"timeout\": 5000\n      }\n    ]\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Execute Tool",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tool_name\": \"calculator\",\n  \"params\": {\n    \"operation\": \"add\",\n    \"a\": 5,\n    \"b\": 3\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tools/execute",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tools",
+                "execute"
+              ]
+            },
+            "description": "Execute a tool with the provided parameters"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "x-tenant-id",
+                    "value": "example"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tool_name\": \"calculator\",\n  \"params\": {\n    \"operation\": \"add\",\n    \"a\": 5,\n    \"b\": 3\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/tools/execute",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "tools",
+                    "execute"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"result\": 8,\n    \"executionTime\": 45\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Tool Execution Metrics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{tenantId}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/metrics/tools/execution?period=24h",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "metrics",
+                "tools",
+                "execution"
+              ],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "24h",
+                  "description": "Time period: 1h, 24h, or 7d"
+                }
+              ]
+            },
+            "description": "Get tool execution metrics for a specific time period"
+          },
+          "response": [
+            {
+              "name": "Success - 24h metrics",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-tenant-id",
+                    "value": "example"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/metrics/tools/execution?period=24h",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "metrics",
+                    "tools",
+                    "execution"
+                  ],
+                  "query": [
+                    {
+                      "key": "period",
+                      "value": "24h"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"period\": \"24h\",\n    \"totalExecutions\": 245,\n    \"successRate\": 0.92,\n    \"avgExecutionTime\": 156,\n    \"toolStats\": [\n      { \"tool\": \"calculator\", \"executions\": 89, \"successRate\": 0.98 },\n      { \"tool\": \"search\", \"executions\": 156, \"successRate\": 0.89 }\n    ]\n  }\n}"
+            }
+          ]
+        }
+      ]
     }
   ],
   "auth": {

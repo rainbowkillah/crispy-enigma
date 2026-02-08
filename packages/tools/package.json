@@ -4,13 +4,26 @@
   "type": "module",
   "exports": {
     "./schema": "./src/schema.ts",
-    "./registry": "./src/registry.ts"
+    "./registry": "./src/registry.ts",
+    "./errors": "./src/errors.ts",
+    "./permissions": "./src/permissions.ts",
+    "./dispatcher": "./src/dispatcher.ts",
+    "./audit": "./src/audit.ts",
+    "./metrics": "./src/metrics.ts",
+    "./bootstrap": "./src/bootstrap.ts",
+    "./builtin/summarize": "./src/builtin/summarize.ts",
+    "./builtin/extract_entities": "./src/builtin/extract_entities.ts",
+    "./builtin/classify_intent": "./src/builtin/classify_intent.ts",
+    "./builtin/tag_chunk_docs": "./src/builtin/tag_chunk_docs.ts",
+    "./builtin/ingest_docs": "./src/builtin/ingest_docs.ts"
   },
   "dependencies": {
     "zod": "^3.22.4"
   },
   "devDependencies": {
     "@repo/core": "workspace:*",
+    "@repo/ai": "workspace:*",
+    "@repo/rag": "workspace:*",
     "typescript": "^5.3.3"
   }
 }

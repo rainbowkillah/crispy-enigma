@@ -34,6 +34,13 @@ import {
   setCachedSearch
 } from '../../../packages/storage/src/search-cache';
 import { getSearchCacheMetrics } from '../../../packages/observability/src/metrics';
+import { bootstrapTools } from '../../../packages/tools/src/bootstrap';
+import { dispatchTool } from '../../../packages/tools/src/dispatcher';
+import { listTools } from '../../../packages/tools/src/registry';
+import { ToolExecutionError } from '../../../packages/tools/src/errors';
+import { recordToolAudit, hashToolParams } from '../../../packages/tools/src/audit';
+import { recordToolMetrics, getToolMetrics } from '../../../packages/tools/src/metrics';
+import type { ToolContext } from '../../../packages/tools/src/schema';
 
 const textEncoder = new TextEncoder();
 const tokenUsagePrefix = 'token-usage';
@@ -83,6 +90,26 @@ type CacheCheckEvent = {
 
 const configs = tenantConfigs.map((config) => loadTenantConfig(config));
 const tenantIndex = buildTenantIndex(configs);
+
+bootstrapTools();
+
+function buildToolContext(
+  tenant: TenantConfig,
+  env: Env,
+  requestId: string,
+  userId?: string
+): ToolContext {
+  return {
+    tenantId: tenant.tenantId,
+    requestId,
+    userId,
+    env,
+    featureFlags: tenant.featureFlags as Record<string, boolean> | undefined,
+    aiGatewayId: tenant.aiGatewayId,
+    chatModelId: env.MODEL_ID ?? tenant.aiModels.chat,
+    embeddingModelId: env.EMBEDDING_MODEL_ID ?? tenant.aiModels.embeddings,
+  };
+}
 
 function sseEvent(data: unknown, event?: string): Uint8Array {
   const payload = JSON.stringify(data);
@@ -335,7 +362,7 @@ async function handleChatRequest(
     return fail('invalid_request', 'Invalid request', 400, traceId);
   }
 
-  const { sessionId, message, stream, userId } = parsed.data;
+  const { sessionId, message, stream, userId, tool_name, tool_params } = parsed.data;
   const maxMessageLength = env.MAX_MESSAGE_LENGTH;
   if (maxMessageLength && message.length > maxMessageLength) {
     return fail('invalid_request', 'Message too long', 400, traceId);
@@ -428,7 +455,85 @@ async function handleChatRequest(
     })
   });
 
+  let toolResultContext = '';
+  if (tool_name) {
+    const toolCtx = buildToolContext(
+      tenant,
+      env,
+      traceId ?? crypto.randomUUID(),
+      userId
+    );
+    try {
+      const toolDispatch = await dispatchTool(
+        tool_name,
+        tool_params ?? {},
+        toolCtx
+      );
+      toolResultContext = `[Tool ${tool_name} result]: ${JSON.stringify(toolDispatch.result.data)}`;
+      const paramsHash = await hashToolParams(tool_params ?? {});
+      void recordToolAudit(
+        {
+          tenantId: tenant.tenantId,
+          toolName: tool_name,
+          requestId: traceId ?? '',
+          userId,
+          paramsHash,
+          success: true,
+          durationMs: toolDispatch.durationMs,
+          timestamp: Date.now(),
+        },
+        env
+      );
+      void recordToolMetrics(
+        {
+          tenantId: tenant.tenantId,
+          toolName: tool_name,
+          durationMs: toolDispatch.durationMs,
+          success: true,
+          tokensUsed: toolDispatch.result.metadata?.tokensUsed,
+          timestamp: Date.now(),
+        },
+        env
+      );
+    } catch (err) {
+      const errorCode =
+        err instanceof ToolExecutionError ? err.code : 'EXECUTION_ERROR';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Tool execution failed';
+      void recordToolAudit(
+        {
+          tenantId: tenant.tenantId,
+          toolName: tool_name,
+          requestId: traceId ?? '',
+          userId,
+          paramsHash: '',
+          success: false,
+          durationMs: 0,
+          errorCode,
+          timestamp: Date.now(),
+        },
+        env
+      );
+      void recordToolMetrics(
+        {
+          tenantId: tenant.tenantId,
+          toolName: tool_name,
+          durationMs: 0,
+          success: false,
+          timestamp: Date.now(),
+        },
+        env
+      );
+      return fail('tool_error', errorMessage, 400, traceId);
+    }
+  }
+
+  const toolSystemMessage: ChatModelMessage[] = toolResultContext
+    ? [{ role: 'system' as const, content: toolResultContext }]
+    : [];
+
   const messages: ChatModelMessage[] = [
+    ...toolSystemMessage,
     ...chronological,
     { role: 'user', content: message }
   ];
@@ -720,6 +825,133 @@ export default {
         return fail('invalid_request', 'Invalid period', 400, traceId);
       }
       const metrics = await getSearchCacheMetrics(
+        config.tenantId,
+        periodParam as '1h' | '24h' | '7d',
+        env
+      );
+      return ok(metrics, traceId);
+    }
+
+    if (url.pathname === '/tools/execute') {
+      if (request.method !== 'POST') {
+        return fail('method_not_allowed', 'Method not allowed', 405, traceId);
+      }
+      let payload: unknown;
+      try {
+        payload = await request.json();
+      } catch {
+        return fail('invalid_json', 'Invalid JSON', 400, traceId);
+      }
+
+      const body = payload as Record<string, unknown>;
+      const toolName = body.tool_name;
+      const toolParams = body.params;
+      if (typeof toolName !== 'string' || !toolName) {
+        return fail('invalid_request', 'Missing tool_name', 400, traceId);
+      }
+
+      const toolCtx = buildToolContext(
+        config,
+        env,
+        traceId ?? crypto.randomUUID(),
+        typeof body.user_id === 'string' ? body.user_id : undefined
+      );
+
+      try {
+        const result = await dispatchTool(toolName, toolParams ?? {}, toolCtx);
+        const paramsHash = await hashToolParams(toolParams ?? {});
+        void recordToolAudit(
+          {
+            tenantId: config.tenantId,
+            toolName,
+            requestId: traceId ?? '',
+            userId: toolCtx.userId,
+            paramsHash,
+            success: true,
+            durationMs: result.durationMs,
+            timestamp: Date.now(),
+          },
+          env
+        );
+        void recordToolMetrics(
+          {
+            tenantId: config.tenantId,
+            toolName,
+            durationMs: result.durationMs,
+            success: true,
+            tokensUsed: result.result.metadata?.tokensUsed,
+            timestamp: Date.now(),
+          },
+          env
+        );
+        return ok(result.result, traceId);
+      } catch (err) {
+        const errorCode =
+          err instanceof ToolExecutionError ? err.code : 'EXECUTION_ERROR';
+        const errorMessage =
+          err instanceof Error ? err.message : 'Tool execution failed';
+        const status =
+          err instanceof ToolExecutionError
+            ? errorCode === 'TOOL_NOT_FOUND'
+              ? 404
+              : errorCode === 'PERMISSION_DENIED'
+                ? 403
+                : errorCode === 'VALIDATION_FAILED'
+                  ? 400
+                  : 500
+            : 500;
+        void recordToolAudit(
+          {
+            tenantId: config.tenantId,
+            toolName,
+            requestId: traceId ?? '',
+            paramsHash: '',
+            success: false,
+            durationMs: 0,
+            errorCode,
+            timestamp: Date.now(),
+          },
+          env
+        );
+        void recordToolMetrics(
+          {
+            tenantId: config.tenantId,
+            toolName,
+            durationMs: 0,
+            success: false,
+            timestamp: Date.now(),
+          },
+          env
+        );
+        return fail(errorCode, errorMessage, status, traceId);
+      }
+    }
+
+    if (url.pathname === '/schema/tools') {
+      if (request.method !== 'GET') {
+        return fail('method_not_allowed', 'Method not allowed', 405, traceId);
+      }
+      const tools = listTools().map((t) => ({
+        name: t.name,
+        description: t.description,
+        parameters: t.parameters,
+        output: t.output,
+        timeout: t.timeout,
+        permissions: t.permissions,
+      }));
+      return ok({ tools }, traceId);
+    }
+
+    if (url.pathname === '/metrics/tools/execution') {
+      if (request.method !== 'GET') {
+        return fail('method_not_allowed', 'Method not allowed', 405, traceId);
+      }
+      const periodParam = url.searchParams.get('period') ?? '24h';
+      const allowedPeriods = new Set(['1h', '24h', '7d']);
+      if (!allowedPeriods.has(periodParam)) {
+        return fail('invalid_request', 'Invalid period', 400, traceId);
+      }
+      const metrics = await getToolMetrics(
         config.tenantId,
         periodParam as '1h' | '24h' | '7d',
         env

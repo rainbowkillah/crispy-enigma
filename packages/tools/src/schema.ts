@@ -50,6 +50,10 @@ export interface ToolContext {
   requestId: string;
   userId?: string;
   env: Env;
+  featureFlags?: Record<string, boolean>;
+  aiGatewayId?: string;
+  chatModelId?: string;
+  embeddingModelId?: string;
 }
 
 /**
