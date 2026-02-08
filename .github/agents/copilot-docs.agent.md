@@ -1,5 +1,5 @@
 ---
-description: "\"Improve template quality and readability\"\n\"Write developer documentation and examples\"\n\"Add error messages and user-friendly output\"\n\"Polish generator prompts and defaults\""
+description: "Improve template quality, write developer documentation with examples, add error messages and user-friendly output, polish generator prompts and defaults"
 name: copilot-docs
 ---
 
