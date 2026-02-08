@@ -1,17 +1,10 @@
 {
-  "inputs": [
-    {
-      "id": "postman-api-key",
-      "type": "promptString",
-      "description": "Enter your Postman API key"
-    }
-  ],
   "mcpServers": {
     "postman-mcp": {
       "type": "http",
       "url": "https://mcp.postman.com/mcp",
       "headers": {
-        "Authorization": "Bearer ${input:postman-api-key}"
+        "Authorization": "Bearer ${POSTMAN_API_KEY}"
       }
     },
     "nx-mcp": {
