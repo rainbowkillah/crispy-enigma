@@ -1,52 +1,47 @@
 # Tenant Isolation Audit
 
-**Date**: February 8, 2026
-**Status**: 🟢 PASS with Warnings
+This document verifies the security and isolation mechanisms for multi-tenancy in the application.
 
-## Executive Summary
-The codebase exhibits a strong "Security by Design" approach to multi-tenancy. All storage adapters enforce `tenantId` parameters. Key isolation mechanisms are verified by dedicated test suites.
+## 1. Request Resolution
+- **Mechanism**: `resolveTenant` function in `packages/core/src/tenant/resolveTenant.ts`.
+- **Method**: Checks `x-tenant-id` header, Hostname mapping, or API Key mapping.
+- **Verification**: **PASS**. The resolution logic is explicit and prioritized correctly.
 
-## Audit Checklist
+## 2. Storage Isolation
 
-### 1. Storage Isolation
-- [x] **KV Namespace**: `TenantKVAdapter` (packages/storage/src/kv.ts) enforces `${tenantId}:${key}` pattern.
-- [x] **Durable Objects**: `getTenantDurableObject` (packages/storage/src/do.ts) enforces `${tenantId}:${objectId}` naming.
-- [x] **Vectorize**: `TenantVectorizeAdapter` (packages/storage/src/vectorize.ts) adds metadata filters and wraps upserts/queries.
-- [x] **Search Cache**: Keys are prefixed with `tenantId`.
+### KV Namespace
+- **Mechanism**: `TenantKVAdapter` in `packages/storage/src/kv.ts`.
+- **Implementation**: Prefixes all keys with `${tenantId}:`.
+    - `get`: `tenantKey(tenantId, key)`
+    - `put`: `tenantKey(tenantId, key)`
+- **Verification**: **PASS**. Key prefixing is a standard and effective isolation strategy for KV.
 
-### 2. Request Isolation
-- [x] **Tenant Resolution**: `resolveTenant` (packages/core) correctly identifies tenant from Host or API Key.
-- [x] **Context Propagation**: `tenantId` is passed explicitly to `Logger`, `Metrics`, and `AI Gateway`. No reliance on global state for tenant context.
+### Durable Objects
+- **Mechanism**: `getTenantDurableObject` in `packages/storage/src/do.ts`.
+- **Implementation**: Generates ID from name `${tenantId}:${objectId}`.
+    - `makeTenantObjectName(tenantId, objectId)`
+- **Verification**: **PASS**. Using the tenant ID in the name passed to `idFromName` ensures that different tenants get different DO instances for the same logical object ID.
 
-### 3. Tool Execution
-- [x] **Context**: `dispatchTool` receives a `ToolContext` containing `tenantId`.
-- [x] **Implementations**: Built-in tools (e.g., `ingest_docs`) utilize `context.tenantId` for storage operations.
-- [!] **Registry**: `registry.ts` uses a global `Map`.
-    - *Risk*: Low (definitions are static), but strict care is needed.
-    - *Mitigation*: Ensure `registerTool` is never called with tenant-specific logic at runtime.
+### Vectorize (Vector Database)
+- **Mechanism**: `TenantVectorizeAdapter` in `packages/storage/src/vectorize.ts`.
+- **Implementation**:
+    - `query`: Passes `namespace: tenantId` in options.
+    - `upsert`: Maps vectors to include `namespace: tenantId`.
+- **Verification**: **PASS**. This relies on the `Vectorize` binding supporting namespaces, which is the correct way to isolate vectors.
 
-### 4. AI Gateway
-- [x] **Routing**: `runGatewayChat` takes `tenantId` and logs usage metrics tagged with it.
-- [x] **Permissions**: Model allowlists are enforced per-tenant in `worker-api/index.ts`.
+### Search Cache
+- **Mechanism**: `buildCacheKey` in `packages/storage/src/search-cache.ts`.
+- **Implementation**: `${tenantId}:search:${hash}`.
+- **Verification**: **PASS**.
 
-## Code Evidence
+## 3. Runtime Isolation
+- **AI Gateway**: `runGatewayChat` and `runGatewayEmbeddings` take `tenantId` and `gatewayId` from the tenant config.
+- **Verification**: **PASS**. Requests are routed to the specific gateway configured for the tenant.
 
-### Good Pattern (Storage)
-```typescript
-// packages/storage/src/kv.ts
-export const tenantKey = (tenantId: string, key: string) => `${tenantId}:${key}`;
-```
-
-### Good Pattern (Vectorize)
-```typescript
-// packages/storage/src/vectorize.ts
-const adapter = new TenantVectorizeAdapter(index);
-await adapter.upsert(tenantId, vectors);
-```
-
-## Vulnerabilities / Warnings
-1.  **Global Tool Registry**: The `packages/tools/src/registry.ts` is a singleton. If a developer accidentally registers a tenant-specific tool at runtime, it would leak to other tenants.
-    - *Recommendation*: Move registry to `Env` or `Context` if dynamic tools are needed.
+## 4. Cross-Tenant Leakage Risks
+- **Logging**: `createLogger` includes `tenantId`. **PASS**.
+- **Metrics**: `createMetrics` includes `tenantId`. **PASS**.
+- **Global State**: No shared global state was found that persists across requests (except for `tenantIndex` which is read-only configuration).
 
 ## Conclusion
-The architecture provides robust isolation. The reliance on explicit parameters over implicit context is a strong positive signal.
+The application implements a robust "Logical Isolation" strategy. Data is co-located but strictly logically separated by mandatory `tenantId` prefixes or namespaces in all storage and access layers.

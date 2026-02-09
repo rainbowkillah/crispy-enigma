@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import worker from '../apps/worker-api/src/index';
 import type { Env } from '../packages/core/src';
+import { createExecutionContext } from './utils/execution-context';
 
 type StubHandler = (request: Request) => Promise<Response>;
 
@@ -76,6 +77,7 @@ function usageKeys(tenantId: string): { daily: string; monthly: string } {
 }
 
 describe('token budget enforcement', () => {
+  const ctx = createExecutionContext();
   it('rejects requests when daily budget is exceeded', async () => {
     const kv = new FakeKV();
     const keys = usageKeys('rainbowsmokeofficial');
@@ -105,7 +107,8 @@ describe('token budget enforcement', () => {
           stream: false
         })
       }),
-      env
+      env,
+      ctx
     );
 
     expect(response.status).toBe(429);
@@ -141,7 +144,8 @@ describe('token budget enforcement', () => {
           stream: false
         })
       }),
-      env
+      env,
+      ctx
     );
 
     expect(response.status).toBe(200);

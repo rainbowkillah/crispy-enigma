@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import worker from '../apps/worker-api/src/index';
 import type { Env } from '../packages/core/src';
+import { createExecutionContext } from './utils/execution-context';
 
 type StubHandler = (request: Request) => Promise<Response>;
 
@@ -54,6 +55,8 @@ const baseEnv: Env = {
   RATE_LIMITER_DO: rateLimiterNamespace as unknown as DurableObjectNamespace
 };
 
+const ctx = createExecutionContext();
+
 describe('session isolation', () => {
   it('uses tenant-scoped DO names for session and rate limiter', async () => {
     await worker.fetch(
@@ -70,7 +73,8 @@ describe('session isolation', () => {
           stream: false
         })
       }),
-      baseEnv
+      baseEnv,
+      ctx
     );
 
     expect(sessionNamespace.names).toContain(
@@ -93,7 +97,8 @@ describe('session isolation', () => {
           stream: false
         })
       }),
-      baseEnv
+      baseEnv,
+      ctx
     );
 
     expect(sessionNamespace.names).toContain(

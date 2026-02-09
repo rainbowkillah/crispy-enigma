@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import worker from '../apps/worker-api/src/index';
 import type { Env } from '../packages/core/src';
+import { createExecutionContext } from './utils/execution-context';
 
 type StubHandler = (request: Request) => Promise<Response>;
 
@@ -75,6 +76,7 @@ const baseEnv: Env = {
   CHAT_SESSION: sessionNamespace as unknown as DurableObjectNamespace,
   RATE_LIMITER_DO: rateLimiterNamespace as unknown as DurableObjectNamespace
 };
+const ctx = createExecutionContext();
 
 describe('chat endpoint', () => {
   it('accepts valid requests with stream=false', async () => {
@@ -91,7 +93,7 @@ describe('chat endpoint', () => {
       })
     });
 
-    const response = await worker.fetch(request, baseEnv);
+    const response = await worker.fetch(request, baseEnv, ctx);
     expect(response.status).toBe(200);
     const body = (await response.json()) as {
       ok: boolean;
@@ -119,7 +121,7 @@ describe('chat endpoint', () => {
       })
     });
 
-    const response = await worker.fetch(request, baseEnv);
+    const response = await worker.fetch(request, baseEnv, ctx);
     expect(response.status).toBe(400);
     const body = (await response.json()) as { ok: boolean; error: { code: string } };
     expect(body.ok).toBe(false);
@@ -138,7 +140,7 @@ describe('chat endpoint', () => {
       })
     });
 
-    const response = await worker.fetch(request, baseEnv);
+    const response = await worker.fetch(request, baseEnv, ctx);
     expect(response.status).toBe(400);
   });
 
@@ -155,7 +157,7 @@ describe('chat endpoint', () => {
       })
     });
 
-    const response = await worker.fetch(request, baseEnv);
+    const response = await worker.fetch(request, baseEnv, ctx);
     expect(response.status).toBe(200);
     expect(response.headers.get('content-type')).toBe('text/event-stream');
     const text = await response.text();
@@ -177,7 +179,7 @@ describe('chat endpoint', () => {
       })
     });
 
-    const response = await worker.fetch(request, baseEnv);
+    const response = await worker.fetch(request, baseEnv, ctx);
     expect(response.status).toBe(200);
     expect(response.headers.get('content-type')).toBe('text/event-stream');
   });
@@ -191,7 +193,8 @@ describe('chat endpoint', () => {
           headers: { 'x-tenant-id': 'mrrainbowsmoke' }
         }
       ),
-      baseEnv
+      baseEnv,
+      ctx
     );
 
     expect(response.status).toBe(200);
@@ -210,7 +213,8 @@ describe('chat endpoint', () => {
           headers: { 'x-tenant-id': 'mrrainbowsmoke' }
         }
       ),
-      baseEnv
+      baseEnv,
+      ctx
     );
 
     expect(response.status).toBe(200);
@@ -224,7 +228,8 @@ describe('chat endpoint', () => {
         method: 'GET',
         headers: { 'x-tenant-id': 'mrrainbowsmoke' }
       }),
-      baseEnv
+      baseEnv,
+      ctx
     );
 
     expect(response.status).toBe(400);
@@ -239,7 +244,8 @@ describe('chat endpoint', () => {
         method: 'DELETE',
         headers: { 'x-tenant-id': 'mrrainbowsmoke' }
       }),
-      baseEnv
+      baseEnv,
+      ctx
     );
 
     expect(response.status).toBe(400);

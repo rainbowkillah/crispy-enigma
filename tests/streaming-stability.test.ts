@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import worker from '../apps/worker-api/src/index';
 import type { Env } from '../packages/core/src';
+import { createExecutionContext } from './utils/execution-context';
 
 type StubHandler = (request: Request) => Promise<Response>;
 
@@ -59,6 +60,8 @@ const baseEnv: Env = {
   RATE_LIMITER_DO: rateLimiterNamespace as unknown as DurableObjectNamespace
 };
 
+const ctx = createExecutionContext();
+
 const makeStreamRequest = (message: string) =>
   new Request('https://mrrainbowsmoke.local/chat', {
     method: 'POST',
@@ -75,7 +78,7 @@ const makeStreamRequest = (message: string) =>
 
 describe('Streaming Stability', () => {
   it('streams SSE events with correct format', async () => {
-    const response = await worker.fetch(makeStreamRequest('hello'), baseEnv);
+    const response = await worker.fetch(makeStreamRequest('hello'), baseEnv, ctx);
     expect(response.status).toBe(200);
     expect(response.headers.get('content-type')).toBe('text/event-stream');
 
@@ -98,9 +101,9 @@ describe('Streaming Stability', () => {
 
   it('handles concurrent streaming requests without interference', async () => {
     const [res1, res2, res3] = await Promise.all([
-      worker.fetch(makeStreamRequest('first'), baseEnv),
-      worker.fetch(makeStreamRequest('second'), baseEnv),
-      worker.fetch(makeStreamRequest('third'), baseEnv)
+      worker.fetch(makeStreamRequest('first'), baseEnv, ctx),
+      worker.fetch(makeStreamRequest('second'), baseEnv, ctx),
+      worker.fetch(makeStreamRequest('third'), baseEnv, ctx)
     ]);
 
     expect(res1.status).toBe(200);
@@ -121,7 +124,7 @@ describe('Streaming Stability', () => {
   });
 
   it('handles slow consumers without dropping messages', async () => {
-    const response = await worker.fetch(makeStreamRequest('slow-consumer'), baseEnv);
+    const response = await worker.fetch(makeStreamRequest('slow-consumer'), baseEnv, ctx);
     expect(response.status).toBe(200);
 
     const reader = response.body!.getReader();
@@ -146,7 +149,7 @@ describe('Streaming Stability', () => {
   });
 
   it('handles client disconnection gracefully', async () => {
-    const response = await worker.fetch(makeStreamRequest('disconnect'), baseEnv);
+    const response = await worker.fetch(makeStreamRequest('disconnect'), baseEnv, ctx);
     expect(response.status).toBe(200);
 
     const reader = response.body!.getReader();

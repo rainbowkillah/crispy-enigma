@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import worker from '../apps/worker-api/src/index';
 import type { Env } from '../packages/core/src';
+import { createExecutionContext } from './utils/execution-context';
 
 type StubHandler = (request: Request) => Promise<Response>;
 
@@ -55,6 +56,7 @@ const baseEnv: Env = {
   CHAT_SESSION: sessionNamespace as unknown as DurableObjectNamespace,
   RATE_LIMITER_DO: rateLimiterNamespace as unknown as DurableObjectNamespace
 };
+const ctx = createExecutionContext();
 
 describe('streaming behavior', () => {
   it('streams SSE when stream=true', async () => {
@@ -71,7 +73,8 @@ describe('streaming behavior', () => {
           stream: true
         })
       }),
-      baseEnv
+      baseEnv,
+      ctx
     );
 
     expect(response.status).toBe(200);
@@ -95,7 +98,8 @@ describe('streaming behavior', () => {
           stream: false
         })
       }),
-      baseEnv
+      baseEnv,
+      ctx
     );
 
     expect(response.status).toBe(200);

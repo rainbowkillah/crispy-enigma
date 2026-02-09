@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import worker from '../apps/worker-api/src/index';
 import type { Env, SearchResponse } from '../packages/core/src';
+import { createExecutionContext } from './utils/execution-context';
+
+const ctx = createExecutionContext();
 
 const baseEnv: Env = {
   AI: {
@@ -71,7 +74,7 @@ const smokeTestSuite: SmokeTestCase[] = [
 describe('Retrieval Quality Smoke Score', () => {
   for (const { query, expectedConfidence, expectedSources } of smokeTestSuite) {
     it(`'${query}' should meet quality standards`, async () => {
-      const response = await worker.fetch(makeSearchRequest(query), baseEnv);
+      const response = await worker.fetch(makeSearchRequest(query), baseEnv, ctx);
       expect(response.status).toBe(200);
 
       const result = await response.json() as { ok: boolean, data: SearchResponse };

@@ -1,39 +1,53 @@
 # Best Practices Alignment
 
-**Date**: February 8, 2026
-**Scope**: Cloudflare Workers & Multi-Tenancy
+This document compares the codebase against Cloudflare Workers and general software engineering best practices.
 
-## Cloudflare Patterns
+## Cloudflare Workers Best Practices
 
-| Pattern | Status | Notes |
-|---------|--------|-------|
-| **Workers AI** | ✅ Aligned | Uses `env.AI` binding correctly. |
-| **Vectorize** | ✅ Aligned | Uses metadata filtering for tenancy. |
-| **Durable Objects** | ✅ Aligned | Used for stateful/consistency needs (Rate Limit, Session). |
-| **KV** | ✅ Aligned | Used for config/caching. |
-| **D1** | ⚠️ Unused | Binding exists but unused. |
-| **Streaming** | ✅ Aligned | Proper `TextEncoder`/`TransformStream` usage for SSE. |
-| **Bindings** | ✅ Aligned | Defined in Env interface. |
+### 1. `ctx.waitUntil` for Background Work
+- **Status**: **FAIL**.
+- **Observation**: Background tasks (metrics, audit logs, cache sets) are fired as floating promises (e.g., `void recordToolAudit(...)`) without `ctx.waitUntil`.
+- **Risk**: High. Data loss (logs, metrics) and race conditions.
+- **Fix**: Modify `fetch(request, env)` to `fetch(request, env, ctx)` and usage `ctx.waitUntil(...)`.
 
-## Multi-Tenant Patterns
+### 2. Durable Objects
+- **Status**: **PASS**.
+- **Observation**:
+    - Uses `idFromName` with tenant-scoped names.
+    - Standard `fetch` interface used.
+    - State storage methods (`get`, `put`) used correctly.
 
-| Pattern | Status | Notes |
-|---------|--------|-------|
-| **Isolation** | ✅ Strong | Explicit `tenantId` in all storage ops. |
-| **Config** | ✅ Strong | `TenantConfig` loaded at runtime (mocked in `index`, likely KV in prod). |
-| **Rate Limiting** | ✅ Strong | Tenant-aware sliding window via DO. |
-| **Observability** | ✅ Strong | Logs/Metrics tagged with `tenantId`. |
-| **Feature Flags** | ✅ Strong | Used for tools and model access. |
+### 3. Environment Variables
+- **Status**: **PASS**.
+- **Observation**: Managed via `Env` interface and passed explicitly. No global `process.env`.
 
-## Architecture
+### 4. Streaming
+- **Status**: **PASS**.
+- **Observation**: Uses `TransformStream` and `TextEncoder` for SSE. Handles client disconnection gracefully.
 
-| Pattern | Status | Notes |
-|---------|--------|-------|
-| **Monorepo** | ✅ Nx | Separation of concerns (packages/apps). |
-| **Routing** | 🟡 Monolithic | `worker-api/index.ts` is too large. |
-| **Testing** | ✅ Integration | Strong focus on E2E flows via `worker.fetch`. |
+## Multi-Tenancy Best Practices
 
-## Recommendations
-1.  **Split `worker-api`**: Refactor the monolithic `index.ts` into a router-based architecture (e.g., using `hono` or a simple router).
-2.  **Clean up D1**: Remove the unused binding to reduce noise.
-3.  **Wrangler Config**: Ensure `wrangler.toml` (or `wrangler.json`) is committed and aligned with `Env` interface.
+### 1. Isolation
+- **Status**: **PASS**.
+- **Observation**: Strict logical isolation in all persistence layers (KV, DO, Vectorize).
+
+### 2. Configuration
+- **Status**: **PASS**.
+- **Observation**: Tenant config is loaded and cached. Feature flags are supported.
+
+### 3. Rate Limiting
+- **Status**: **PASS**.
+- **Observation**: Dedicated `RateLimiter` Durable Object ensures accurate, atomic counting per tenant/user.
+
+## General Code Quality
+
+### 1. Structure
+- **Status**: **Needs Improvement**.
+- **Observation**: `index.ts` is too large. Logic should be modularized.
+
+### 2. Dependencies
+- **Status**: **Good**.
+- **Observation**: Dependencies are managed via separate packages (`packages/*`).
+
+## Summary
+The architecture is sound and follows most best practices, with the **critical exception** of `ctx.waitUntil` usage. Fixing this is the top priority.

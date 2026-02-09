@@ -1,104 +1,53 @@
 # Refactoring Opportunities
 
+This document outlines areas for code improvement, focusing on maintainability, readability, and performance.
+
 ## High Priority
 
-### 1. Monolithic Worker Entry Point
-**Severity**: 🔴 Critical
-**Location**: `apps/worker-api/src/index.ts` (approx. 800+ lines)
+### 1. Monolithic Handler in `apps/worker-api/src/index.ts`
+The `fetch` handler in `apps/worker-api/src/index.ts` is over 800 lines long and contains all routing, business logic, validation, and error handling.
+- **Problem**: Difficult to test, maintain, and extend. Mixing routing with business logic makes it hard to see the high-level flow.
+- **Recommendation**:
+    - Extract route handlers into separate controller files (e.g., `controllers/chat.ts`, `controllers/rag.ts`, `controllers/tools.ts`).
+    - Use a lightweight router (like `itty-router` or Hono) or a custom router class to manage routes.
+    - Move validation logic (Zod schemas) to a shared `schema` package or dedicated files.
 
-**Current Pattern**:
-A single `fetch` handler contains all routing logic (`/chat`, `/search`, `/metrics`, `/tools`, `/tts`), validation, error handling, and business logic.
-
-**Issue**:
-- Hard to maintain and test.
-- High cognitive load.
-- specific route logic is mixed with global concerns (CORS, tenant resolution).
-
-**Recommended Pattern**:
-Split into a router/controller pattern.
-```typescript
-// apps/worker-api/src/routes/chat.ts
-export async function handleChat(req: Request, ctx: Context) { ... }
-
-// apps/worker-api/src/router.ts
-router.post('/chat', handleChat);
-```
-
-**Benefit**: Improves maintainability and allows for easier addition of new routes.
-**Effort**: 3 days
-
-### 2. Global Tool Registry Risk
-**Severity**: 🟡 Medium
-**Location**: `packages/tools/src/registry.ts`
-
-**Current Pattern**:
-```typescript
-const registry = new Map<string, ToolDefinition>();
-```
-**Issue**:
-- Uses a global mutable `Map`. In Cloudflare Workers, global scope persists across requests on the same isolate.
-- While current tools seem generic, this invites "tenant pollution" if dynamic registration is ever added.
-
-**Recommended Pattern**:
-- Keep `registry` read-only after bootstrap.
-- Or, move registry to a `Context` object passed down, instantiated per request or lazily.
-
-**Benefit**: Ensures strict tenant isolation and prevents cross-tenant data leaks via tool definitions.
-**Effort**: 1 day
+### 2. Missing `ctx.waitUntil` for Background Tasks
+Throughout `apps/worker-api/src/index.ts`, background tasks are fired without being awaited or passed to `context.waitUntil`.
+- **Location**: `apps/worker-api/src/index.ts`
+- **Examples**:
+    - `void recordToolAudit(...)`
+    - `void recordToolMetrics(...)`
+    - `void recordCost(...)`
+    - `void setCachedSearch(...)`
+    - `void recordSearchMetrics(...)`
+- **Problem**: In Cloudflare Workers, promises not awaited before the response is returned are cancelled. This leads to data loss in logs, metrics, and caches.
+- **Recommendation**: Ensure the `fetch` handler signature includes `ctx: ExecutionContext` and wrap all background promises in `ctx.waitUntil(promise)`.
 
 ## Medium Priority
 
-### 3. Unused D1 Database Binding
-**Severity**: 🟡 Medium
-**Location**: `packages/core/src/env.ts`
+### 1. Duplicate Error Handling
+Error handling logic is repeated across different route handlers.
+- **Location**: `apps/worker-api/src/index.ts`
+- **Problem**: Inconsistent error responses if one block is changed but others are not.
+- **Recommendation**: Implement a central error handling middleware or utility function that takes an error and returns a standardized JSON response.
 
-**Current Pattern**:
-`DB: D1Database` is defined in `Env` and mocked in tests, but zero usage found in source code.
-
-**Issue**:
-- Dead code/configuration.
-- Confusing for new developers (should I use D1?).
-
-**Recommended Pattern**:
-Remove it if not used, or implement the intended usage.
-
-**Benefit**: Cleanup.
-**Effort**: 1 hour
-
-### 4. AI Gateway Type Looseness
-**Severity**: 🟡 Medium
-**Location**: `packages/ai/src/gateway.ts`
-
-**Current Pattern**:
-```typescript
-env.AI as unknown as { run: ... }
-```
-**Issue**:
-- Bypassing TypeScript checks for the `AI` binding.
-- Prone to runtime errors if Cloudflare types change.
-
-**Recommended Pattern**:
-- Use proper `@cloudflare/workers-types` definitions.
-- Create a strict wrapper/adapter for `env.AI`.
-
-**Benefit**: Type safety.
-**Effort**: 4 hours
+### 2. Implicit `any` in `extractJsonArray`
+The function `extractJsonArray` uses `JSON.parse(candidate) as unknown` and then checks `Array.isArray`.
+- **Location**: `apps/worker-api/src/index.ts`
+- **Problem**: While functional, it could be more robust using a validation library like Zod to ensure the array contains strings specifically, rather than just `typeof item === 'string'`.
+- **Recommendation**: Use `z.array(z.string()).safeParse()` for stricter validation.
 
 ## Low Priority
 
-### 5. Inconsistent Helper Locations
-**Severity**: 🟢 Low
-**Location**: `apps/worker-api/src/index.ts`
+### 1. Magic Strings for Error Codes
+Error codes like `'invalid_request'`, `'ai_error'`, `'method_not_allowed'` are hardcoded strings.
+- **Location**: `apps/worker-api/src/index.ts` and `packages/core/src/http/response.ts`
+- **Problem**: Typos in error codes can lead to client-side handling issues.
+- **Recommendation**: Define an enum or constant object for all API error codes (e.g., `ApiErrorCodes.INVALID_REQUEST`).
 
-**Current Pattern**:
-Helpers like `sseEvent`, `extractJsonArray`, `computeConfidence` are defined locally in `index.ts`.
-
-**Issue**:
-- Clutters the main file.
-- Not reusable.
-
-**Recommended Pattern**:
-Move to `packages/core/src/utils` or `packages/ai/src/utils`.
-
-**Benefit**: Code reuse and cleaner entry point.
-**Effort**: 2 hours
+### 2. Hardcoded Routes
+Route paths are hardcoded in `if` statements.
+- **Location**: `apps/worker-api/src/index.ts`
+- **Problem**: Hard to get a complete view of the API surface.
+- **Recommendation**: Define routes in a constant object or configuration file.

@@ -1,56 +1,39 @@
 # Error Handling Patterns
 
-**Date**: February 8, 2026
-**Status**: 🟡 Consistent but Ad-hoc
+This report analyzes how errors are captured, reported, and presented to the client.
 
-## Analysis
+## Pattern Overview
 
-### 1. Error Response Format
-- **Pattern**: Consistent use of `fail()` helper in `apps/worker-api`.
-- **Format**:
-    ```json
-    {
-      "ok": false,
-      "error": {
-        "code": "invalid_request",
-        "message": "...",
-        "traceId": "..."
-      }
-    }
-    ```
-- **Verdict**: ✅ Excellent user-facing consistency.
+### 1. The `fail` Helper
+- **Usage**: Widespread.
+- **Signature**: `fail(code: string, message: string, status?: number, traceId?: string)`
+- **Output**: JSON `{ ok: false, error: { code, message }, traceId }`.
+- **Verdict**: **Good**. Provides a consistent error shape for clients.
 
-### 2. Internal Error Classes
-- **Location**: `packages/tools/src/errors.ts`
-- **Classes**: `ToolExecutionError` with `ToolErrorCode`.
-- **Verdict**: ✅ Good use of custom error types for domain logic.
+### 2. Try/Catch Blocks
+- **Usage**: Used around external API calls (AI Gateway, Storage, Tools).
+- **Behavior**: Catches exceptions, logs them with `logger.error`, and returns a `fail` response (usually 500 or 502).
+- **Verdict**: **Good**. Prevents unhandled exceptions from crashing the worker (though the worker runtime handles that, a structured error is better).
 
-### 3. Exception Swallowing
-- **Location**: `packages/ai/src/gateway.ts` (`runGatewayChat`)
-- **Pattern**:
-    ```typescript
-    try {
-      // attempt model
-    } catch (error) {
-      lastError = error;
-      // continue to next model
-    }
-    ```
-- **Verdict**: ⚠️ Acceptable for fallback logic, but `throw lastError` at the end loses the context of *previous* errors (only throws the last one).
-- **Recommendation**: Aggregate errors (e.g., `AggregateError`) if multiple models fail, to help debugging.
+### 3. Domain-Specific Errors
+- **Classes**: `ToolExecutionError` in `packages/tools`.
+- **Handling**: Explicitly caught and mapped to HTTP status codes (404, 403, 400).
+- **Verdict**: **Excellent**. Allows for semantic error handling beyond just "something broke".
 
-### 4. Logging
-- **Pattern**: `logger.error(event, error, metadata)`
-- **Verdict**: ✅ Good. Structured logging captures stack traces and context (`tenantId`, `traceId`).
+## Weaknesses
 
-### 5. HTTP Status Codes
-- **Pattern**:
-    - 400: Validation/Input errors
-    - 403: Permissions/Allowlist
-    - 429: Rate limits
-    - 500/502: Internal/Upstream errors
-- **Verdict**: ✅ Correct semantic usage.
+### 1. Missing `ctx.waitUntil`
+- **Impact on Errors**: If an error occurs in a background task (like logging or metrics), it might not be reported because the promise is floating and the worker might exit.
+- **Recommendation**: As noted in other reports, use `ctx.waitUntil`.
 
-## Recommendations
-1.  **Aggregate Failures**: In AI Gateway, if fallback fails, log/return info about *both* failures, not just the last one.
-2.  **Global Error Boundary**: Ensure `worker.fetch` has a top-level `try/catch` to catch unhandled synchronous errors (though `fail()` covers most paths).
+### 2. Magic Strings
+- **Issue**: Error codes are string literals.
+- **Recommendation**: Use an enum `ApiErrorCode` to prevent typos and enable easy documentation generation.
+
+### 3. Silent Failures
+- **Example**: `safeWrite` in the streaming handler catches errors and ignores them (`// Client likely disconnected; ignore.`).
+- **Verdict**: **Acceptable** for streaming disconnection, but ensures that *actual* logic errors aren't swallowed there.
+
+## Logging
+- **Logger**: `logger.error` is used with context (tenantId, traceId).
+- **Verdict**: **Good**. Essential for debugging in production.

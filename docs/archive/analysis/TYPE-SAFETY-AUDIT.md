@@ -1,52 +1,35 @@
 # Type Safety Audit
 
-**Date**: February 8, 2026
-**Status**: 🟡 GOOD (Needs Improvements)
+This report analyzes the TypeScript configuration and usage patterns.
 
-## Overview
-The codebase uses TypeScript strict mode concepts well, but some critical boundaries (Cloudflare bindings) are loosely typed.
+## Configuration
+- **File**: `tsconfig.base.json`
+- **Settings**:
+    - `"strict": true`: **Enabled**. This includes `noImplicitAny`, `strictNullChecks`, etc.
+    - `"types": ["@cloudflare/workers-types"]`: Correct for the environment.
+- **Verification**: **PASS**. The project starts with a strong configuration foundation.
 
-## Key Findings
+## Usage Patterns
 
-### 1. Environment Typing (`Env`)
-- **Status**: ✅ Excellent
-- **Location**: `packages/core/src/env.ts`
-- **Details**: Comprehensive interface defining all bindings (`KVNamespace`, `DurableObjectNamespace`, `Ai`, `Vectorize`).
+### 1. `any` Usage
+- **Findings**:
+    - `extractJsonArray` in `apps/worker-api/src/index.ts` uses `JSON.parse(candidate) as unknown`. This is safe.
+    - `runGatewayChat` return types need to be checked (assumed `any` or loose types from the gateway SDK if not typed).
+- **Risk**: Low. Most `any` usage seems to be around JSON parsing, which is unavoidable but handled with `unknown` + validation.
 
-### 2. Runtime Validation (Zod)
-- **Status**: ✅ Excellent
-- **Details**: Extensive use of Zod for:
-    - API Requests (`chatRequestSchema`, `ingestRequestSchema`)
-    - Tool Parameters (`validateToolParameters`)
-    - TTS Requests (`ttsRequestSchema`)
-    - Session IDs
-- **Benefit**: Ensures runtime type safety at the edge.
+### 2. Validation
+- **Library**: Zod is used extensively (`chatRequestSchema`, `ingestRequestSchema`).
+- **Effectiveness**: **High**. Zod provides runtime validation that aligns with TypeScript types.
 
-### 3. Cloudflare Bindings
-- **Status**: ⚠️ Needs Improvement
-- **Location**: `packages/ai/src/gateway.ts`
-- **Issue**:
-    ```typescript
-    env.AI as unknown as { run: ... }
-    ```
-    - The `AI` binding is cast to `unknown` then to a structural type. This bypasses the official `@cloudflare/workers-types`.
-- **Recommendation**: Integrate correct types for `Ai` binding.
+### 3. Environment Variables
+- **Interface**: `Env` interface in `packages/core/src/env.ts` defines all bindings.
+- **Bindings**: `AI`, `VECTORIZE`, `KVNamespace`, `DurableObjectNamespace` are correctly typed.
+- **Verification**: **PASS**.
 
-### 4. Generics Usage
-- **Status**: ✅ Good
-- **Details**: Tools system uses generics (`ToolDefinition<Params, Output>`) effectively to enforce parameter and output shapes.
-
-### 5. `any` Usage
-- **Status**: 🟢 Low
-- **Details**: Mostly found in test mocks (acceptable).
-- **Flagged**:
-    - `extractTextResponse` in `gateway.ts` iterates over `unknown` types with manual checks. This is defensive coding (good) but type-unsafe (hard to read).
-
-## Metrics
-- **Zod Schemas**: ~15 defined
-- **Interface definitions**: High coverage in `packages/*/src/*.ts`.
-- **Explicit `any`**: Rare in source code.
+### 4. Shared Types
+- **Location**: `packages/core/src` exports shared types like `ChatMessage`, `SearchResponse`.
+- **Consistency**: **High**. Frontend and backend (if applicable) or different packages share the same type definitions.
 
 ## Recommendations
-1.  **Fix AI Binding Types**: Remove `as unknown` casts in `gateway.ts`.
-2.  **Strict Null Checks**: Ensure `tsconfig.json` has `strict: true` (verified in analysis to be effectively strict usage).
+1.  **Strict JSON Parsing**: Introduce a generic `safeJsonParse<T>(json: string, schema: ZodSchema<T>): T | null` helper to avoid manual `unknown` casting and checks.
+2.  **API Response Types**: Explicitly type the `Response` bodies in the fetch handler. Currently, `ok()` and `fail()` return `Response`, but the generic `T` in `ok<T>` doesn't enforce that the actual runtime JSON matches `T` if `JSON.stringify` is used manually. (The `ok` helper does this well, but manual `new Response(...)` usage exists).
