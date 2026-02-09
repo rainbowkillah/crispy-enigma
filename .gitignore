@@ -159,7 +159,6 @@ m4-codex-prompt.sh
 .local/
 temp/
 tmp/
-docs/agents.nx-phase.prompt.yaml
 
 # Generated analysis artifacts
 VARIABLE_NAMES.md
