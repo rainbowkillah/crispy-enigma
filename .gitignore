@@ -169,3 +169,9 @@ VARIABLE_NAMES.md
 .env.*.local
 tenants/**/.env
 tenants/**/.env.local
+
+#AI
+!.claude/
+!.gemini/
+!.codex
+!.agents/
