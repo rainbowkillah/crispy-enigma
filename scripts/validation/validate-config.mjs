@@ -7,7 +7,7 @@ import {
   listEnvKeys,
   loadWranglerConfig,
   resolveEnvKey
-} from './lib/wrangler-config.mjs';
+} from '../lib/wrangler-config.mjs';
 
 const tenantConfigSchema = z.object({
   tenantId: z.string().min(1),

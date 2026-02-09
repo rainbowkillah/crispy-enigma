@@ -117,8 +117,7 @@ Per your requirements:
 
 ```
 ✓ docs/agents.nx-phase.prompt.yaml     ← NX Phase orchestration
-✓ docs/NX-*.md (all 6 files)           ← NX documentation
-✓ docs/nx-plugin/                      ← NX plugin code
+✓ docs/nx/                             ← NX docs (consolidated)
 ✓ nx.json                              ← NX configuration
 ✓ packages/nx-cloudflare/              ← NX plugin package
 
@@ -237,7 +236,7 @@ Once cleanup is done:
 # .github/CODEOWNERS
 /packages/core/        @team-core
 /packages/ai/          @team-ai
-/docs/nx-plugin/       @team-nx
+/docs/nx/              @team-nx
 ```
 
 ### 2. **Create CONTRIBUTING.md**

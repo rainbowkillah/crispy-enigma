@@ -47,22 +47,22 @@ All issues already have correct phase labels based on agent assignment:
 
 ### Documentation Suite (5 files)
 
-1. **`docs/NX-README.md`** (236 lines)
+1. **`docs/nx/NX-README.md`** (236 lines)
    - Master index with navigation
    - 3 execution options
    - Troubleshooting guide
 
-2. **`docs/NX-ALIGNMENT-QUICK-REF.md`** (137 lines)
+2. **`docs/nx/NX-ALIGNMENT-QUICK-REF.md`** (137 lines)
    - Fast-track execution guide
    - Quick commands
    - Verification checklist
 
-3. **`docs/NX-VISUAL-STRUCTURE.md`** (230 lines)
+3. **`docs/nx/NX-VISUAL-STRUCTURE.md`** (230 lines)
    - Visual hierarchy diagrams
    - Issue distribution charts
    - Workflow flowchart
 
-4. **`docs/NX-ISSUES-ALIGNMENT.md`** (200 lines)
+4. **`docs/nx/NX-ISSUES-ALIGNMENT.md`** (200 lines)
    - Complete issue mappings
    - Detailed validation procedures
    - Action item lists
@@ -119,7 +119,7 @@ All issues already have correct phase labels based on agent assignment:
 - **Option 2**: GitHub UI bulk assignment (20-30 minutes)
 - **Option 3**: GitHub CLI manual commands (30+ minutes)
 
-All approaches fully documented in `docs/NX-ALIGNMENT-QUICK-REF.md`.
+All approaches fully documented in `docs/nx/NX-ALIGNMENT-QUICK-REF.md`.
 
 ## Verification Procedure
 
@@ -207,12 +207,12 @@ gh project item-list 13 --owner rainbowkillah --format json | jq '.items | lengt
 
 ## Documentation Navigation
 
-Start here: **[`docs/NX-README.md`](./NX-README.md)**
+Start here: **[`docs/nx/NX-README.md`](./NX-README.md)**
 
 Quick paths:
-- Need to execute? → [`docs/NX-ALIGNMENT-QUICK-REF.md`](./NX-ALIGNMENT-QUICK-REF.md)
-- Need to understand? → [`docs/NX-VISUAL-STRUCTURE.md`](./NX-VISUAL-STRUCTURE.md)
-- Need details? → [`docs/NX-ISSUES-ALIGNMENT.md`](./NX-ISSUES-ALIGNMENT.md)
+- Need to execute? → [`docs/nx/NX-ALIGNMENT-QUICK-REF.md`](./NX-ALIGNMENT-QUICK-REF.md)
+- Need to understand? → [`docs/nx/NX-VISUAL-STRUCTURE.md`](./NX-VISUAL-STRUCTURE.md)
+- Need details? → [`docs/nx/NX-ISSUES-ALIGNMENT.md`](./NX-ISSUES-ALIGNMENT.md)
 - Need script? → [`scripts/align-nx-issues.sh`](../scripts/align-nx-issues.sh)
 
 ## Acknowledgments

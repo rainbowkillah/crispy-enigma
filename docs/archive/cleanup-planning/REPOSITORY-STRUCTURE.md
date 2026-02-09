@@ -155,7 +155,12 @@ crispy-enigma/
 │       │   ├── incident-response.md
 │       │   └── rollback-deployment.md
 │       │
-│       ├── nx-plugin/              # ✓ NX-protected
+│       ├── nx/                     # ✓ NX docs (consolidated)
+│       │   ├── NX-ALIGNMENT-QUICK-REF.md
+│       │   ├── NX-EXECUTIVE-SUMMARY.md
+│       │   ├── NX-ISSUES-ALIGNMENT.md
+│       │   ├── NX-README.md
+│       │   ├── NX-VISUAL-STRUCTURE.md
 │       │   ├── documentation-gaps.md
 │       │   ├── generator-input-map.md
 │       │   ├── refactoring-opportunities.md
@@ -174,13 +179,6 @@ crispy-enigma/
 │       ├── dashboards.md           # Observability dashboards
 │       ├── external-dependency-failures.md # Known issues
 │       │
-│       ├── NX-*.md (6 files)      # ✓ ALL NX-PROTECTED, NOT REVIEWED
-│       │   ├── NX-ALIGNMENT-QUICK-REF.md
-│       │   ├── NX-EXECUTIVE-SUMMARY.md
-│       │   ├── NX-ISSUES-ALIGNMENT.md
-│       │   ├── NX-README.md
-│       │   ├── NX-VISUAL-STRUCTURE.md
-│       │   └── (Keep all untouched)
 │       │
 │       └── archive/                # Old records & historical docs
 │           ├── README.md           # Archive organization (NEW)
@@ -325,9 +323,9 @@ touch archive/README.md
 
 ```
 ✓ docs/agents.nx-phase.prompt.yaml
-✓ docs/nx-plugin/
+✓ docs/nx/
 ✓ nx.json
-✓ All docs/NX-*.md files
+✓ docs/nx/ (all NX docs consolidated)
 ```
 
 These remain **exactly as-is** per requirements.

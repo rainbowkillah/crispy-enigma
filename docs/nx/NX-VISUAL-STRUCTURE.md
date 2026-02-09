@@ -225,6 +225,6 @@ gh project item-list 13 --owner rainbowkillah --format json | \
 ---
 
 **Documentation:**
-- Detailed: `docs/NX-ISSUES-ALIGNMENT.md`
-- Quick Ref: `docs/NX-ALIGNMENT-QUICK-REF.md`
+- Detailed: `docs/nx/NX-ISSUES-ALIGNMENT.md`
+- Quick Ref: `docs/nx/NX-ALIGNMENT-QUICK-REF.md`
 - Script: `scripts/align-nx-issues.sh`

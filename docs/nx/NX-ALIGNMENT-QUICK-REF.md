@@ -41,7 +41,7 @@ The script will:
 
 1. **For each milestone group**, select all issues and bulk-assign:
    - Navigate to [Issues](https://github.com/rainbowkillah/crispy-enigma/issues)
-   - Filter by issue numbers (see detailed lists in `docs/NX-ISSUES-ALIGNMENT.md`)
+   - Filter by issue numbers (see detailed lists in `docs/nx/NX-ISSUES-ALIGNMENT.md`)
    - Bulk-assign to milestone
    - Bulk-add to Project #13
 
@@ -113,9 +113,9 @@ Expected output:
 
 ## Documentation
 
-- **Detailed Analysis**: `docs/NX-ISSUES-ALIGNMENT.md`
+- **Detailed Analysis**: `docs/nx/NX-ISSUES-ALIGNMENT.md`
 - **Automation Script**: `scripts/align-nx-issues.sh`
-- **This Quick Reference**: `docs/NX-ALIGNMENT-QUICK-REF.md`
+- **This Quick Reference**: `docs/nx/NX-ALIGNMENT-QUICK-REF.md`
 
 ## Limitations
 

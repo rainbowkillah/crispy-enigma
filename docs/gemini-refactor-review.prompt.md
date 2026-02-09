@@ -32,7 +32,7 @@ Analyze the existing codebase and produce documentation that will guide the NX p
 
 ## Deliverables
 
-### 1. Refactoring Opportunities Report (`docs/nx-plugin/refactoring-opportunities.md`)
+### 1. Refactoring Opportunities Report (`docs/nx/refactoring-opportunities.md`)
 For each file/pattern, identify:
 - **Current state**: What it does, how it's structured
 - **Duplication**: Repeated patterns that the NX plugin should generate
@@ -40,14 +40,14 @@ For each file/pattern, identify:
 - **Config drift**: Where tenant configs could diverge from templates
 - **Simplification**: What could be auto-generated vs hand-written
 
-### 2. Documentation Gaps Report (`docs/nx-plugin/documentation-gaps.md`)
+### 2. Documentation Gaps Report (`docs/nx/documentation-gaps.md`)
 - Functions missing JSDoc
 - Public APIs without usage examples
 - Configuration options not documented
 - Error paths not documented
 - Missing README files per package
 
-### 3. NX Generator Input Map (`docs/nx-plugin/generator-input-map.md`)
+### 3. NX Generator Input Map (`docs/nx/generator-input-map.md`)
 Map existing manual patterns to NX generator equivalents:
 - "To add a tenant, I currently do X" → `nx g @crispy/nx-cloudflare:tenant`
 - "To add a KV binding, I edit Y" → `nx g @crispy/nx-cloudflare:binding --type=kv`
@@ -62,6 +62,6 @@ Analyze and propose a template that:
 - Marks placeholder values clearly
 
 ## Output Format
-Produce markdown files in `docs/nx-plugin/` directory.
+Produce markdown files in `docs/nx/` directory.
 Use tables, code blocks, and checklists for clarity.
 Flag critical items with ⚠️ and suggestions with 💡.

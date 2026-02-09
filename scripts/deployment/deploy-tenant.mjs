@@ -6,7 +6,7 @@ import {
   listEnvKeys,
   loadWranglerConfig,
   resolveEnvKey
-} from './lib/wrangler-config.mjs';
+} from '../lib/wrangler-config.mjs';
 
 const tokenForTenant = (name) => {
   const normalized = name.toUpperCase().replace(/[^A-Z0-9]/g, '_');

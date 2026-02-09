@@ -36,7 +36,7 @@ Developer experience layer for scaffolding workers, tenants, and bindings using 
 
 **Total:** 96 sub-issues + 17 parent issues = 113 issues tracked in [GitHub Project #13](https://github.com/users/rainbowkillah/projects/13/)
 
-**Alignment Status:** ⚠️ Milestones need assignment (see `docs/NX-ALIGNMENT-QUICK-REF.md` for automation script)
+**Alignment Status:** ⚠️ Milestones need assignment (see `docs/nx/NX-ALIGNMENT-QUICK-REF.md` for automation script)
 
 ---
 
@@ -86,5 +86,5 @@ Per‑tenant auth is supported via:
 - **Multi‑account auth:** `docs/deployment/multi-account-auth.md`
 - **Runbooks:** `docs/runbooks/rollback-deployment.md`, `docs/runbooks/incident-response.md`
 - **Plan:** `docs/plan.md`
-- **NX Alignment:** `docs/NX-ALIGNMENT-QUICK-REF.md`, `docs/NX-ISSUES-ALIGNMENT.md`
+- **NX Alignment:** `docs/nx/NX-ALIGNMENT-QUICK-REF.md`, `docs/nx/NX-ISSUES-ALIGNMENT.md`
 - **NX Automation:** `scripts/align-nx-issues.sh`

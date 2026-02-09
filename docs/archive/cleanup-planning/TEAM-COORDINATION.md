@@ -248,7 +248,7 @@ See docs/archive/analysis/ for detailed findings.
 
 NX items untouched:
 - docs/agents.nx-phase.prompt.yaml ✓
-- docs/NX-*.md (all 6 files) ✓
+- docs/nx/ (consolidated NX docs) ✓
 - nx.json ✓
 - packages/nx-cloudflare/ ✓
 ```

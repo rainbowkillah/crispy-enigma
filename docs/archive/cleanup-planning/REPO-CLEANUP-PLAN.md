@@ -393,8 +393,7 @@ After implementation, verify:
 ```
 docs/agents.nx-phase.prompt.yaml
 docs/agents.prompt.yaml
-docs/NX-*.md (all 6 files)
-docs/nx-plugin/
+docs/nx/ (consolidated NX docs)
 nx.json
 ```
 

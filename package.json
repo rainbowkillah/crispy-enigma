@@ -4,19 +4,19 @@
   "packageManager": "npm@11.9.0",
   "type": "module",
   "scripts": {
-    "dev": "node scripts/dev.mjs",
-    "chat:dev": "node scripts/chat-dev.mjs",
-    "smoke:dev": "node scripts/smoke-dev.mjs",
-    "tenants:generate": "node scripts/generate-tenant-index.mjs",
-    "validate": "node scripts/validate-config.mjs",
-    "deploy": "node scripts/deploy-tenant.mjs",
-    "deploy:all": "node scripts/deploy-all.mjs",
-    "drift": "node scripts/detect-drift.mjs",
+    "dev": "node scripts/development/dev.mjs",
+    "chat:dev": "node scripts/development/chat-dev.mjs",
+    "smoke:dev": "node scripts/development/smoke-dev.mjs",
+    "tenants:generate": "node scripts/setup/generate-tenant-index.mjs",
+    "validate": "node scripts/validation/validate-config.mjs",
+    "deploy": "node scripts/deployment/deploy-tenant.mjs",
+    "deploy:all": "node scripts/deployment/deploy-all.mjs",
+    "drift": "node scripts/validation/detect-drift.mjs",
     "test": "vitest run",
     "lint": "eslint .",
     "format": "prettier --write .",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "load-test": "node scripts/load-test.ts"
+    "load-test": "node scripts/testing/load-test.ts"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240215.0",

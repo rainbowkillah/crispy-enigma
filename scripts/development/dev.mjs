@@ -2,7 +2,7 @@ import { spawn, spawnSync } from 'node:child_process';
 import process from 'node:process';
 import { existsSync, mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { loadWranglerConfig, listEnvKeys, resolveEnvKey } from './lib/wrangler-config.mjs';
+import { loadWranglerConfig, listEnvKeys, resolveEnvKey } from '../lib/wrangler-config.mjs';
 
 const tenantArg = process.argv.find((arg) => arg.startsWith('--tenant='));
 const tenant = tenantArg?.split('=')[1];

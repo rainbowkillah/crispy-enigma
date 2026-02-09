@@ -685,7 +685,7 @@ test -f archive/deployment-history/2026-02-08/index.json && echo "✓ Deployment
 
 # Verify NX is untouched
 test -f nx.json && echo "✓ nx.json preserved"
-ls docs/NX-*.md | wc -l  # Should be 6
+ls docs/nx/*.md | wc -l  # Should be 9 (consolidated)
 
 # Checks pass
 npm install  # No errors
@@ -709,7 +709,7 @@ git commit -m "refactor: repo structure consolidation & cleanup
 
 NX-protected items left untouched:
 - docs/agents.nx-phase.prompt.yaml
-- docs/NX-*.md (all 6 files)
+- docs/nx/ (consolidated NX docs)
 - nx.json
 - packages/nx-cloudflare (NX plugin)
 
