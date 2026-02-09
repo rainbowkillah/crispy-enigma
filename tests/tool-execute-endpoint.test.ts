@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import worker from '../apps/worker-api/src/index';
 import type { Env } from '../packages/core/src';
+import { createExecutionContext } from './utils/execution-context';
 
 function createMockEnv(): Env {
   return {
@@ -25,12 +26,14 @@ function createMockEnv(): Env {
   };
 }
 
+const ctx = createExecutionContext();
+
 const fetchWorker = (
   url: string,
   init: RequestInit,
   env?: Env
 ) =>
-  worker.fetch(new Request(url, init), env ?? createMockEnv());
+  worker.fetch(new Request(url, init), env ?? createMockEnv(), ctx);
 
 const json = async (response: Response) =>
   response.json() as Promise<{

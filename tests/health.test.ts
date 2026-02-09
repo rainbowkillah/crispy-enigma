@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import worker from '../apps/worker-api/src/index';
 import type { Env } from '../packages/core/src';
+import { createExecutionContext } from './utils/execution-context';
 
 const env: Env = {
   AI: {} as Ai,
@@ -14,8 +15,10 @@ const env: Env = {
   MAX_REQUEST_BODY_SIZE: 10240
 };
 
+const ctx = createExecutionContext();
+
 const fetchWorker = async (url: string, headers: Record<string, string> = {}) =>
-  worker.fetch(new Request(url, { headers }), env);
+  worker.fetch(new Request(url, { headers }), env, ctx);
 
 const json = async (response: Response) =>
   response.json() as Promise<{

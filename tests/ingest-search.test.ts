@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import worker from '../apps/worker-api/src/index';
 import type { Env } from '../packages/core/src';
+import { createExecutionContext } from './utils/execution-context';
 
 type StubHandler = (request: Request) => Promise<Response>;
 
@@ -118,6 +119,8 @@ function makeEnv(
   };
 }
 
+const ctx = createExecutionContext();
+
 describe('ingest/search endpoints', () => {
   it('ingests text and upserts vectors', async () => {
     const vectorize = new FakeVectorize();
@@ -136,7 +139,8 @@ describe('ingest/search endpoints', () => {
           source: 'unit-test'
         })
       }),
-      env
+      env,
+      ctx
     );
 
     expect(response.status).toBe(200);
@@ -160,7 +164,8 @@ describe('ingest/search endpoints', () => {
           topK: 3
         })
       }),
-      env
+      env,
+      ctx
     );
 
     expect(response.status).toBe(200);

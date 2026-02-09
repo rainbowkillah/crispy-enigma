@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import worker from '../apps/worker-api/src/index';
 import type { Env } from '../packages/core/src';
+import { createExecutionContext } from './utils/execution-context';
 
 const baseEnv: Env = {
   AI: {} as Ai,
@@ -14,6 +15,8 @@ const baseEnv: Env = {
   MAX_REQUEST_BODY_SIZE: 4
 };
 
+const ctx = createExecutionContext();
+
 describe('request size limits', () => {
   it('rejects bodies larger than MAX_REQUEST_BODY_SIZE when Content-Length is present', async () => {
     const request = new Request('https://mrrainbowsmoke.local/health', {
@@ -25,7 +28,7 @@ describe('request size limits', () => {
       body: '012345'
     });
 
-    const response = await worker.fetch(request, baseEnv);
+    const response = await worker.fetch(request, baseEnv, ctx);
     expect(response.status).toBe(413);
   });
 
@@ -39,7 +42,7 @@ describe('request size limits', () => {
       body: '0123'
     });
 
-    const response = await worker.fetch(request, baseEnv);
+    const response = await worker.fetch(request, baseEnv, ctx);
     expect(response.status).toBe(200);
   });
 });

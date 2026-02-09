@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import type { Env } from '../packages/core/src';
+import { createExecutionContext } from './utils/execution-context';
 
 // Mock tenant config
 vi.mock('../tenants/index', () => ({
@@ -44,12 +45,14 @@ const env: Env = {
   MAX_REQUEST_BODY_SIZE: 10240
 };
 
+const ctx = createExecutionContext();
+
 const fetchWorker = async (url: string, method: string, body?: any, headers: Record<string, string> = {}) => {
   return worker.fetch(new Request(url, {
     method,
     headers,
     body: body ? JSON.stringify(body) : undefined
-  }), env);
+  }), env, ctx);
 };
 
 describe('TTS Endpoint', () => {

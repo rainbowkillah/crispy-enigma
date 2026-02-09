@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import worker from '../apps/worker-api/src/index';
 import type { Env } from '../packages/core/src';
+import { createExecutionContext } from './utils/execution-context';
 
 type StubHandler = (request: Request) => Promise<Response>;
 
@@ -79,6 +80,7 @@ function makeEnv(calls: AiRunCall[], overrides: Partial<Env> = {}): Env {
     ...overrides
   };
 }
+const ctx = createExecutionContext();
 
 describe('AI Gateway integration', () => {
   it('routes model calls through tenant gateway id and metadata', async () => {
@@ -98,7 +100,8 @@ describe('AI Gateway integration', () => {
           stream: false
         })
       }),
-      env
+      env,
+      ctx
     );
 
     expect(response.status).toBe(200);
@@ -128,7 +131,8 @@ describe('AI Gateway integration', () => {
           stream: false
         })
       }),
-      env
+      env,
+      ctx
     );
 
     expect(calls).toHaveLength(1);
@@ -154,7 +158,8 @@ describe('AI Gateway integration', () => {
           stream: true
         })
       }),
-      env
+      env,
+      ctx
     );
 
     expect(response.status).toBe(200);
@@ -183,7 +188,8 @@ describe('AI Gateway integration', () => {
           stream: false
         })
       }),
-      env
+      env,
+      ctx
     );
 
     expect(calls).toHaveLength(1);
@@ -207,7 +213,8 @@ describe('AI Gateway integration', () => {
           stream: false
         })
       }),
-      env
+      env,
+      ctx
     );
 
     expect(response.status).toBe(403);
@@ -247,7 +254,8 @@ describe('AI Gateway integration', () => {
           stream: false
         })
       }),
-      env
+      env,
+      ctx
     );
 
     expect(response.status).toBe(200);

@@ -324,6 +324,7 @@ async function handleChatRequest(
   env: Env,
   tenant: TenantConfig,
   logger: Logger,
+  ctx: ExecutionContext,
   traceId?: string
 ): Promise<Response> {
   let payload: unknown;
@@ -455,58 +456,66 @@ async function handleChatRequest(
       );
       toolResultContext = `[Tool ${tool_name} result]: ${JSON.stringify(toolDispatch.result.data)}`;
       const paramsHash = await hashToolParams(tool_params ?? {});
-      void recordToolAudit(
-        {
-          tenantId: tenant.tenantId,
-          toolName: tool_name,
-          requestId: traceId ?? '',
-          userId,
-          paramsHash,
-          success: true,
-          durationMs: toolDispatch.durationMs,
-          timestamp: Date.now(),
-        },
-        env
+      ctx.waitUntil(
+        recordToolAudit(
+          {
+            tenantId: tenant.tenantId,
+            toolName: tool_name,
+            requestId: traceId ?? '',
+            userId,
+            paramsHash,
+            success: true,
+            durationMs: toolDispatch.durationMs,
+            timestamp: Date.now(),
+          },
+          env
+        )
       );
-      void recordToolMetrics(
-        {
-          tenantId: tenant.tenantId,
-          toolName: tool_name,
-          durationMs: toolDispatch.durationMs,
-          success: true,
-          tokensUsed: toolDispatch.result.metadata?.tokensUsed,
-          timestamp: Date.now(),
-        },
-        env
+      ctx.waitUntil(
+        recordToolMetrics(
+          {
+            tenantId: tenant.tenantId,
+            toolName: tool_name,
+            durationMs: toolDispatch.durationMs,
+            success: true,
+            tokensUsed: toolDispatch.result.metadata?.tokensUsed,
+            timestamp: Date.now(),
+          },
+          env
+        )
       );
     } catch (err) {
       const errorCode =
         err instanceof ToolExecutionError ? err.code : 'EXECUTION_ERROR';
       const errorMessage =
         err instanceof Error ? err.message : 'Tool execution failed';
-      void recordToolAudit(
-        {
-          tenantId: tenant.tenantId,
-          toolName: tool_name,
-          requestId: traceId ?? '',
-          userId,
-          paramsHash: '',
-          success: false,
-          durationMs: 0,
-          errorCode,
-          timestamp: Date.now(),
-        },
-        env
+      ctx.waitUntil(
+        recordToolAudit(
+          {
+            tenantId: tenant.tenantId,
+            toolName: tool_name,
+            requestId: traceId ?? '',
+            userId,
+            paramsHash: '',
+            success: false,
+            durationMs: 0,
+            errorCode,
+            timestamp: Date.now(),
+          },
+          env
+        )
       );
-      void recordToolMetrics(
-        {
-          tenantId: tenant.tenantId,
-          toolName: tool_name,
-          durationMs: 0,
-          success: false,
-          timestamp: Date.now(),
-        },
-        env
+      ctx.waitUntil(
+        recordToolMetrics(
+          {
+            tenantId: tenant.tenantId,
+            toolName: tool_name,
+            durationMs: 0,
+            success: false,
+            timestamp: Date.now(),
+          },
+          env
+        )
       );
       return fail('tool_error', errorMessage, 400, traceId);
     }
@@ -548,12 +557,14 @@ async function handleChatRequest(
       usageSnapshot = await getUsageSnapshot(env.RATE_LIMITER, tenant.tenantId, Date.now());
     }
     await applyUsageUpdate(env.RATE_LIMITER, usageSnapshot, totalTokens);
-    void recordCost(
-      tenant.tenantId,
-      metrics.modelId,
-      metrics.tokensIn ?? 0,
-      metrics.tokensOut ?? 0,
-      env
+    ctx.waitUntil(
+      recordCost(
+        tenant.tenantId,
+        metrics.modelId,
+        metrics.tokensIn ?? 0,
+        metrics.tokensOut ?? 0,
+        env
+      )
     );
   };
 
@@ -758,7 +769,7 @@ export { RateLimiter } from './rate-limiter-do';
 
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const traceId = extractTraceId(request);
     const url = new URL(request.url);
     const tenant = resolveTenant(request, {
@@ -868,29 +879,33 @@ export default {
       try {
         const result = await dispatchTool(toolName, toolParams ?? {}, toolCtx);
         const paramsHash = await hashToolParams(toolParams ?? {});
-        void recordToolAudit(
-          {
-            tenantId: config.tenantId,
-            toolName,
-            requestId: traceId ?? '',
-            userId: toolCtx.userId,
-            paramsHash,
-            success: true,
-            durationMs: result.durationMs,
-            timestamp: Date.now(),
-          },
-          env
+        ctx.waitUntil(
+          recordToolAudit(
+            {
+              tenantId: config.tenantId,
+              toolName,
+              requestId: traceId ?? '',
+              userId: toolCtx.userId,
+              paramsHash,
+              success: true,
+              durationMs: result.durationMs,
+              timestamp: Date.now(),
+            },
+            env
+          )
         );
-        void recordToolMetrics(
-          {
-            tenantId: config.tenantId,
-            toolName,
-            durationMs: result.durationMs,
-            success: true,
-            tokensUsed: result.result.metadata?.tokensUsed,
-            timestamp: Date.now(),
-          },
-          env
+        ctx.waitUntil(
+          recordToolMetrics(
+            {
+              tenantId: config.tenantId,
+              toolName,
+              durationMs: result.durationMs,
+              success: true,
+              tokensUsed: result.result.metadata?.tokensUsed,
+              timestamp: Date.now(),
+            },
+            env
+          )
         );
         return ok(result.result, traceId);
       } catch (err) {
@@ -908,28 +923,32 @@ export default {
                   ? 400
                   : 500
             : 500;
-        void recordToolAudit(
-          {
-            tenantId: config.tenantId,
-            toolName,
-            requestId: traceId ?? '',
-            paramsHash: '',
-            success: false,
-            durationMs: 0,
-            errorCode,
-            timestamp: Date.now(),
-          },
-          env
+        ctx.waitUntil(
+          recordToolAudit(
+            {
+              tenantId: config.tenantId,
+              toolName,
+              requestId: traceId ?? '',
+              paramsHash: '',
+              success: false,
+              durationMs: 0,
+              errorCode,
+              timestamp: Date.now(),
+            },
+            env
+          )
         );
-        void recordToolMetrics(
-          {
-            tenantId: config.tenantId,
-            toolName,
-            durationMs: 0,
-            success: false,
-            timestamp: Date.now(),
-          },
-          env
+        ctx.waitUntil(
+          recordToolMetrics(
+            {
+              tenantId: config.tenantId,
+              toolName,
+              durationMs: 0,
+              success: false,
+              timestamp: Date.now(),
+            },
+            env
+          )
         );
         return fail(errorCode, errorMessage, status, traceId);
       }
@@ -1263,28 +1282,32 @@ export default {
         const cacheLatency = performance.now() - cacheStart;
         try {
           const queryHash = await hashSearchQuery(rewrittenQuery);
-          void recordCacheCheck(env, config.tenantId, {
-            timestamp: Date.now(),
-            hit: true,
-            latencyMs: cacheLatency,
-            queryHash
-          });
+          ctx.waitUntil(
+            recordCacheCheck(env, config.tenantId, {
+              timestamp: Date.now(),
+              hit: true,
+              latencyMs: cacheLatency,
+              queryHash
+            })
+          );
         } catch {
           // Ignore cache check hashing failures.
         }
-        void recordSearchMetrics(env, config.tenantId, {
-          tenantId: config.tenantId,
-          traceId,
-          route: 'search',
-          status: 'cache-hit',
-          cacheHit: true,
-          latencies: {
-            totalMs: performance.now() - searchStartedAt,
-            rewriteMs
-          },
-          topK: requestedTopK,
-          matchesReturned: cached.sources.length
-        });
+        ctx.waitUntil(
+          recordSearchMetrics(env, config.tenantId, {
+            tenantId: config.tenantId,
+            traceId,
+            route: 'search',
+            status: 'cache-hit',
+            cacheHit: true,
+            latencies: {
+              totalMs: performance.now() - searchStartedAt,
+              rewriteMs
+            },
+            topK: requestedTopK,
+            matchesReturned: cached.sources.length
+          })
+        );
         return ok(cached, traceId);
       }
 
@@ -1314,20 +1337,22 @@ export default {
           gatewayId: config.aiGatewayId,
           modelId: embeddingModelId
         });
-        void recordSearchMetrics(env, config.tenantId, {
-          tenantId: config.tenantId,
-          traceId,
-          route: 'search',
-          status: 'error',
-          cacheHit: false,
-          latencies: {
-            totalMs: performance.now() - searchStartedAt,
-            rewriteMs,
-            embeddingMs
-          },
-          topK: requestedTopK,
-          matchesReturned: 0
-        });
+        ctx.waitUntil(
+          recordSearchMetrics(env, config.tenantId, {
+            tenantId: config.tenantId,
+            traceId,
+            route: 'search',
+            status: 'error',
+            cacheHit: false,
+            latencies: {
+              totalMs: performance.now() - searchStartedAt,
+              rewriteMs,
+              embeddingMs
+            },
+            topK: requestedTopK,
+            matchesReturned: 0
+          })
+        );
         return fail('ai_error', `Embedding error: ${errorMessage}`, 502, traceId);
       }
 
@@ -1344,21 +1369,23 @@ export default {
           });
           retrievalMs = performance.now() - retrievalStart;
         } catch {
-          void recordSearchMetrics(env, config.tenantId, {
-            tenantId: config.tenantId,
-            traceId,
-            route: 'search',
-            status: 'error',
-            cacheHit: false,
-            latencies: {
-              totalMs: performance.now() - searchStartedAt,
-              rewriteMs,
-              embeddingMs,
-              retrievalMs
-            },
-            topK: requestedTopK,
-            matchesReturned: 0
-          });
+          ctx.waitUntil(
+            recordSearchMetrics(env, config.tenantId, {
+              tenantId: config.tenantId,
+              traceId,
+              route: 'search',
+              status: 'error',
+              cacheHit: false,
+              latencies: {
+                totalMs: performance.now() - searchStartedAt,
+                rewriteMs,
+                embeddingMs,
+                retrievalMs
+              },
+              topK: requestedTopK,
+              matchesReturned: 0
+            })
+          );
           return fail('ai_error', 'Retrieval provider unavailable', 502, traceId);
         }
       }
@@ -1394,22 +1421,24 @@ export default {
           confidence: 0,
           followUps: []
         };
-        void recordSearchMetrics(env, config.tenantId, {
-          tenantId: config.tenantId,
-          traceId,
-          route: 'search',
-          status: 'success',
-          cacheHit: false,
-          latencies: {
-            totalMs: performance.now() - searchStartedAt,
-            rewriteMs,
-            embeddingMs,
-            retrievalMs,
-            ragAssemblyMs
-          },
-          topK: requestedTopK,
-          matchesReturned: 0
-        });
+        ctx.waitUntil(
+          recordSearchMetrics(env, config.tenantId, {
+            tenantId: config.tenantId,
+            traceId,
+            route: 'search',
+            status: 'success',
+            cacheHit: false,
+            latencies: {
+              totalMs: performance.now() - searchStartedAt,
+              rewriteMs,
+              embeddingMs,
+              retrievalMs,
+              ragAssemblyMs
+            },
+            topK: requestedTopK,
+            matchesReturned: 0
+          })
+        );
         return ok(response, traceId);
       }
 
@@ -1440,23 +1469,25 @@ export default {
         answerText = result.content.trim();
         generationMs = performance.now() - generationStart;
       } catch {
-        void recordSearchMetrics(env, config.tenantId, {
-          tenantId: config.tenantId,
-          traceId,
-          route: 'search',
-          status: 'error',
-          cacheHit: false,
-          latencies: {
-            totalMs: performance.now() - searchStartedAt,
-            rewriteMs,
-            embeddingMs,
-            retrievalMs,
-            ragAssemblyMs,
-            generationMs
-          },
-          topK: requestedTopK,
-          matchesReturned: matches.length
-        });
+        ctx.waitUntil(
+          recordSearchMetrics(env, config.tenantId, {
+            tenantId: config.tenantId,
+            traceId,
+            route: 'search',
+            status: 'error',
+            cacheHit: false,
+            latencies: {
+              totalMs: performance.now() - searchStartedAt,
+              rewriteMs,
+              embeddingMs,
+              retrievalMs,
+              ragAssemblyMs,
+              generationMs
+            },
+            topK: requestedTopK,
+            matchesReturned: matches.length
+          })
+        );
         return fail('ai_error', 'AI provider unavailable', 502, traceId);
       }
 
@@ -1519,37 +1550,43 @@ export default {
         followUps
       };
 
-      void setCachedSearch(config.tenantId, rewrittenQuery, response, 86400, env);
+      ctx.waitUntil(
+        setCachedSearch(config.tenantId, rewrittenQuery, response, 86400, env)
+      );
       try {
         const queryHash = await hashSearchQuery(rewrittenQuery);
-        void recordCacheCheck(env, config.tenantId, {
-          timestamp: Date.now(),
-          hit: false,
-          latencyMs: performance.now() - searchStartedAt,
-          queryHash
-        });
+        ctx.waitUntil(
+          recordCacheCheck(env, config.tenantId, {
+            timestamp: Date.now(),
+            hit: false,
+            latencyMs: performance.now() - searchStartedAt,
+            queryHash
+          })
+        );
       } catch {
         // Ignore cache check hashing failures.
       }
-      void recordSearchMetrics(env, config.tenantId, {
-        tenantId: config.tenantId,
-        traceId,
-        route: 'search',
-        status: 'success',
-        cacheHit: false,
-        latencies: {
-          totalMs: performance.now() - searchStartedAt,
-          rewriteMs,
-          embeddingMs,
-          retrievalMs,
-          ragAssemblyMs,
-          generationMs,
-          followUpGenerationMs
-        },
-        tokensUsed: followUpUsage ? { followUpGeneration: followUpUsage } : undefined,
-        topK: requestedTopK,
-        matchesReturned: matches.length
-      });
+      ctx.waitUntil(
+        recordSearchMetrics(env, config.tenantId, {
+          tenantId: config.tenantId,
+          traceId,
+          route: 'search',
+          status: 'success',
+          cacheHit: false,
+          latencies: {
+            totalMs: performance.now() - searchStartedAt,
+            rewriteMs,
+            embeddingMs,
+            retrievalMs,
+            ragAssemblyMs,
+            generationMs,
+            followUpGenerationMs
+          },
+          tokensUsed: followUpUsage ? { followUpGeneration: followUpUsage } : undefined,
+          topK: requestedTopK,
+          matchesReturned: matches.length
+        })
+      );
 
       return ok(response, traceId);
     }
@@ -1560,7 +1597,7 @@ export default {
         return fail('method_not_allowed', 'Method not allowed', 405, traceId);
       }
 
-      return handleChatRequest(request, env, config, logger, traceId);
+      return handleChatRequest(request, env, config, logger, ctx, traceId);
     }
 
     if (chatRoute.kind === 'history' && chatRoute.sessionId) {
